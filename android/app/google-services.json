@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "182743752167",
+    "project_id": "digitendance-dev",
+    "storage_bucket": "digitendance-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:182743752167:android:9319470cbcdc338612f142",
+        "android_client_info": {
+          "package_name": "com.pk.EnigmaTek.digitendance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "182743752167-iepbjt52raok31l9tuaekg4hkrof1t3c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAR2GD_3nKliX9tyXvQQ8_nqXw2KJ1RaY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "182743752167-iepbjt52raok31l9tuaekg4hkrof1t3c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "182743752167-sf2oi4f0nnncmup3lvhoti3mn61vrujr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.newDigitendance"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
