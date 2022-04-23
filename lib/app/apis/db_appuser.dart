@@ -8,21 +8,60 @@ class DbAppUser {
   final db = FirebaseFirestore.instance;
 
   DbAppUser();
+
+  ///[createSignUpUserInDb] will perform bath write on db to
+  ///
+  /// 1---> cretes a new [Institution] with default values and the
+  /// user defined [title] in the [institutions]collection of db
+  ///
+  /// 2--> create a new [Appuser] with const [UserRole.admin]
+  ///  in the [institution/user] collection of db
+  ///
   Future createSignUpUserInDb({
     required AppUser appUser,
     required Institution institution,
   }) async {
-    try {
-      
-      await db
+    WriteBatch batch = db.batch();
+
+    /// set the [Institution] doc in the db
+    batch.set(
+      db
           // .collection('institutions')
-          .doc('/'+institution.docRef.path)
-          .collection('users')
-          .doc()
-          .set(appUser.toMap());
-    } catch (e) {
-      Utils.log(e.toString());
-    }
+          .doc(appUser.docRef.path),
+      institution.toMap(),
+    );
+
+    /// set the [AppUser] doc in the db
+    /// get reference for user doc
+    DocumentReference<Map<String, dynamic>> appUserDocRef =
+        db.doc(institution.docRef.path).collection('users').doc();
+
+    /// update [appUserDocRef] in [appUser]
+    appUser.docRef = appUserDocRef;
+
+    ///
+    ///
+    ///
+    ///
+    ///
+    batch.set(appUserDocRef,appUser.toMap());
+    batch.commit();
+
+    ///first create the institution
+
+    // String institutionPath = await createInstitution(institution);
+
+    // /// create [FirebaseAuth] user
+    // try {
+    //   await db
+    //       // .collection('institutions')
+    //       .doc('/' + institution.docRef.path)
+    //       .collection('users')
+    //       .doc()
+    //       .set(appUser.toMap());
+    // } catch (e) {
+    //   Utils.log(e.toString());
+    // }
   }
 
   Future<String> createInstitution(Institution institution) async {

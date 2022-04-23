@@ -104,7 +104,8 @@ class AuthApi {
     
     try {
       userCredential = await instance
-          .createUserWithEmailAndPassword(email: _email, password: _password)
+          .createUserWithEmailAndPassword(email: _email, 
+          password: _password,)
           .then((onSignUpSuccess));
     } catch (e) {
       Utils.log(e.toString());

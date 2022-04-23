@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_digitendance/ui/authentication/login/login_page.dart';
+import 'package:new_digitendance/ui/home/admin/admin_homepage.dart';
 // import '../ui/startup/state/auth_notifier.dart';
 import '../startup/state/startup_state.dart';
 
@@ -17,13 +18,13 @@ class StartupView extends ConsumerWidget {
     return startupState.hasAuthentiatedUser
         ?
         // return Home
-        Container(
-            color: Colors.green,
-          )
+        // Container(
+        //     // color: Colors.green,
+        //     child: ElevatedButton(onPressed: onPressed, child: Text('Log Out')),
+        //   )
+        AdminAppHomePage()
         : //return Login Page
         const LoginPage();
-
-    
   }
 
   // _handleWhenData(User? user, WidgetRef ref) {
@@ -36,4 +37,8 @@ class StartupView extends ConsumerWidget {
   //     return LoginView();
   // }
   // }
+
+  void onPressed() {
+    FirebaseAuth.instance.signOut();
+  }
 }

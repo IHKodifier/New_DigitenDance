@@ -1,0 +1,18 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:new_digitendance/ui/home/admin/admin_state.dart';
+
+class AdminAppHomePage extends ConsumerWidget {
+  const AdminAppHomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final adminstate = ref.watch(adminStateNotifierProvider);
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: Text('Admin Home)'),
+      ),
+    );
+  }
+}

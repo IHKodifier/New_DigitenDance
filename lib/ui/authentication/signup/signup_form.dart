@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:new_digitendance/app/apis/dbapi.dart';
+import 'package:new_digitendance/app/contants.dart';
 import 'package:new_digitendance/ui/authentication/auth_state.dart';
 
 import '../../../app/models/institution.dart';
@@ -82,26 +82,24 @@ class _LoginFormState extends ConsumerState<SignupForm> {
   }
 
   Future<void> onSignUp() async {
-    var result =
-        await FirebaseFirestore.instance.collection('institutions').get();
-    Utils.log(result.docs[0].data().toString());
+       _formkey.currentState?.validate();
+    _formkey.currentState?.save();
 
-    // _formkey.currentState?.validate();
-    // _formkey.currentState?.save();
+    Utils.log('CREATING INSTITUTION ${
+      _institution.toString()}');
+    notifier.setBusy();
+    var result = await  notifier
+        .signUpUser(
+            email: _email,
+            password: _password,
+            institution: _institution,
+            loginProviderType: 
+            LoginProviderType.EmailPassword)
+        .then((value) {
+      Utils.log(value.runtimeType.toString());
+    });
+      notifier.setIdle();
 
-    // Utils.log('CREATING INSTITUTION ${_institution.toString()}');
-    // notifier.setBusy();
-    // var result =  notifier
-    //     .signUpWithEmailPassword(
-    //         email: _email,
-    //         password: _password,
-    //         institution: _institution,
-    //         login_serviceProvider: LoginProviderType.EmailPassword)
-    //     .then((value) {
-
-    // notifier.setIdle();
-    // Utils.log(value.runtimeType.toString());
-    //     });
   }
 
   buildSignupButton() {

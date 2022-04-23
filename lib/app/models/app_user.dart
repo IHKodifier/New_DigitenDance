@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:new_digitendance/app/apis/dbapi.dart';
 import '../utilities.dart';
 
 //An [AppUser] represents the user that has been authenticated to the system
@@ -93,7 +94,14 @@ class AppUser extends Equatable {
     result.addAll({'userId': userId});
     // result.addAll({'uUID': uUID});
     result.addAll({'roles': roles.map((x) => x.toMap()).toList()});
-    result.addAll({'docRef': docRef.path});
+    var intitutionDocRef = docRef;
+    var userDocRef = DbApi()
+        .dbAppUser
+        .db
+        .doc(intitutionDocRef.path)
+        .collection('users')
+        .doc();
+    result.addAll({'docRef': userDocRef.path});
     if (additionalAppUserInfo != null) {
       result.addAll({'additionalAppUserInfo': additionalAppUserInfo!.toMap()});
     }

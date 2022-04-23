@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:new_digitendance/app/apis/db_appuser.dart';
 
 import 'package:new_digitendance/app/apis/dbapi.dart';
 import 'package:new_digitendance/app/authapi.dart';
@@ -57,19 +59,39 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   //   if (user != null) await setUserInAuthState(user);
   // }
 
-  Future signUpWithEmailPassword(
+  /// function to sign up by creating a [FirebaseAuth ] user with emaila user with Email and password and acreate [Institution] and [AppUser] by calling [createSignUpUserInDb] on [DbAppUser]
+  /// function    and
+  /// password and if success
+  /// 
+  Future signUpUser(
       {required String email,
       required String password,
       required Institution institution,
-      required LoginProviderType login_serviceProvider}) async {
+      required LoginProviderType loginProviderType}) async {
     final dbApi = thisref.read(dbApiProvider);
     final AuthApi = thisref.read(authApiProvider);
-    // final dbApi = thisref.read(dbApiProvider);
-    // dbApi.
-    ///TODO  implement function
+   
+
+    
+    UserCredential creadtedUser; 
+   await  FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    )
+        .then((value) {
+      creadtedUser = value;
+    });
+
+    ///
     AppUser appUser = AppUser(
-        docRef: institution.docRef, userId: email, roles: [UserRole.admin]);
-   await  dbApi.dbAppUser.createSignUpUserInDb(appUser: appUser,institution: institution);
+      docRef: institution.docRef,
+      userId: email,
+      roles: const [UserRole.admin],
+    );
+
+    await dbApi.dbAppUser
+        .createSignUpUserInDb(appUser: appUser, institution: institution);
   }
 
   // setUserInAuthState(User? user) async {
@@ -103,7 +125,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 
   void setIdle() {
-    state.copyWith(isBusy: false);
+    state = state.copyWith(isBusy: false);
   }
 
   // void getIdle() {
