@@ -10,6 +10,8 @@ final adminStateNotifierProvider =
 /// provides encapsulated state of []
 class AdminState {
   List<Course>? availableCourses;
+  Course? activeCourse;
+  
 }
 
 class AdminStateNotifier extends StateNotifier<AdminState> {

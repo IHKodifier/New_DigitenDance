@@ -25,9 +25,7 @@ class DbAppUser {
 
     /// set the [Institution] doc in the db
     batch.set(
-      db
-          // .collection('institutions')
-          .doc(appUser.docRef.path),
+      db.doc(appUser.docRef.path),
       institution.toMap(),
     );
 
@@ -44,7 +42,7 @@ class DbAppUser {
     ///
     ///
     ///
-    batch.set(appUserDocRef,appUser.toMap());
+    batch.set(appUserDocRef, appUser.toMap());
     batch.commit();
 
     ///first create the institution
@@ -62,6 +60,7 @@ class DbAppUser {
     // } catch (e) {
     //   Utils.log(e.toString());
     // }
+    return appUser;
   }
 
   Future<String> createInstitution(Institution institution) async {

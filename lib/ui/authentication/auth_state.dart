@@ -5,8 +5,8 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:new_digitendance/app/apis/db_appuser.dart';
 
+import 'package:new_digitendance/app/apis/db_appuser.dart';
 import 'package:new_digitendance/app/apis/dbapi.dart';
 import 'package:new_digitendance/app/authapi.dart';
 import 'package:new_digitendance/app/base_app_state.dart';
@@ -45,6 +45,9 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   bool? get isBusy => state.isBusy;
   bool get isNotBusy => !isBusy!;
 
+  void setAuthenticatedUser({required AppUser appUser}) {
+    state = state.copyWith(authenticatedUser: appUser);
+  }
   // Future<void> login({
   //   required LoginProviderType loginProvider,
   //   required String email,
@@ -62,36 +65,35 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   /// function to sign up by creating a [FirebaseAuth ] user with emaila user with Email and password and acreate [Institution] and [AppUser] by calling [createSignUpUserInDb] on [DbAppUser]
   /// function    and
   /// password and if success
-  /// 
-  Future signUpUser(
+  ///
+  Future<AppUser> signUpUser(
       {required String email,
       required String password,
       required Institution institution,
       required LoginProviderType loginProviderType}) async {
     final dbApi = thisref.read(dbApiProvider);
     final AuthApi = thisref.read(authApiProvider);
-   
 
-    
-    UserCredential creadtedUser; 
-   await  FirebaseAuth.instance
+    UserCredential creadtedUserCredential;
+    await FirebaseAuth.instance
         .createUserWithEmailAndPassword(
       email: email,
       password: password,
     )
         .then((value) {
-      creadtedUser = value;
+      creadtedUserCredential = value;
     });
 
     ///
     AppUser appUser = AppUser(
       docRef: institution.docRef,
       userId: email,
-      roles: const [UserRole.admin],
+      roles: const [UserRole.admin,
+      ],
     );
-
-    await dbApi.dbAppUser
+    final updatedAppUser = await dbApi.dbAppUser
         .createSignUpUserInDb(appUser: appUser, institution: institution);
+    return updatedAppUser;
   }
 
   // setUserInAuthState(User? user) async {
@@ -146,7 +148,7 @@ class AuthState extends Equatable {
 
   @override
   // TODO: implement props
-  List<Object?> get props => [authenticatedUser, selectedRole, isBusy];
+  List<Object> get props => [isBusy!, authenticatedUser!, [selectedRole]];
 
   AuthState copyWith({
     AppUser? authenticatedUser,

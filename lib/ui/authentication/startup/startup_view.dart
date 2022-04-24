@@ -13,30 +13,17 @@ class StartupView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final _stream = ref.watch(authStateChangesStreamProvider);
-    final startupState = ref.read(startupStateNotifierProvider);
+    final startupState = ref.watch(startupStateNotifierProvider);
 
     return startupState.hasAuthentiatedUser
         ?
-        // return Home
-        // Container(
-        //     // color: Colors.green,
-        //     child: ElevatedButton(onPressed: onPressed, child: Text('Log Out')),
-        //   )
+       
         AdminAppHomePage()
         : //return Login Page
         const LoginPage();
   }
 
-  // _handleWhenData(User? user, WidgetRef ref) {
-  //   if (user != null) {
-  //     final notifier = ref.watch(authStateProvider.notifier);
-  //     // final authState = thisRef.watch(authStateProvider);
-  //     notifier.setUserInAuthState(user);
-  //     return AppHomeView();
-  //   } else {
-  //     return LoginView();
-  // }
-  // }
+
 
   void onPressed() {
     FirebaseAuth.instance.signOut();

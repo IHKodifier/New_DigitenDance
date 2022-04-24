@@ -94,14 +94,14 @@ class AppUser extends Equatable {
     result.addAll({'userId': userId});
     // result.addAll({'uUID': uUID});
     result.addAll({'roles': roles.map((x) => x.toMap()).toList()});
-    var intitutionDocRef = docRef;
-    var userDocRef = DbApi()
-        .dbAppUser
-        .db
-        .doc(intitutionDocRef.path)
-        .collection('users')
-        .doc();
-    result.addAll({'docRef': userDocRef.path});
+    // var intitutionDocRef = docRef;
+    // var userDocRef = DbApi()
+    //     .dbAppUser
+    //     .db
+    //     .doc(intitutionDocRef.path)
+    //     .collection('users')
+    //     .doc();
+    result.addAll({'docRef': docRef.path});
     if (additionalAppUserInfo != null) {
       result.addAll({'additionalAppUserInfo': additionalAppUserInfo!.toMap()});
     }

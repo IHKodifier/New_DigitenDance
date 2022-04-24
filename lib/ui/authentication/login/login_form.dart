@@ -28,7 +28,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   @override
   Widget build(BuildContext context) {
     final notifier = ref.read(authStateNotifierProvider.notifier);
-    return Container(
+    return Material(
       child: Center(
         child: SingleChildScrollView(
           child: Column(

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:new_digitendance/app/base_app_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:new_digitendance/app/models/app_user.dart';
 
 final startupStateNotifierProvider =
     StateNotifierProvider<StartupStateNotifier, StartupState>((ref) {
@@ -13,7 +14,13 @@ final startupStateNotifierProvider =
 
 class StartupStateNotifier extends StateNotifier<StartupState> {
   StartupStateNotifier([state]) : super(state ?? StartupState());
+
+
+//   ref.ref.listen<>(, (value) { 
+    
+//   });
 }
+
 
 class StartupState extends Equatable {
   bool _hasAuthenticatedUser = false;

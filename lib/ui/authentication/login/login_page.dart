@@ -8,23 +8,8 @@ class LoginPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      color: Colors.black.withOpacity(0.65),
-      child: InteractiveViewer(
-        child: Center(
-          child: Container(
-            width: 500,
-            height: MediaQuery.of(context).size.height * .60,
-            child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(28)),
-              child: LoginForm(),
-              
-              // ],
-            ),
-          ),
-        ),
-      ),
+    return Center(
+      child: LoginForm(),
     );
   }
 }
