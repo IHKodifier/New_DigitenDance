@@ -15,11 +15,13 @@ Digitendance App LOG ____________\n ${data!}
               List<T>>.fromHandlers(
             handleData: (QuerySnapshot<Map<String, dynamic>> data,
                 EventSink<List<T>> sink) {
-              final snaps = data.docs.map((doc) => doc.data()).toList();
-              final sessions = snaps.map((json) => fromJson(json)).toList();
+              sink.add(data.docs.map((e) => fromJson(e.data())).toList());
+
+              // final snaps = data.docs.map((doc) => doc.data()).toList();
+              // final sessions = snaps.map((json) => fromJson(json)).toList();
               // data.docs[0].
 
-              sink.add(sessions);
+              // sink.add(sessions);
             },
           );
 }

@@ -3,12 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:new_digitendance/app/apis/dbapi.dart';
 import 'package:new_digitendance/app/contants.dart';
-import 'package:new_digitendance/ui/authentication/auth_state.dart';
 import 'package:new_digitendance/ui/authentication/startup/state/startup_state.dart';
 import 'package:new_digitendance/ui/home/admin/admin_homepage.dart';
 
 import '../../../app/models/institution.dart';
 import '../../../app/utilities.dart';
+import '../state/auth_state.dart';
+import '../state/authentication_notifier.dart';
+import '../state/institution_state.dart';
 
 class SignupForm extends ConsumerStatefulWidget {
   const SignupForm({Key? key}) : super(key: key);
@@ -26,8 +28,8 @@ class _LoginFormState extends ConsumerState<SignupForm> {
   bool concealPassword = true;
   String _password = '';
   late Institution _institution;
-  late AuthStateNotifier authStateNotifier;
-  late AuthState authState;
+  late AuthenticationNotifier authStateNotifier;
+  late AuthenticationState authState;
   @override
   void dispose() {
     emailController.dispose();
@@ -37,15 +39,15 @@ class _LoginFormState extends ConsumerState<SignupForm> {
 
   @override
   Widget build(BuildContext context) {
-    authStateNotifier = ref.read(authStateNotifierProvider.notifier);
-    authState = ref.watch(authStateNotifierProvider);
+    authStateNotifier = ref.read(authenticationNotifierProvider.notifier);
+    authState = ref.watch(authenticationNotifierProvider);
 
     // return ?
     // builSignUpForm(context):Materialpa;
     if (authState.authenticatedUser == null) {
       return builSignUpForm(context);
     } else {
-      return const AdminAppHomePage();
+      return AdminAppHomePage();
     }
   }
 
@@ -96,7 +98,7 @@ class _LoginFormState extends ConsumerState<SignupForm> {
     _formkey.currentState?.save();
 
     Utils.log('CREATING INSTITUTION ${_institution.toString()}');
-    authStateNotifier.setBusy();
+    authStateNotifier.setBusyTo=true;
     var signedupUser = await authStateNotifier
         .signUpUser(
             email: _email,
@@ -106,9 +108,15 @@ class _LoginFormState extends ConsumerState<SignupForm> {
         .then((value) {
       Utils.log(value.toString());
       authStateNotifier.setAuthenticatedUser(appUser: value);
+      ref.read(institutionProvider.notifier).setInstitution(_institution);
+      // final adminNotifier =ref.read(adminStateNotifierProvider.notifier);
+      // adminNotifier.
+      Navigator.of(context).pop();
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => AdminAppHomePage()));
     });
 
-    authStateNotifier.setIdle();
+    authStateNotifier.setBusyTo=false;
   }
 
   buildSignupButton() {

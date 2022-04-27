@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:new_digitendance/app/contants.dart';
-import 'package:new_digitendance/ui/authentication/auth_state.dart';
 import 'package:new_digitendance/ui/authentication/signup/signup_page.dart';
+import 'package:new_digitendance/ui/home/admin/admin_homepage.dart';
+
+import '../state/auth_state.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -27,7 +29,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final notifier = ref.read(authStateNotifierProvider.notifier);
+    final notifier = ref.read(authenticationNotifierProvider.notifier);
     return Material(
       child: Center(
         child: SingleChildScrollView(
@@ -64,7 +66,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   buildLoginButton(WidgetRef ref) {
     // final authState = ref.watch(authStateProvider);
-    // final notifier = ref.read(authStateProvider.notifier);
+    final notifier = ref.read(authenticationNotifierProvider.notifier);
     return Expanded(
       child: Container(
         // width: 300,
@@ -73,13 +75,15 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           padding: const EdgeInsets.symmetric(horizontal: 32.0),
           child: ElevatedButton.icon(
               icon: FaIcon(FontAwesomeIcons.key, size: 40),
-              onPressed: () {
-                // isBusy = true;
-                // notifier.login(
-                //     loginProvider: LoginProviderType.EmailPassword,
-                //     email: emailController.text,
-                //     password: passwordController.text);
-                // isBusy = false;
+              onPressed: () async {
+                notifier.setBusyTo = true;
+                var loginSuccess = await notifier.login(
+                    loginProvider: LoginProviderType.EmailPassword,
+                    email: emailController.text,
+                    password: passwordController.text);
+                notifier.setBusyTo = false;
+                Navigator.of(context).pop();
+                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>AdminAppHomePage()));
               },
               label: const Text(
                 'Login',
@@ -95,18 +99,14 @@ class _LoginFormState extends ConsumerState<LoginForm> {
     // final notifier = ref.read(authStateProvider.notifier);
     return Expanded(
       child: Container(
-        
         // width: 300,
         height: 50,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.all(0),
           child: TextButton(
-              // icon: FaIcon(
-              //   FontAwesomeIcons.fileCircleCheck,
-              //   size: 40,
-              // ),
               onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (_)=>SignupPage()));
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (_) => const SignupPage()));
               },
               child: const Text(
                 'SIGN UP',

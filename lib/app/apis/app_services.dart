@@ -3,7 +3,7 @@
 ///
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:new_digitendance/app/apis/dbapi.dart';
-import 'package:new_digitendance/app/authapi.dart';
+import '../apis/authapi.dart';
 
 ///[appServices] is a convenience wrapper class for all
 /// APIs in the system

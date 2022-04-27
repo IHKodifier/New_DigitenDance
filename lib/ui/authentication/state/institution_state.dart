@@ -34,14 +34,8 @@ class InstitutionNotifier extends StateNotifier<Institution> {
     );
   }
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+  
 
-    return other is InstitutionNotifier && other.ref == ref;
-  }
-
-  @override
-  int get hashCode => ref.hashCode;
+ 
 
 }
