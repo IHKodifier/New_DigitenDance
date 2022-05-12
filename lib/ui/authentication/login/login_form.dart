@@ -15,53 +15,17 @@ class LoginForm extends ConsumerStatefulWidget {
 }
 
 class _LoginFormState extends ConsumerState<LoginForm> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  String email = '';
   bool concealPassword = true;
+  String email = '';
+  TextEditingController emailController = TextEditingController();
   String password = '';
+  TextEditingController passwordController = TextEditingController();
+
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final notifier = ref.read(authenticationNotifierProvider.notifier);
-    return Material(
-      child: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Text(
-                  'LOGIN',
-                  style: Theme.of(context).textTheme.headline3,
-                ),
-              ),
-              _emailTextField(),
-              SizedBox(
-                height: 20,
-              ),
-              _passwordTextField(),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  buildLoginButton(ref),
-                  buildSignUpButton(ref),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   buildLoginButton(WidgetRef ref) {
@@ -73,8 +37,8 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         height: 50,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32.0),
-          child: ElevatedButton.icon(
-              icon: FaIcon(FontAwesomeIcons.key, size: 40),
+          child: ElevatedButton(
+              // icon: FaIcon(FontAwesomeIcons.key, size: 40),
               onPressed: () async {
                 notifier.setBusyTo = true;
                 var loginSuccess = await notifier.login(
@@ -85,7 +49,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 Navigator.of(context).pop();
                 Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>AdminAppHomePage()));
               },
-              label: const Text(
+              child: const Text(
                 'Login',
                 style: TextStyle(fontSize: 22),
               )),
@@ -167,6 +131,43 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             icon: concealPassword
                 ? const Icon(Icons.visibility)
                 : const Icon(Icons.visibility_off),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final notifier = ref.read(authenticationNotifierProvider.notifier);
+    return Material(
+      child: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Text(
+                  'LOGIN',
+                  style: Theme.of(context).textTheme.headline3,
+                ),
+              ),
+              _emailTextField(),
+              SizedBox(
+                height: 20,
+              ),
+              _passwordTextField(),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buildLoginButton(ref),
+                  buildSignUpButton(ref),
+                ],
+              ),
+            ],
           ),
         ),
       ),

@@ -31,10 +31,13 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
   ) : super(const AuthenticationState()) {
     db = ref.read(dbProvider);
   }
-  StateNotifierProviderRef<AuthenticationNotifier, AuthenticationState> ref;
-  bool? get isBusy => state.isBusy;
-  bool get isNotBusy => !isBusy!;
+
   late FirebaseFirestore db;
+  StateNotifierProviderRef<AuthenticationNotifier, AuthenticationState> ref;
+
+  bool? get isBusy => state.isBusy;
+
+  bool get isNotBusy => !isBusy!;
 
   signOut() {
     FirebaseAuth.instance.signOut();
@@ -114,9 +117,7 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
     return updatedAppUser;
   }
 
- 
-
-  /// function to grab [user doc] from [db] and transform it
+  /// function to grab [AppUser doc] from [db] and transform it
   /// to [AppUser] and then set the state
   Future<AppUser> grabAppUserFromDb(User user) async {
     var userQuerySnapshot = await db
@@ -124,7 +125,7 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
         .where('userId', isEqualTo: user.email)
         .get();
     Utils.log(
-        ' user\'s institutionPath : ${userQuerySnapshot.docs[0].reference.parent.parent.toString()}');
+        ' user\'s institutionPath : ${userQuerySnapshot.docs[0].reference.parent.parent?.path}');
     var _institutionDocRef = userQuerySnapshot.docs[0].reference.parent.parent!;
 
     var data =
@@ -135,5 +136,4 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
         AppUser.fromJson(json.encode(userQuerySnapshot.docs[0].data()));
     return appUser;
   }
-
 }

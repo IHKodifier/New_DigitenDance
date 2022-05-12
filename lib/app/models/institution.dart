@@ -5,10 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:new_digitendance/app/apis/dbapi.dart';
 
 class Institution extends Equatable {
-  late final String title;
-  final String id;
-  final String? address;
-  late DocumentReference<Map<String,dynamic>> docRef;
   Institution({
     required this.title,
     required this.id,
@@ -16,9 +12,31 @@ class Institution extends Equatable {
     required this.docRef,
   });
 
+  factory Institution.fromJson(String source) =>
+      Institution.fromMap(json.decode(source));
+
+  factory Institution.fromMap(Map<String, dynamic> map) {
+    final _docRef = DbApi().documentReferenceFromPath(map['docRef']);
+    return Institution(
+        title: map['title'] ?? '',
+        id: map['id'] ?? '',
+        address: map['address'],
+        docRef: _docRef);
+  }
+
+   String? address;
+   DocumentReference<Map<String,dynamic>> docRef;
+   String? id;
+   String? title;
+
   @override
   // TODO: implement props
-  List<Object> get props => [title, id, address ?? 'not set', docRef];
+  List<Object> get props => [title!, id!, address ?? 'not set', docRef];
+
+  @override
+  String toString() {
+    return 'Institution(title: $title, id: $id, address: $address, docRef: ${docRef.path.toString()})';
+  }
 
   Institution copyWith({
     String? title,
@@ -34,11 +52,6 @@ class Institution extends Equatable {
     );
   }
 
-  @override
-  String toString() {
-    return 'Institution(title: $title, id: $id, address: $address, docRef: ${docRef.path.toString()})';
-  }
-
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
@@ -52,17 +65,5 @@ class Institution extends Equatable {
     return result;
   }
 
-  factory Institution.fromMap(Map<String, dynamic> map) {
-    final _docRef = DbApi().documentReferenceFromPath(map['docRef']);
-    return Institution(
-        title: map['title'] ?? '',
-        id: map['id'] ?? '',
-        address: map['address'],
-        docRef: _docRef);
-  }
-
   String toJson() => json.encode(toMap());
-
-  factory Institution.fromJson(String source) =>
-      Institution.fromMap(json.decode(source));
 }

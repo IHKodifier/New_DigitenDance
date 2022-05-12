@@ -14,7 +14,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Digitendance 1.0',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.deepOrange),
+      theme: ThemeData(
+      useMaterial3:true,
+        primarySwatch: Colors.deepOrange),
       home: FutureBuilder(
         future: _initializeApp,
         builder: (context, snapshot) {
