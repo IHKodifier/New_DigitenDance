@@ -19,7 +19,8 @@ class AuthApi {
   late FirebaseAuth instance;
   late UserCredential? userCredential;
 
-  final String _defaultPhotoURL=' https://www.kindpng.com/picc/m/78-786207_user-avatar-png-user-avatar-icon-png-transparent.png';
+  final String _defaultPhotoURL =
+      ' https://www.kindpng.com/picc/m/78-786207_user-avatar-png-user-avatar-icon-png-transparent.png';
   String _email = '';
   Institution? _institution;
   String _password = '';
@@ -27,7 +28,7 @@ class AuthApi {
 
   Stream<User?> get authStateChanges => instance.authStateChanges();
 
-  Future<User?> login({
+  Future<User?> attemptLogin({
     required LoginProviderType loginProvider,
     required String email,
     required String password,
@@ -37,16 +38,16 @@ class AuthApi {
     dynamic returnvalue;
     switch (loginProvider) {
       case LoginProviderType.EmailPassword:
-        returnvalue = _signInwithEmail();
+        returnvalue = await _signInwithEmail();
         break;
       case LoginProviderType.Facebook:
-        returnvalue = _signInwithFacebook();
+        returnvalue = await _signInwithFacebook();
         break;
       case LoginProviderType.Google:
-        returnvalue = _signInwithGoogle();
+        returnvalue = await _signInwithGoogle();
         break;
       case LoginProviderType.Phone:
-        returnvalue = _signInwithPhone();
+        returnvalue = await _signInwithPhone();
         break;
 
       default:
@@ -75,43 +76,42 @@ class AuthApi {
     _institution = institution;
     _email = email;
     _password = password;
-    
+
     try {
       userCredential = await instance
-          .createUserWithEmailAndPassword(email: _email, 
-          password: _password,)
+          .createUserWithEmailAndPassword(
+            email: _email,
+            password: _password,
+          )
           .then((onSignUpSuccess));
     } catch (e) {
       Utils.log(e.toString());
     }
   }
 
-    /// upon sign Up success immediately create the new [Institution] and store document path in [_path]
+  /// upon sign Up success immediately create the new [Institution] and store document path in [_path]
 
   FutureOr<UserCredential?> onSignUpSuccess(UserCredential value) async {
     await AppServices.dbService.dbAppUser.createInstitution(_institution!);
-    AppUser _appUser =
-        AppUser(userId: _email,
-         docRef: AppServices.dbService.documentReferenceFromPath(_path),
-         roles:const <UserRole>[
-          UserRole.admin,
-          UserRole.faculty,
-          UserRole.student,
-                   
-        ],
-         additionalAppUserInfo: AdditionalAppUserInfo(photoUrl:_defaultPhotoURL,
-           ),
-
-         );
-    await AppServices.dbService.dbAppUser.createSignUpUserInDb(
-      appUser: _appUser,
-      institution: _institution!
-      );
+    AppUser _appUser = AppUser(
+      userId: _email,
+      docRef: AppServices.dbService.documentReferenceFromPath(_path),
+      roles: const <UserRole>[
+        UserRole.admin,
+        UserRole.faculty,
+        UserRole.student,
+      ],
+      additionalAppUserInfo: AdditionalAppUserInfo(
+        photoUrl: _defaultPhotoURL,
+      ),
+    );
+    await AppServices.dbService.dbAppUser
+        .createSignUpUserInDb(appUser: _appUser, institution: _institution!);
     return null;
 
     /// create a new [AppUser] in firestore
 //TODO
-    /// 
+    ///
   }
 
   Future<User?> _signInwithEmail() async {
@@ -121,7 +121,7 @@ class AuthApi {
     } catch (e) {
       Utils.log(e.toString());
     }
-    if (userCredential?.user!= null) {
+    if (userCredential?.user != null) {
       return userCredential?.user;
     } else {
       return null;

@@ -35,8 +35,7 @@ final authenticationNotifierProvider =
 ///class to manage and notify state changes to [AuthenticationState]
 ///manages the budy/not busy states of the [AuthenticationState] by
 /// providing a getter  [isBusy] and setter [setBusyTo]
-/// provides methods like [signOut], [login], [signUpUser]
-
+/// provides methods like [signOut], [attemptLogin], [signUpUser]
 
 class AuthenticationState extends Equatable {
   final bool? isBusy;

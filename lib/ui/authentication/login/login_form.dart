@@ -46,11 +46,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                     email: emailController.text,
                     password: passwordController.text);
                 notifier.setBusyTo = false;
-                Navigator.of(context).pop();
+                if (loginSuccess){
                 Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>AdminAppHomePage()));
+                }
+                
               },
               child: const Text(
-                'Login',
+                'Sign In',
                 style: TextStyle(fontSize: 22),
               )),
         ),
@@ -59,8 +61,8 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   }
 
   buildSignUpButton(WidgetRef ref) {
-    // final authState = ref.watch(authStateProvider);
-    // final notifier = ref.read(authStateProvider.notifier);
+    /// final authState = ref.watch(authStateProvider);
+    /// final notifier = ref.read(authStateProvider.notifier);
     return Expanded(
       child: Container(
         // width: 300,
