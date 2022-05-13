@@ -28,7 +28,11 @@ final institutionProvider =
 
 ///[InstitutionNotifier] manages and notifies the state of active [Institution] that belongs to the logged in [AppUser]
 class InstitutionNotifier extends StateNotifier<Institution> {
-  InstitutionNotifier(this.ref, [state]) : super(state);
+  InstitutionNotifier(this.ref, [state]) : super(state??Institution(
+    id: 'not set',
+    title: 'not set',
+    docRef: DbApi().documentReferenceFromPath('/institutions/initial')
+  ));
 
   final StateNotifierProviderRef<InstitutionNotifier, Institution> ref;
 
