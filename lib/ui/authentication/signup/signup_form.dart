@@ -108,7 +108,7 @@ class _LoginFormState extends ConsumerState<SignupForm> {
         .then((value) {
       Utils.log(value.toString());
       authStateNotifier.setAuthenticatedUser(appUser: value);
-      ref.read(institutionProvider.notifier).setInstitution(_institution);
+      ref.read(institutionNotifierProvider.notifier).setInstitution(_institution);
       // final adminNotifier =ref.read(adminStateNotifierProvider.notifier);
       // adminNotifier.
       Navigator.of(context).pop();
@@ -121,13 +121,13 @@ class _LoginFormState extends ConsumerState<SignupForm> {
 
   buildSignupButton() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 128),
+      margin: const EdgeInsets.symmetric(horizontal: 128),
       child: SizedBox(
         // width: 300,
         height: 50,
         child: authStateNotifier.isNotBusy
             ? Container(
-                margin: EdgeInsets.symmetric(horizontal: 28),
+                margin: const EdgeInsets.symmetric(horizontal: 28),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: ElevatedButton.icon(
@@ -146,7 +146,7 @@ class _LoginFormState extends ConsumerState<SignupForm> {
 
   _emailTextField() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 64),
+      margin: const EdgeInsets.symmetric(horizontal: 64),
       child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: TextFormField(
@@ -179,7 +179,7 @@ class _LoginFormState extends ConsumerState<SignupForm> {
 
   _institutionTextField() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 64),
+      margin: const EdgeInsets.symmetric(horizontal: 64),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: TextFormField(
@@ -213,7 +213,7 @@ class _LoginFormState extends ConsumerState<SignupForm> {
 
   _passwordTextField() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 64),
+      margin: const EdgeInsets.symmetric(horizontal: 64),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: TextFormField(

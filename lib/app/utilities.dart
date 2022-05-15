@@ -10,11 +10,11 @@ Digitendance App LOG ____________]] ${data!}
   }
 
   static StreamTransformer<QuerySnapshot<Map<String, dynamic>>, List<T>>
-      streamTransformer<T>(T Function(Map<String, dynamic> json) fromJson) =>
-          StreamTransformer<QuerySnapshot<Map<String, dynamic>>,
-              List<T>>.fromHandlers(
+      streamTransformer<T>(T Function(Map<String, dynamic> jsonMap) fromJson) =>
+          StreamTransformer<QuerySnapshot<Map<String, dynamic>>,List<T>>.fromHandlers(
             handleData: (QuerySnapshot<Map<String, dynamic>> data,
-                EventSink<List<T>> sink) {
+                EventSink<List<T>> sink) 
+                {
               sink.add(data.docs.map((e) => fromJson(e.data())).toList());
 
               // final snaps = data.docs.map((doc) => doc.data()).toList();

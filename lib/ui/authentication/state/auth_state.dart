@@ -38,19 +38,18 @@ final authenticationNotifierProvider =
 /// provides methods like [signOut], [attemptLogin], [signUpUser]
 
 class AuthenticationState extends Equatable {
-  final bool? isBusy;
+   bool isBusy=false;
   final AppUser? authenticatedUser;
-  final UserRole? selectedRole;
-  const AuthenticationState({
+   UserRole? get  selectedRole=> authenticatedUser?.roles[0];
+   AuthenticationState({
     this.authenticatedUser,
-    this.selectedRole,
     this.isBusy = false,
   });
 
   @override
   // TODO: implement props
   List<Object> get props => [
-        isBusy!,
+        isBusy,
         authenticatedUser!,
         [selectedRole]
       ];
@@ -62,7 +61,7 @@ class AuthenticationState extends Equatable {
   }) {
     return AuthenticationState(
       authenticatedUser: authenticatedUser ?? this.authenticatedUser,
-      selectedRole: selectedRole ?? this.selectedRole,
+      // selectedRole: selectedRole ?? this.selectedRole,
       isBusy: isBusy ?? this.isBusy,
     );
   }
@@ -85,9 +84,9 @@ class AuthenticationState extends Equatable {
       authenticatedUser: map['authenticatedUser'] != null
           ? AppUser.fromMap(map['authenticatedUser'])
           : null,
-      selectedRole: map['selectedRole'] != null
-          ? UserRole.fromMap(map['selectedRole'])
-          : null,
+      // selectedRole: map['selectedRole'] != null
+      //     ? UserRole.fromMap(map['selectedRole'])
+      //     : null,
     );
   }
 

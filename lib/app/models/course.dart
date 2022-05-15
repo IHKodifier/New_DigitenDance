@@ -33,7 +33,8 @@ class Course extends Equatable {
       courseTitle: courseTitle ?? this.courseTitle,
       credits: credits ?? this.credits,
       preReqs: preReqs ?? this.preReqs,
-      sessions: sessions ?? this.sessions, docRef: docRef,
+      sessions: sessions ?? this.sessions,
+      docRef: docRef,
     );
   }
 
@@ -60,7 +61,7 @@ class Course extends Equatable {
   }
 
   factory Course.fromMap(Map<String, dynamic> map) {
-    return Course(
+    Course retval = Course(
       courseId: map['courseId'],
       courseTitle: map['courseTitle'],
       credits: map['credits']?.toInt(),
@@ -72,6 +73,7 @@ class Course extends Equatable {
           : null,
       docRef: map['docRef'],
     );
+    return retval;
   }
 
   String toJson() => json.encode(toMap());

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_digitendance/ui/authentication/state/auth_state.dart';
 import 'package:new_digitendance/ui/authentication/state/institution_state.dart';
+import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
 import '../../../app/contants.dart';
 import '../../../app/models/app_user.dart';
 import '../../../app/models/institution.dart';
@@ -13,7 +14,7 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
   AuthenticationNotifier(
     state,
     this.ref,
-  ) : super(const AuthenticationState()) {
+  ) : super(AuthenticationState()) {
     db = ref.read(dbProvider);
   }
 
@@ -63,16 +64,16 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
       password: password,
     );
 
-    //if [user] is not null get the db doc for [AppUser]
-    ///and create [AppUser] fron the db doc.
+    //if the returned [user] is not null then  get the db doc for [AppUser]
+    ///and create [AppUser] fronm the db doc.
     ///set the [Institution] in [institutionProvider]
     ///then set this user in [AuthenticationState]
     ///
     if (loggegInUser != null) {
       grabAppUserFromDb(loggegInUser).then((appUser) {
         Utils.log('Grabbing AppUser from DB ${appUser.toString()}');
-        
-            setAuthenticatedUser(appUser: appUser);
+        setAuthenticatedUser(appUser: appUser);
+        ref.read(adminStateNotifierProvider.notifier).availableCourses();
       });
       // Navigator.of(context).pop();
       return true;
@@ -117,7 +118,7 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
   /// function to grab [AppUser doc] from [db] and transform it
   /// to [AppUser] and then set the state
   Future<AppUser> grabAppUserFromDb(User user) async {
-    // to grab [AppUser] db doc   [AppUser]'s institution needs to retreived  first
+    // to grab an [AppUser] db doc, the  [AppUser]'s institution needs to retreived  first
     var userQuerySnapshot = await db
         .collectionGroup('users')
         .where('userId', isEqualTo: user.email)
@@ -126,14 +127,16 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
         ' user\'s retrived : ${userQuerySnapshot.docs[0].data().toString()}');
     Utils.log(
         ' user\'s institutionPath : ${userQuerySnapshot.docs[0].reference.parent.parent?.path}');
+
+    ///reference to the  Institution where
+    /// the current [AppUser] belongs
     var _institutionDocRef = userQuerySnapshot.docs[0].reference.parent.parent!;
 
-    var data =
-        await db.collection('institutions').doc(_institutionDocRef.id).get();
-    Institution institution = Institution.fromMap(data.data()!);
+    var instituionData = await db.doc(_institutionDocRef.path).get();
+    Institution institution = Institution.fromMap(instituionData.data()!);
     AppUser appUser =
         AppUser.fromJson(json.encode(userQuerySnapshot.docs[0].data()));
-    ref.read(institutionProvider.notifier).setInstitution(institution);
+    ref.read(institutionNotifierProvider.notifier).setInstitution(institution);
     return appUser;
   }
 }

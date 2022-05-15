@@ -1,6 +1,4 @@
-import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_digitendance/app/apis/dbapi.dart';
 
@@ -8,9 +6,9 @@ import 'package:new_digitendance/app/models/app_user.dart';
 import 'package:new_digitendance/app/models/institution.dart';
 import 'package:new_digitendance/app/utilities.dart';
 
-///[institutionProvider] provides  the [StateNotifier<InstitutionNotifier>] to manage the  active [Institution] in the system. Each [Institution] is created in the Firestore at path  [/institutions/docId]
+///[institutionNotifierProvider] provides  the [StateNotifier<InstitutionNotifier>] to manage the  active [Institution] in the system. Each [Institution] is created in the Firestore at path  [/institutions/docId]
 
-final institutionProvider =
+final institutionNotifierProvider =
     StateNotifierProvider<InstitutionNotifier, Institution>((ref) {
   return InstitutionNotifier(
     ref,

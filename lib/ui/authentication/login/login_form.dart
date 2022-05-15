@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:new_digitendance/app/contants.dart';
 import 'package:new_digitendance/ui/authentication/signup/signup_page.dart';
 import 'package:new_digitendance/ui/home/admin/admin_homepage.dart';
+import 'package:new_digitendance/ui/shared/shimmers.dart';
 
 import '../state/auth_state.dart';
 
@@ -29,7 +30,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   }
 
   buildLoginButton(WidgetRef ref) {
-    // final authState = ref.watch(authStateProvider);
     final notifier = ref.read(authenticationNotifierProvider.notifier);
     return Expanded(
       child: Container(
@@ -46,10 +46,10 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                     email: emailController.text,
                     password: passwordController.text);
                 notifier.setBusyTo = false;
-                if (loginSuccess){
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>AdminAppHomePage()));
+                if (loginSuccess) {
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (_) => AdminAppHomePage()));
                 }
-                
               },
               child: const Text(
                 'Sign In',
@@ -141,10 +141,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(authenticationNotifierProvider);
     final notifier = ref.read(authenticationNotifierProvider.notifier);
     return Material(
       child: Center(
-        child: SingleChildScrollView(
+        child: (state.isBusy) ?BusyShimmer()
+        :
+        SingleChildScrollView(
           child: Column(
             children: [
               Padding(

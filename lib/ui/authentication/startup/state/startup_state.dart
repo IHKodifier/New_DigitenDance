@@ -24,7 +24,7 @@ class StartupStateNotifier extends StateNotifier<StartupState> {
 class StartupState extends Equatable {
   bool _hasAuthenticatedUser = false;
   StartupState() {
-    // Firebase.initializeApp();
+    Firebase.initializeApp();
     _hasAuthenticatedUser = (FirebaseAuth.instance.currentUser != null);
   }
 
