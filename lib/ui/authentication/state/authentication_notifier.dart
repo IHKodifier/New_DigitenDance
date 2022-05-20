@@ -73,7 +73,7 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
       grabAppUserFromDb(loggegInUser).then((appUser) {
         Utils.log('Grabbing AppUser from DB ${appUser.toString()}');
         setAuthenticatedUser(appUser: appUser);
-        ref.read(adminStateNotifierProvider.notifier).availableCourses();
+        // ref.read(adminStateNotifierProvider.notifier).availableCourses();
       });
       // Navigator.of(context).pop();
       return true;

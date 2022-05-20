@@ -7,14 +7,6 @@ import 'package:new_digitendance/app/models/course_registration.dart';
 import 'package:new_digitendance/app/models/faculty.dart';
 
 class Session extends Equatable {
-  String? sessionId;
-  String? sessionTitle;
-  String parentCourseId;
-  DateTime? registrationStartDate;
-  Timestamp? registrationEndDate;
-  SessionStatus? sessionStatus;
-  Faculty? faculty;
-  List<CourseRegistration>? courseRegistrations;
   Session({
     this.sessionId,
     this.sessionTitle,
@@ -24,6 +16,49 @@ class Session extends Equatable {
     this.faculty,
     this.courseRegistrations,
   });
+
+  factory Session.fromJson(String source) =>
+      Session.fromMap(json.decode(source));
+
+  factory Session.fromMap(Map<String, dynamic> map) {
+    return Session(
+      sessionId: map['sessionId'],
+      sessionTitle: map['sessionTitle'],
+      parentCourseId: map['parentCourseId'] ?? '',
+      registrationStartDate: map['registrationStartDate'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['registrationStartDate'])
+          : null,
+      registrationEndDate:
+          map['registrationEndDate']! ?? map['registrationEndDate'].toDate(),
+      faculty: map['faculty'] != null ? Faculty.fromMap(map['faculty']) : null,
+      courseRegistrations: map['courseRegistrations'] != null
+          ? List<CourseRegistration>.from(map['courseRegistrations']
+              ?.map((x) => CourseRegistration.fromMap(x)))
+          : null,
+    );
+  }
+
+  List<CourseRegistration>? courseRegistrations;
+  Faculty? faculty;
+  String parentCourseId;
+  Timestamp? registrationEndDate;
+  DateTime? registrationStartDate;
+  String? sessionId;
+  SessionStatus? sessionStatus;
+  String? sessionTitle;
+
+  @override
+  List<Object> get props {
+    return [
+      sessionId ?? '',
+      sessionTitle ?? '',
+      parentCourseId,
+      registrationStartDate!,
+      registrationEndDate!,
+      faculty!,
+      courseRegistrations ?? <CourseRegistration>[],
+    ];
+  }
 
   Session copyWith({
     String? sessionId,
@@ -77,41 +112,7 @@ class Session extends Equatable {
     return result;
   }
 
-  factory Session.fromMap(Map<String, dynamic> map) {
-    return Session(
-      sessionId: map['sessionId'],
-      sessionTitle: map['sessionTitle'],
-      parentCourseId: map['parentCourseId'] ?? '',
-      registrationStartDate: map['registrationStartDate'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['registrationStartDate'])
-          : null,
-      registrationEndDate:
-          map['registrationEndDate']! ?? map['registrationEndDate'].toDate(),
-      faculty: map['faculty'] != null ? Faculty.fromMap(map['faculty']) : null,
-      courseRegistrations: map['courseRegistrations'] != null
-          ? List<CourseRegistration>.from(map['courseRegistrations']
-              ?.map((x) => CourseRegistration.fromMap(x)))
-          : null,
-    );
-  }
-
   String toJson() => json.encode(toMap());
-
-  factory Session.fromJson(String source) =>
-      Session.fromMap(json.decode(source));
-
-  @override
-  List<Object> get props {
-    return [
-      sessionId ?? '',
-      sessionTitle ?? '',
-      parentCourseId,
-      registrationStartDate!,
-      registrationEndDate!,
-      faculty!,
-      courseRegistrations ?? <CourseRegistration>[],
-    ];
-  }
 }
 
 enum RegistrationStatus {

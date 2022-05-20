@@ -1,44 +1,63 @@
-import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:new_digitendance/app/contants.dart';
+import 'package:new_digitendance/app/models/session.dart';
 import 'package:new_digitendance/ui/authentication/state/auth_state.dart';
 import '../../../../app/models/course.dart';
+import '../../../../app/utilities.dart';
 import '../../../authentication/state/institution_state.dart';
 
-final adminStateNotifierProvider =
-    StateNotifierProvider<AdminStateNotifier, AdminState>((ref) {
-  return AdminStateNotifier(ref);
+final allCoursesStreamProvider =
+    StreamProvider<Iterable<Course>>((ref) async* {
+  yield*  ref
+      .read(dbProvider)
+      .doc(ref.read(institutionNotifierProvider).docRef.path)
+      .collection('courses')
+      .snapshots().map((event) =>
+       event.docs.map((e) => Course.fromMap(e.data()),).toList()).asBroadcastStream();
 });
 
-/// provides encapsulated state of []
-class AdminState extends Equatable {
-  Course? activeCourse;
-    AsyncValue<List<Course>>? availableCourses;
-  bool isBusy = false;
+final currentCourseProvider =
+    StateNotifierProvider<CourseNotifier, Course>((ref) {
+  DocumentReference docRef=ref.read(dbApiProvider).documentReferenceFromPath('/instiution/default');
+  return CourseNotifier(Course(docRef: docRef), ref);
+});
 
-  @override
-  // TODO: implement props
-  List<Object?> get props => [availableCourses, activeCourse, isBusy];
-}
+class CourseNotifier extends StateNotifier<Course> {
+  final StateNotifierProviderRef<CourseNotifier, Course> ref;
+  CourseNotifier(state, this.ref) : super(state);
+  DocumentReference? get docRef => state.docRef;
 
-class AdminStateNotifier extends StateNotifier<AdminState> {
-  AdminStateNotifier(this.ref, [state]) : super(state ?? AdminState());
+  // void setPreReqsonCourse(QuerySnapshot<Map<String, dynamic>> data) {
+  //   data.docs.forEach((element) {
+  //     state.preReqs!.add(Course.fromData(element.data()));
+  //     Utils.log(
+  //         'added ${element.data().toString()} to selected Course\'s preREQs ');
+  //   });
+  // }
 
-  late FirebaseFirestore db;
-  final StateNotifierProviderRef<AdminStateNotifier, AdminState> ref;
-  bool get isBusy => state.isBusy;
-  bool get isNOtBusy => state.isBusy;
-  set busy(bool val) {
-    state.isBusy = val;
+  void setSessiononCourseProvider(
+      QuerySnapshot<Map<String, dynamic>> data, String courseId) {
+    state.sessions!.clear();
+    // var courseId = ref.read(currentCourseProvider).courseId!;
+    for (var element in data.docs) {
+      // Utilities.log(element.data().toString());
+
+      // state.sessions!
+      //     .add(Session.fromDataAndCourseId(element.data(), courseId));
+
+      Utils.log(
+          'ADDED  ${element.data()['sessionId'] + element.data()['facultyId']} to selected Course\'s SESSIONS ');
+    }
   }
 
-
-  Stream<Course>  availableCourses (){
-    db = ref.read(dbProvider);
-    String institutionDocRef = ref.read(institutionNotifierProvider).docRef.path;
-
-    final stream = db.doc(institutionDocRef).collection('courses').snapshots();
-    return stream.map((querySnapshot) => Course.fromMap(querySnapshot.docs[0].data()));
-  }
+  // void removePreReq(Course courseElement) {
+  //   final newState = state.copyWith();
+  //   if (newState.preReqs!.isNotEmpty) {
+  //     if (newState.preReqs!.contains(courseElement)) {
+  //       newState.preReqs!.remove(courseElement);
+  //     }
+  //     state = newState;
+  //   }
+  // }
 }
