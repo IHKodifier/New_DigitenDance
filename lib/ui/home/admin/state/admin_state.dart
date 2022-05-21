@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 import 'package:new_digitendance/app/contants.dart';
 import 'package:new_digitendance/app/models/session.dart';
 import 'package:new_digitendance/ui/authentication/state/auth_state.dart';
@@ -7,19 +8,25 @@ import '../../../../app/models/course.dart';
 import '../../../../app/utilities.dart';
 import '../../../authentication/state/institution_state.dart';
 
-final allCoursesStreamProvider =
-    StreamProvider<Iterable<Course>>((ref) async* {
-  yield*  ref
+var logger = Logger(printer: PrettyPrinter());
+final allCoursesStreamProvider = StreamProvider<Iterable<Course>>((ref) async* {
+  logger.d(ref.read(institutionNotifierProvider).docRef.path);
+  yield* ref
       .read(dbProvider)
       .doc(ref.read(institutionNotifierProvider).docRef.path)
       .collection('courses')
-      .snapshots().map((event) =>
-       event.docs.map((e) => Course.fromMap(e.data()),).toList()).asBroadcastStream();
+      .snapshots()
+      .map((event) => event.docs
+          .map(
+            (e) => Course.fromMap(e.data()),
+          )
+          .toList());
 });
 
 final currentCourseProvider =
     StateNotifierProvider<CourseNotifier, Course>((ref) {
-  DocumentReference docRef=ref.read(dbApiProvider).documentReferenceFromPath('/instiution/default');
+  DocumentReference docRef =
+      ref.read(dbApiProvider).documentReferenceFromPath('/instiution/default');
   return CourseNotifier(Course(docRef: docRef), ref);
 });
 
@@ -27,11 +34,12 @@ class CourseNotifier extends StateNotifier<Course> {
   final StateNotifierProviderRef<CourseNotifier, Course> ref;
   CourseNotifier(state, this.ref) : super(state);
   DocumentReference? get docRef => state.docRef;
+  var logger = Logger(printer: PrettyPrinter());
 
   // void setPreReqsonCourse(QuerySnapshot<Map<String, dynamic>> data) {
   //   data.docs.forEach((element) {
   //     state.preReqs!.add(Course.fromData(element.data()));
-  //     Utils.log(
+  //    logger.i(
   //         'added ${element.data().toString()} to selected Course\'s preREQs ');
   //   });
   // }
@@ -46,7 +54,7 @@ class CourseNotifier extends StateNotifier<Course> {
       // state.sessions!
       //     .add(Session.fromDataAndCourseId(element.data(), courseId));
 
-      Utils.log(
+      logger.i(
           'ADDED  ${element.data()['sessionId'] + element.data()['facultyId']} to selected Course\'s SESSIONS ');
     }
   }

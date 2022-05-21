@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 import 'package:new_digitendance/app/models/course.dart';
 import 'package:new_digitendance/app/models/institution.dart';
 import 'package:new_digitendance/app/utilities.dart';
@@ -18,117 +19,127 @@ import 'state/admin_state.dart';
 class AdminAppHomePage extends ConsumerWidget {
   AdminAppHomePage({Key? key}) : super(key: key);
 
+  var logger = Logger(printer: PrettyPrinter());
+  var notifier;
   var thisRef;
 
   late BuildContext _context;
-  var notifier;
 
-  Widget? onError(Object error, StackTrace? stackTrace) {}
+  // Widget? onError(Object error, StackTrace? stackTrace) {}
 
-  Widget onLoading() => const BusyShimmer();
+  // Widget onLoading() => const BusyShimmer();
 
-  Widget? onData(Iterable<Course> data) {
-    // data.map((event) => event.docs.map((e) => Course.fromMap(e.data())));
-    var coursesList = data.toList();
+  // Widget? onData(Iterable<Course> data) {
+  //   // var coursesList = data.toList();
 
-    Utils.log('printing onData ${data.toString()}');
-    // Institution institution = Institution.fromJson
+  //   // logger.i('Length of Courses ${coursesList.length.toString()}');
+  //   // Institution institution = Institution.fromJson
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text(
-            'get inst title',
-            // instutution.title!,
-            // style: Theme.of(context).textTheme.headline3),
-          ),
-        ),
-        const SizedBox(height: 20),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 32),
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            // ignore: prefer_const_literals_to_create_immutables
-            children: [
-              const HomeMenuCard(
-                iconData: Icons.auto_stories,
-                title: 'Courses',
-              ),
-              const HomeMenuCard(
-                // assetName: 'student.jpg',
-                iconData: Icons.people,
-                title: 'Students',
-              ),
-              const HomeMenuCard(
-                // assetName: 'faculty.png',
-                iconData: Icons.school,
-                title: 'Faculty',
-              ),
-              const HomeMenuCard(
-                // assetName: 'about.png',
-                iconData: Icons.info,
-                title: 'About Digitendance',
-              ),
-              const HomeMenuCard(
-                // assetName: 'settings.png',
-                iconData: Icons.settings,
-                title: 'Settings',
-              ),
-              const HomeMenuCard(
-                // assetName: 'reports.jpg',
-                iconData: Icons.bar_chart_sharp,
-                title: 'Reports',
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        ElevatedButton(
-            onPressed: () {
-              notifier.signOut();
-            },
-            child: Text('Log out ')),
-      ],
-    );
-  }
+  //   return
+  // }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // thisRef = ref;
-    final allAdminCourses = ref.watch(allCoursesStreamProvider);
+    thisRef = ref;
+    // final allAdminCourses = ref.watch(allCoursesStreamProvider);
     AuthenticationNotifier notifier =
         thisRef.read(authenticationNotifierProvider.notifier);
     thisRef = ref;
     _context = context;
 
     return Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-              onPressed: () {
-                // AuthenticationNotifier notifier =
-                //     thisRef.read(authenticationNotifierProvider.notifier);
-                notifier.signOut();
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: ((context) => LoginPage())));
-              },
-              icon: const Icon(Icons.logout),
-              iconSize: 40,
-            ),
-          ],
-        ),
-        body: Center(
-          child: Center(
-            child: allAdminCourses.when(
-                data: onData, error: onError, loading: onLoading),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {
+              // AuthenticationNotifier notifier =
+              //     thisRef.read(authenticationNotifierProvider.notifier);
+              notifier.signOut();
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: ((context) => LoginPage())));
+            },
+            icon: const Icon(Icons.logout),
+            iconSize: 40,
           ),
-        ));
+        ],
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  'get inst title',
+                  // instutution.title!,
+                  // style: Theme.of(context).textTheme.headline3),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 32),
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  // ignore: prefer_const_literals_to_create_immutables
+                  children: [
+                    const HomeMenuCard(
+                      iconData: Icons.auto_stories,
+                      title: 'Courses',
+                    ),
+                    const HomeMenuCard(
+                      // assetName: 'student.jpg',
+                      iconData: Icons.people,
+                      title: 'Students',
+                    ),
+                    const HomeMenuCard(
+                      // assetName: 'faculty.png',
+                      iconData: Icons.school,
+                      title: 'Faculty',
+                    ),
+                    const HomeMenuCard(
+                      // assetName: 'about.png',
+                      iconData: Icons.info,
+                      title: 'About Digitendance',
+                    ),
+                    const HomeMenuCard(
+                      // assetName: 'settings.png',
+                      iconData: Icons.settings,
+                      title: 'Settings',
+                    ),
+                    const HomeMenuCard(
+                      // assetName: 'reports.jpg',
+                      iconData: Icons.bar_chart_sharp,
+                      title: 'Reports',
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    notifier.signOut();
+                  },
+                  child: Text('Log out ')),
+            ],
+          ),
+        ),
+      ),
+    );
 
+
+
+
+
+
+
+
+
+
+    
     // ListView.builder(itemBuilder: (context,index){return ListTile(title: Text(availableCourses![index].courseTitle!),);}),
     // Column(
     //   mainAxisAlignment: MainAxisAlignment.center,
@@ -169,8 +180,8 @@ class HomeMenuCard extends StatelessWidget {
           hoverColor: Colors.purple.shade300,
           splashColor: Colors.purple.shade100,
           onTap: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const CoursesPage()));
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => CoursesPage()));
           },
           child: Card(
             // shape: Bordersh(),

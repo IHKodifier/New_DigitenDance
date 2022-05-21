@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 import 'package:new_digitendance/ui/authentication/state/auth_state.dart';
 import 'package:new_digitendance/ui/authentication/state/institution_state.dart';
 import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
@@ -38,6 +39,8 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
     state = state.copyWith(authenticatedUser: null);
   }
 
+  var logger = Logger(printer: PrettyPrinter());
+
   ///function to set the [state.isBusy]  to [val]
   set setBusyTo(bool val) {
     state = state.copyWith(isBusy: val);
@@ -71,8 +74,14 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
     ///
     if (loggegInUser != null) {
       grabAppUserFromDb(loggegInUser).then((appUser) {
-        Utils.log('Grabbing AppUser from DB ${appUser.toString()}');
+        logger.i('Grabbing AppUser from DB ${appUser.toString()}');
         setAuthenticatedUser(appUser: appUser);
+        ref.listen(authenticationNotifierProvider,
+            (AuthenticationState? previous, AuthenticationState next) {
+          ref.read(institutionNotifierProvider).docRef =
+              next.authenticatedUser?.docRef.parent as DocumentReference<Map<String, dynamic>>;
+          // next.authenticatedUser.docRef.parent;
+        });
         // ref.read(adminStateNotifierProvider.notifier).availableCourses();
       });
       // Navigator.of(context).pop();
@@ -123,9 +132,9 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
         .collectionGroup('users')
         .where('userId', isEqualTo: user.email)
         .get();
-    Utils.log(
+    logger.i(
         ' user\'s retrived : ${userQuerySnapshot.docs[0].data().toString()}');
-    Utils.log(
+    logger.i(
         ' user\'s institutionPath : ${userQuerySnapshot.docs[0].reference.parent.parent?.path}');
 
     ///reference to the  Institution where

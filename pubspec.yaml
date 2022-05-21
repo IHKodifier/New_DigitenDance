@@ -54,6 +54,11 @@ dependencies:
   syncfusion_flutter_signaturepad: ^19.3.57
   syncfusion_flutter_calendar: 
   collection: ^1.15.0
+  logger: ^1.1.0
+
+
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

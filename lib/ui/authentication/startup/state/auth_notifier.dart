@@ -56,7 +56,7 @@
 //     //   ${state.toString()}
 //     //   ''');
 //     state = newState;
-//     Utils.log(''''
+//     logger.i(''''
 //       AuthState has been updated . new state equals  
 //       ${newState.toString()}
 //       ''');
@@ -73,6 +73,6 @@
 //   Future<void> signOut() async {
 //     authApi = thisref.watch(authApiProvider);
 //     await authApi!.signOut();
-//     Utils.log(FirebaseAuth.instance.currentUser.toString());
+//     logger.i(FirebaseAuth.instance.currentUser.toString());
 //   }
 // }

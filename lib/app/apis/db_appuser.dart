@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:logger/logger.dart';
 import 'package:new_digitendance/app/models/app_user.dart';
 
 import '../models/institution.dart';
@@ -8,6 +9,9 @@ class DbAppUser {
   final db = FirebaseFirestore.instance;
 
   DbAppUser();
+    var logger = Logger(
+    printer: PrettyPrinter()
+  );
 
   ///[createSignUpUserInDb] will perform bath write on db to
   ///
@@ -58,7 +62,7 @@ class DbAppUser {
     //       .doc()
     //       .set(appUser.toMap());
     // } catch (e) {
-    //   Utils.log(e.toString());
+    //   logger.i(e.toString());
     // }
     return appUser;
   }
@@ -72,12 +76,12 @@ class DbAppUser {
           .doc(institution.docRef.path)
           .set(institution.toMap())
           .then(
-            (value) => Utils.log(
+            (value) => logger.i(
               'Instituion created ${institution.toString()}',
             ),
           );
     } catch (e) {
-      Utils.log(e.toString());
+      logger.i(e.toString());
     }
 
     return institution.docRef.path;

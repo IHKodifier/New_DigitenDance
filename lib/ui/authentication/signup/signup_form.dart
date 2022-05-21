@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:logger/logger.dart';
 import 'package:new_digitendance/app/apis/dbapi.dart';
 import 'package:new_digitendance/app/contants.dart';
 import 'package:new_digitendance/ui/authentication/startup/state/startup_state.dart';
@@ -30,6 +31,9 @@ class _LoginFormState extends ConsumerState<SignupForm> {
   late Institution _institution;
   late AuthenticationNotifier authStateNotifier;
   late AuthenticationState authState;
+       var logger = Logger(
+    printer: PrettyPrinter()
+  );
   @override
   void dispose() {
     emailController.dispose();
@@ -41,6 +45,7 @@ class _LoginFormState extends ConsumerState<SignupForm> {
   Widget build(BuildContext context) {
     authStateNotifier = ref.read(authenticationNotifierProvider.notifier);
     authState = ref.watch(authenticationNotifierProvider);
+ 
 
     // return ?
     // builSignUpForm(context):Materialpa;
@@ -97,7 +102,7 @@ class _LoginFormState extends ConsumerState<SignupForm> {
     _formkey.currentState?.validate();
     _formkey.currentState?.save();
 
-    Utils.log('CREATING INSTITUTION ${_institution.toString()}');
+    logger.i('CREATING INSTITUTION ${_institution.toString()}');
     authStateNotifier.setBusyTo=true;
     var signedupUser = await authStateNotifier
         .signUpUser(
@@ -106,7 +111,7 @@ class _LoginFormState extends ConsumerState<SignupForm> {
             institution: _institution,
             loginProviderType: LoginProviderType.EmailPassword)
         .then((value) {
-      Utils.log(value.toString());
+      logger.i(value.toString());
       authStateNotifier.setAuthenticatedUser(appUser: value);
       ref.read(institutionNotifierProvider.notifier).setInstitution(_institution);
       // final adminNotifier =ref.read(adminStateNotifierProvider.notifier);

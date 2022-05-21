@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 import 'package:new_digitendance/app/apis/app_services.dart';
 import 'package:new_digitendance/app/contants.dart';
 import 'package:new_digitendance/app/models/app_user.dart';
@@ -13,6 +14,9 @@ final authApiProvider =
 class AuthApi {
   // ignore: prefer_final_fields
   // String _phone = '';
+  var logger = Logger(
+    printer: PrettyPrinter()
+  );
 
   AuthApi(this.instance);
 
@@ -85,7 +89,7 @@ class AuthApi {
           )
           .then((onSignUpSuccess));
     } catch (e) {
-      Utils.log(e.toString());
+      logger.i(e.toString());
     }
   }
 
@@ -119,7 +123,7 @@ class AuthApi {
       userCredential = await instance.signInWithEmailAndPassword(
           email: _email, password: _password);
     } catch (e) {
-      Utils.log(e.toString());
+      logger.i(e.toString());
     }
     if (userCredential?.user != null) {
       return userCredential?.user;

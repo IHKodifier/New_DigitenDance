@@ -1,5 +1,6 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 import 'package:new_digitendance/app/apis/dbapi.dart';
 
 import 'package:new_digitendance/app/models/app_user.dart';
@@ -12,8 +13,7 @@ final institutionNotifierProvider =
     StateNotifierProvider<InstitutionNotifier, Institution>((ref) {
   return InstitutionNotifier(
     ref,
-    // Institution(
-    //     id: 'not set', title: 'not set', docRef: null as DocumentReference<Map<String, dynamic>>),
+    
   );
 });
 
@@ -32,12 +32,16 @@ class InstitutionNotifier extends StateNotifier<Institution> {
     docRef: DbApi().documentReferenceFromPath('/institutions/initial')
   ));
 
+       var logger = Logger(
+    printer: PrettyPrinter()
+  );
+
   final StateNotifierProviderRef<InstitutionNotifier, Institution> ref;
 
   void setInstitution(Institution data) {
-    Utils.log('setting institution....received data ${data.toString()}');
+    logger.i('setting institution state to....received data ${data.toString()}');
     state = data;
-    Utils.log('state set to ... ${state.toString()}');
+    logger.i('state has been successfuly set to ... ${state.toString()}');
   }
 
   // InstitutionNotifier copyWith({
