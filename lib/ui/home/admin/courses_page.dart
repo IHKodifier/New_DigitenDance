@@ -12,7 +12,13 @@ import '../../../app/models/course.dart';
 
 class CoursesPage extends ConsumerWidget {
   CoursesPage({Key? key}) : super(key: key);
+
   var log = Logger(printer: PrettyPrinter());
+
+  navigateToAddCourse(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const NewCourse()));
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -45,47 +51,40 @@ class CoursesPage extends ConsumerWidget {
       // FloatingActionButtonLocation.miniCenterFloat,
     );
   }
-
-  navigateToAddCourse(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const NewCourse()));
-  }
 }
 
 class CoursesList extends ConsumerWidget {
   CoursesList({Key? key}) : super(key: key);
+
   var log = Logger(printer: PrettyPrinter());
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    log.i('feteching courses stream');
-    log.i(ref.read(institutionNotifierProvider));
-    // final courses = ref.watch(allCoursesStreamProvider);
-    // log.i(courses.asData?.value.toString);
-    ref.read(institutionNotifierProvider);
+    log.i(
+        'feteching courses stream from ${ref.read(institutionNotifierProvider).docRef?.path}');
 
-    final coursesList = ref.watch(allCoursesStreamProvider);
-    // log.i(message)
-    return coursesList.when(
-        data: (courseIterable) {
-          final coursesLists = courseIterable.toList();
-          return ListView.builder(
-            itemCount: coursesLists.length,
-            itemBuilder: (context, index) {
-              // final course = Course.fromMap(
-              //     data[index],
-              // data.docs[index].reference,
-              // );
-              return CourseCard(
-                course: coursesLists[index],
-              );
-            },
-          );
-        },
-        error: (err, st) {
-          log.e(err.toString() + st.toString());
-          return Center(child: Text(err.toString() + st.toString()));
-        },
-        loading: () => const BusyShimmer());
+    final courseStream = ref.watch(allCoursesStreamProvider);
+    return  courseStream.when(
+      error: (err, st) {
+        log.e(err.toString() + st.toString());
+        return Center(
+          child: Text(
+            err.toString() + st.toString(),
+          ),
+        );
+      },
+      loading: () => const BusyShimmer(),
+      data: (courses) {
+        log.i('length of courses ${courses.length.toString()}');
+        return ListView.builder(
+          itemCount: courses.length,
+          itemBuilder: (context, index) {
+            return CourseCard(
+              course: courses[index],
+            );
+          },
+        );
+      },
+    );
   }
 }

@@ -31,7 +31,7 @@ class _LoginFormState extends ConsumerState<SignupForm> {
   late Institution _institution;
   late AuthenticationNotifier authStateNotifier;
   late AuthenticationState authState;
-       var logger = Logger(
+       var log = Logger(
     printer: PrettyPrinter()
   );
   @override
@@ -102,7 +102,7 @@ class _LoginFormState extends ConsumerState<SignupForm> {
     _formkey.currentState?.validate();
     _formkey.currentState?.save();
 
-    logger.i('CREATING INSTITUTION ${_institution.toString()}');
+    log.i('CREATING INSTITUTION ${_institution.toString()}');
     authStateNotifier.setBusyTo=true;
     var signedupUser = await authStateNotifier
         .signUpUser(
@@ -111,7 +111,7 @@ class _LoginFormState extends ConsumerState<SignupForm> {
             institution: _institution,
             loginProviderType: LoginProviderType.EmailPassword)
         .then((value) {
-      logger.i(value.toString());
+      log.i(value.toString());
       authStateNotifier.setAuthenticatedUser(appUser: value);
       ref.read(institutionNotifierProvider.notifier).setInstitution(_institution);
       // final adminNotifier =ref.read(adminStateNotifierProvider.notifier);

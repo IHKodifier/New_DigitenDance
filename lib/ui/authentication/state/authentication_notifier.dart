@@ -5,11 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:new_digitendance/ui/authentication/state/auth_state.dart';
 import 'package:new_digitendance/ui/authentication/state/institution_state.dart';
-import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
 import '../../../app/contants.dart';
 import '../../../app/models/app_user.dart';
 import '../../../app/models/institution.dart';
-import '../../../app/utilities.dart';
 
 class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
   AuthenticationNotifier(
@@ -22,6 +20,8 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
   /// [db]  exposes the [FireBaseFirestore] instance
   /// for this app
   late FirebaseFirestore db;
+
+  var log = Logger(printer: PrettyPrinter());
 
   ///ref to red and listen to other providers
   StateNotifierProviderRef<AuthenticationNotifier, AuthenticationState> ref;
@@ -37,9 +37,8 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
   signOut() {
     FirebaseAuth.instance.signOut();
     state = state.copyWith(authenticatedUser: null);
+    // ref.read(institutionNotifierProvider.notifier).state = null as Institution;
   }
-
-  var logger = Logger(printer: PrettyPrinter());
 
   ///function to set the [state.isBusy]  to [val]
   set setBusyTo(bool val) {
@@ -52,16 +51,18 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
 
   /// function to login an [AppUser] with the provided
   /// [LoginProviderType]. On succesffull login , it will
-  /// set the [authenticatedUser] and [selectedRole]
+  /// grab the [AppUser] by calling [grabAppUserFromDb] then
+  /// set the [authenticatedUser] ,[selectedRole]
   /// on the [AuthenticationState]
+  /// and [Institution] on the [InstitutionNotifier] by calling [getInstitutionforUser]
 
-  Future<bool> login({
+  Future login({
     required LoginProviderType loginProvider,
     required String email,
     required String password,
   }) async {
     final authApi = ref.read(authApiProvider);
-    final loggegInUser = await authApi.attemptLogin(
+    final attemptedUser = await authApi.attemptLogin(
       loginProvider: LoginProviderType.EmailPassword,
       email: email,
       password: password,
@@ -72,26 +73,23 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
     ///set the [Institution] in [institutionProvider]
     ///then set this user in [AuthenticationState]
     ///
-    if (loggegInUser != null) {
-      grabAppUserFromDb(loggegInUser).then((appUser) {
-        logger.i('Grabbing AppUser from DB ${appUser.toString()}');
+    if (attemptedUser != null) {
+      grabAppUserFromDb(attemptedUser).then((appUser) {
+        log.d('Grabbing AppUser from DB ${appUser.toString()}');
         setAuthenticatedUser(appUser: appUser);
-        ref.listen(authenticationNotifierProvider,
-            (AuthenticationState? previous, AuthenticationState next) {
-          ref.read(institutionNotifierProvider).docRef =
-              next.authenticatedUser?.docRef.parent as DocumentReference<Map<String, dynamic>>;
-          // next.authenticatedUser.docRef.parent;
-        });
-        // ref.read(adminStateNotifierProvider.notifier).availableCourses();
+        ref.read(institutionNotifierProvider.notifier).setDocRefOnInstitution(
+            appUser.docRef.parent.parent
+                as DocumentReference<Map<String, dynamic>>);
+
+        // ref.read(institutionNotifierProvider).docRef = appUser
+        //     .docRef.parent.parent as DocumentReference<Map<String, dynamic>>;
       });
-      // Navigator.of(context).pop();
       return true;
     }
     return false;
   }
 
-  /// function to sign up by creating a [FirebaseAuth ] user with
-  /// the user provided  Email and password
+  /// function to sign up [AppUser] by creating a [FirebaseAuth ] user with   /// the user provided  Email and password
   /// on successfull sgnUp. it will call [createSignUpUserInDb] on [DbAppUser]to create  the new [Institution] and create the  new [AppUser] doc in db at path  [/institutions/[institution doc/users/appUser Doc]
   Future<AppUser> signUpUser(
       {required String email,
@@ -124,17 +122,38 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
     return updatedAppUser;
   }
 
+  ///function to grab [Institution] of the provided [User]
+  void getInstitutionforUser() async {
+    var userEmail =
+        ref.read(authenticationNotifierProvider).authenticatedUser?.email;
+    var userQuerySnapshot = await db
+        .collectionGroup('users')
+        .where('userId', isEqualTo: userEmail)
+        .get();
+    log.d(' user\'s retrived : ${userQuerySnapshot.docs[0].data().toString()}');
+    log.d(
+        ' user\'s institutionPath : ${userQuerySnapshot.docs[0].reference.parent.parent?.path}');
+
+    ///reference to the  Institution where
+    /// the current [AppUser] belongs
+    var _institutionDocRef = userQuerySnapshot.docs[0].reference.parent.parent!;
+
+    var instituionData = await db.doc(_institutionDocRef.path).get();
+    Institution institution = Institution.fromMap(instituionData.data()!);
+    ref.read(institutionNotifierProvider.notifier).setInstitution(institution);
+  }
+
   /// function to grab [AppUser doc] from [db] and transform it
   /// to [AppUser] and then set the state
+
   Future<AppUser> grabAppUserFromDb(User user) async {
-    // to grab an [AppUser] db doc, the  [AppUser]'s institution needs to retreived  first
+    /// to grab an [AppUser] db doc, the  [AppUser]'s institution needs to retreived  first
     var userQuerySnapshot = await db
         .collectionGroup('users')
         .where('userId', isEqualTo: user.email)
         .get();
-    logger.i(
-        ' user\'s retrived : ${userQuerySnapshot.docs[0].data().toString()}');
-    logger.i(
+    log.d(' user\'s retrived : ${userQuerySnapshot.docs[0].data().toString()}');
+    log.d(
         ' user\'s institutionPath : ${userQuerySnapshot.docs[0].reference.parent.parent?.path}');
 
     ///reference to the  Institution where

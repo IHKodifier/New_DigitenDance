@@ -55,6 +55,7 @@ dependencies:
   syncfusion_flutter_calendar: 
   collection: ^1.15.0
   logger: ^1.1.0
+  flutter_randomcolor: ^1.0.12
 
 
 

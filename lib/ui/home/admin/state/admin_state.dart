@@ -2,25 +2,44 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:new_digitendance/app/contants.dart';
-import 'package:new_digitendance/app/models/session.dart';
 import 'package:new_digitendance/ui/authentication/state/auth_state.dart';
+import 'package:new_digitendance/ui/home/admin/state/transformer.dart';
 import '../../../../app/models/course.dart';
-import '../../../../app/utilities.dart';
 import '../../../authentication/state/institution_state.dart';
 
 var logger = Logger(printer: PrettyPrinter());
-final allCoursesStreamProvider = StreamProvider<Iterable<Course>>((ref) async* {
-  logger.d(ref.read(institutionNotifierProvider).docRef.path);
-  yield* ref
+final allCoursesStreamProvider = StreamProvider<List<Course>>((ref) async* {
+  // StreamController<QuerySnapshot<Map<String, dynamic>>>
+  //
+  var fireStream =  ref
       .read(dbProvider)
       .doc(ref.read(institutionNotifierProvider).docRef.path)
       .collection('courses')
       .snapshots()
-      .map((event) => event.docs
-          .map(
-            (e) => Course.fromMap(e.data()),
-          )
-          .toList());
+      .transform(streamTransformer(Course.fromMap));
+  yield* fireStream;
+
+  //////////////////////////////////
+  // logger.d(ref.read(institutionNotifierProvider).docRef.path);
+  // await ref
+  //     .read(dbProvider)
+  //     .doc(ref.read(institutionNotifierProvider).docRef.path)
+  //     .collection('courses')
+  //     .snapshots()
+  //     .map((snapshot) async* {
+  //   logger
+  //       .i('snapshot has ${snapshot.docs.length.toString()} documents inside');
+  //   snapshot.docs.map((e) async* {
+  //     logger.i('Course Received....${e.data().toString()}');
+  //     yield Course.fromMap(e.data());
+  //   });
+  // });
+
+  // .map((event) => event.docs
+  //     .map(
+  //       (e) => Course.fromMap(e.data()),
+  //     )
+  // );
 });
 
 final currentCourseProvider =
@@ -31,10 +50,12 @@ final currentCourseProvider =
 });
 
 class CourseNotifier extends StateNotifier<Course> {
-  final StateNotifierProviderRef<CourseNotifier, Course> ref;
   CourseNotifier(state, this.ref) : super(state);
-  DocumentReference? get docRef => state.docRef;
+
   var logger = Logger(printer: PrettyPrinter());
+  final StateNotifierProviderRef<CourseNotifier, Course> ref;
+
+  DocumentReference? get docRef => state.docRef;
 
   // void setPreReqsonCourse(QuerySnapshot<Map<String, dynamic>> data) {
   //   data.docs.forEach((element) {

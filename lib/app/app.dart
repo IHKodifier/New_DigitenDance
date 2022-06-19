@@ -13,10 +13,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Digitendance 1.0',
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner:false,
       theme: ThemeData(
       useMaterial3:true,
-        primarySwatch: Colors.deepOrange),
+        primarySwatch: Colors.green),
       home: FutureBuilder(
         future: _initializeApp,
         builder: (context, snapshot) {

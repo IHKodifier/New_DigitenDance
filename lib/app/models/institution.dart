@@ -5,12 +5,14 @@ import 'package:equatable/equatable.dart';
 import 'package:new_digitendance/app/apis/dbapi.dart';
 
 class Institution extends Equatable {
-  Institution({
+  Institution(
+    {
     required this.title,
     required this.id,
     this.address,
     required this.docRef,
-  });
+  }
+  );
 
   factory Institution.fromJson(String source) =>
       Institution.fromMap(json.decode(source));
@@ -24,10 +26,10 @@ class Institution extends Equatable {
         docRef: _docRef);
   }
 
-   String? address;
-   DocumentReference<Map<String,dynamic>> docRef;
-   String? id;
-   String? title;
+  String? address;
+  late DocumentReference<Map<String, dynamic>> docRef;
+  late String? id;
+  late String? title;
 
   @override
   // TODO: implement props

@@ -9,9 +9,11 @@ import 'package:new_digitendance/app/models/course.dart';
 import 'package:new_digitendance/app/models/institution.dart';
 import 'package:new_digitendance/app/utilities.dart';
 import 'package:new_digitendance/ui/authentication/login/login_page.dart';
+import 'package:new_digitendance/ui/authentication/state/institution_state.dart';
 import 'package:new_digitendance/ui/home/admin/courses_page.dart';
 import 'package:new_digitendance/ui/shared/shimmers.dart';
 
+import '../../authentication/startup/state/startup_state.dart';
 import '../../authentication/state/auth_state.dart';
 import '../../authentication/state/authentication_notifier.dart';
 import 'state/admin_state.dart';
@@ -20,7 +22,6 @@ class AdminAppHomePage extends ConsumerWidget {
   AdminAppHomePage({Key? key}) : super(key: key);
 
   var logger = Logger(printer: PrettyPrinter());
-  var notifier;
   var thisRef;
 
   late BuildContext _context;
@@ -42,10 +43,13 @@ class AdminAppHomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     thisRef = ref;
     // final allAdminCourses = ref.watch(allCoursesStreamProvider);
-    AuthenticationNotifier notifier =
+    final startupNotifier = ref.read(startupStateNotifierProvider.notifier);
+    AuthenticationNotifier authNotifier =
         thisRef.read(authenticationNotifierProvider.notifier);
     thisRef = ref;
     _context = context;
+    Institution institution = ref.read(institutionNotifierProvider);
+    ;
 
     return Scaffold(
       appBar: AppBar(
@@ -54,7 +58,7 @@ class AdminAppHomePage extends ConsumerWidget {
             onPressed: () {
               // AuthenticationNotifier notifier =
               //     thisRef.read(authenticationNotifierProvider.notifier);
-              notifier.signOut();
+              authNotifier.signOut();
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: ((context) => LoginPage())));
             },
@@ -69,11 +73,10 @@ class AdminAppHomePage extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Text(
-                  'get inst title',
-                  // instutution.title!,
+                  institution.title!,
                   // style: Theme.of(context).textTheme.headline3),
                 ),
               ),
@@ -121,7 +124,7 @@ class AdminAppHomePage extends ConsumerWidget {
               ),
               ElevatedButton(
                   onPressed: () {
-                    notifier.signOut();
+                    authNotifier.signOut();
                   },
                   child: Text('Log out ')),
             ],
@@ -130,16 +133,6 @@ class AdminAppHomePage extends ConsumerWidget {
       ),
     );
 
-
-
-
-
-
-
-
-
-
-    
     // ListView.builder(itemBuilder: (context,index){return ListTile(title: Text(availableCourses![index].courseTitle!),);}),
     // Column(
     //   mainAxisAlignment: MainAxisAlignment.center,

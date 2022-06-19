@@ -18,7 +18,7 @@ class BusyShimmer extends StatelessWidget {
           color: const Color.fromARGB(221, 97, 92, 92),
         ),
       ),
-      baseColor: const Color.fromARGB(221, 97, 92, 92),
+      baseColor: Theme.of(context).primaryColor,
       highlightColor: const Color.fromARGB(131, 255, 255, 255),
     );
   }

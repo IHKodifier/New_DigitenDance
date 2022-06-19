@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:new_digitendance/app/models/app_user.dart';
+import 'package:new_digitendance/ui/authentication/startup/startup_view.dart';
 
 final startupStateNotifierProvider =
     StateNotifierProvider<StartupStateNotifier, StartupState>((ref) {
@@ -14,12 +15,10 @@ final startupStateNotifierProvider =
 class StartupStateNotifier extends StateNotifier<StartupState> {
   StartupStateNotifier([state]) : super(state ?? StartupState());
 
+//   ref.ref.listen<>(, (value) {
 
-//   ref.ref.listen<>(, (value) { 
-    
 //   });
 }
-
 
 class StartupState extends Equatable {
   bool _hasAuthenticatedUser = false;
@@ -35,4 +34,5 @@ class StartupState extends Equatable {
   @override
   // TODO: implement props
   List<Object?> get props => [hasAuthentiatedUser];
+  User? get currentFirebaseUser => FirebaseAuth.instance.currentUser;
 }

@@ -188,6 +188,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
+  flutter_randomcolor:
+    dependency: "direct main"
+    description:
+      name: flutter_randomcolor
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.12"
   flutter_riverpod:
     dependency: "direct main"
     description:
