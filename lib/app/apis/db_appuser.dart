@@ -29,14 +29,14 @@ class DbAppUser {
 
     /// set the [Institution] doc in the db
     batch.set(
-      db.doc(appUser.docRef.path),
+      db.doc(appUser.docRef!.path),
       institution.toMap(),
     );
 
     /// set the [AppUser] doc in the db
     /// get reference for user doc
     DocumentReference<Map<String, dynamic>> appUserDocRef =
-        db.doc(institution.docRef.path).collection('users').doc();
+        db.doc(institution.docRef!.path).collection('users').doc();
 
     /// update [appUserDocRef] in [appUser]
     appUser.docRef = appUserDocRef;
@@ -73,7 +73,7 @@ class DbAppUser {
     try {
       await db
           // .collection('institutions')
-          .doc(institution.docRef.path)
+          .doc(institution.docRef!.path)
           .set(institution.toMap())
           .then(
             (value) => logger.i(
@@ -84,6 +84,6 @@ class DbAppUser {
       logger.i(e.toString());
     }
 
-    return institution.docRef.path;
+    return institution.docRef!.path;
   }
 }

@@ -78,7 +78,7 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
         log.d('Grabbing AppUser from DB ${appUser.toString()}');
         setAuthenticatedUser(appUser: appUser);
         ref.read(institutionNotifierProvider.notifier).setDocRefOnInstitution(
-            appUser.docRef.parent.parent
+            appUser.docRef!.parent.parent
                 as DocumentReference<Map<String, dynamic>>);
 
         // ref.read(institutionNotifierProvider).docRef = appUser

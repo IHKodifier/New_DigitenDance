@@ -15,9 +15,7 @@ final startupStateNotifierProvider =
 class StartupStateNotifier extends StateNotifier<StartupState> {
   StartupStateNotifier([state]) : super(state ?? StartupState());
 
-//   ref.ref.listen<>(, (value) {
 
-//   });
 }
 
 class StartupState extends Equatable {

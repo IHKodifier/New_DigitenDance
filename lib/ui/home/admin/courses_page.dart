@@ -8,7 +8,9 @@ import 'package:new_digitendance/ui/home/admin/course_card.dart';
 import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
 import 'package:new_digitendance/ui/shared/shimmers.dart';
 
-import '../../../app/models/course.dart';
+import '../../authentication/startup/state/startup_state.dart';
+import '../../authentication/state/auth_state.dart';
+
 
 class CoursesPage extends ConsumerWidget {
   CoursesPage({Key? key}) : super(key: key);
@@ -60,6 +62,36 @@ class CoursesList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+//TODO paste ref.listen code here
+    ref.listen<StartupState>(startupStateNotifierProvider,
+        (StartupState? previous, StartupState next) {
+int x;
+        x = 2;
+
+
+      if (next.hasAuthentiatedUser) {
+        
+        ref
+            .read(authenticationNotifierProvider.notifier)
+            .grabAppUserFromDb(next.currentFirebaseUser!)
+            .then((appUser) {
+          log.d(
+              'Detected existing user and now\n Grabbing AppUser from DB ${appUser.toString()}');
+          ref
+              .read(authenticationNotifierProvider.notifier)
+              .setAuthenticatedUser(appUser: appUser);
+          ref.read(institutionNotifierProvider.notifier).setDocRefOnInstitution(
+              appUser.docRef!.parent.parent
+                  as DocumentReference<Map<String, dynamic>>);
+        });
+      }
+    });
+
+
+
+
+    
     log.i(
         'feteching courses stream from ${ref.read(institutionNotifierProvider).docRef?.path}');
 

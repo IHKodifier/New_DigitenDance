@@ -21,23 +21,10 @@ import 'state/admin_state.dart';
 class AdminAppHomePage extends ConsumerWidget {
   AdminAppHomePage({Key? key}) : super(key: key);
 
-  var logger = Logger(printer: PrettyPrinter());
+  var log = Logger(printer: PrettyPrinter());
   var thisRef;
 
   late BuildContext _context;
-
-  // Widget? onError(Object error, StackTrace? stackTrace) {}
-
-  // Widget onLoading() => const BusyShimmer();
-
-  // Widget? onData(Iterable<Course> data) {
-  //   // var coursesList = data.toList();
-
-  //   // logger.i('Length of Courses ${coursesList.length.toString()}');
-  //   // Institution institution = Institution.fromJson
-
-  //   return
-  // }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -50,6 +37,32 @@ class AdminAppHomePage extends ConsumerWidget {
     _context = context;
     Institution institution = ref.read(institutionNotifierProvider);
     ;
+
+
+    ref.listen<StartupState>(startupStateNotifierProvider,
+        (StartupState? previous, StartupState next) {
+int x;
+        x = 2;
+
+
+      if (next.hasAuthentiatedUser) {
+        
+        ref
+            .read(authenticationNotifierProvider.notifier)
+            .grabAppUserFromDb(next.currentFirebaseUser!)
+            .then((appUser) {
+          log.d(
+              'Detected existing user and now\n Grabbing AppUser from DB ${appUser.toString()}');
+          ref
+              .read(authenticationNotifierProvider.notifier)
+              .setAuthenticatedUser(appUser: appUser);
+          ref.read(institutionNotifierProvider.notifier).setDocRefOnInstitution(
+              appUser.docRef!.parent.parent
+                  as DocumentReference<Map<String, dynamic>>);
+        });
+      }
+    });
+
 
     return Scaffold(
       appBar: AppBar(

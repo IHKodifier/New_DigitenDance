@@ -25,7 +25,6 @@ class StartupView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final _stream = ref.watch(authStateChangesStreamProvider);
     final startupState = ref.watch<StartupState>(startupStateNotifierProvider);
     ref.listen<StartupState>(startupStateNotifierProvider,
         (StartupState? previous, StartupState next) {
@@ -45,7 +44,7 @@ int x;
               .read(authenticationNotifierProvider.notifier)
               .setAuthenticatedUser(appUser: appUser);
           ref.read(institutionNotifierProvider.notifier).setDocRefOnInstitution(
-              appUser.docRef.parent.parent
+              appUser.docRef!.parent.parent
                   as DocumentReference<Map<String, dynamic>>);
         });
       }

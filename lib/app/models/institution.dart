@@ -7,10 +7,10 @@ import 'package:new_digitendance/app/apis/dbapi.dart';
 class Institution extends Equatable {
   Institution(
     {
-    required this.title,
-    required this.id,
+     this.title,
+     this.id,
     this.address,
-    required this.docRef,
+     this.docRef,
   }
   );
 
@@ -27,17 +27,17 @@ class Institution extends Equatable {
   }
 
   String? address;
-  late DocumentReference<Map<String, dynamic>> docRef;
+  late DocumentReference<Map<String, dynamic>>? docRef;
   late String? id;
   late String? title;
 
   @override
   // TODO: implement props
-  List<Object> get props => [title!, id!, address ?? 'not set', docRef];
+  List<Object> get props => [title!, id!, address ?? 'not set', docRef!.path];
 
   @override
   String toString() {
-    return 'Institution(title: $title, id: $id, address: $address, docRef: ${docRef.path.toString()})';
+    return 'Institution(title: $title, id: $id, address: $address, docRef: ${docRef?.path.toString()})';
   }
 
   Institution copyWith({
@@ -62,7 +62,7 @@ class Institution extends Equatable {
     if (address != null) {
       result.addAll({'address': address});
     }
-    result.addAll({'docRef': docRef.path});
+    result.addAll({'docRef': docRef!.path});
 
     return result;
   }

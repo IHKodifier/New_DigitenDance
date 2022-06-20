@@ -13,6 +13,7 @@ import 'package:new_digitendance/ui/authentication/state/auth_state.dart';
 ///[institutionNotifierProvider] provides  the [StateNotifier<InstitutionNotifier>] to manage the  active [Institution] in the system. Each [Institution] is created in the Firestore at path  [/institutions/docId]
 final institutionNotifierProvider =
     StateNotifierProvider<InstitutionNotifier, Institution>((ref) {
+      
   return InstitutionNotifier(
     ref,
   );
@@ -26,9 +27,9 @@ class InstitutionNotifier extends StateNotifier<Institution> {
               Institution(
                 id: 'not set',
                 title: 'not set',
-                docRef:
-                    // ref.read(authenticationNotifierProvider).authenticatedUser?.docRef.parent.parent,
-                    DbApi().documentReferenceFromPath('/institutions/initial'),
+                // docRef:
+                //     // ref.read(authenticationNotifierProvider).authenticatedUser?.docRef.parent.parent,
+                //     DbApi().documentReferenceFromPath('/institutions/initial'),
               ),
         ) {
     // final user = ref.read(authenticationNotifierProvider).authenticatedUser;

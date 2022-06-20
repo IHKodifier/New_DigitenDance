@@ -47,7 +47,7 @@ class AppUser extends Equatable {
   AdditionalAppUserInfo? additionalAppUserInfo;
 
   /// This [AppUser]'s [DocumentReference] in the firestore
-  DocumentReference<Map<String, dynamic>> docRef;
+  DocumentReference<Map<String, dynamic>>? docRef;
 
   /// corresponds to the [user_UUID] in  the
   /// [Firebase Console -->Auth-->users ]
@@ -68,7 +68,7 @@ class AppUser extends Equatable {
       userId,
       // uUID,
       roles,
-      docRef,
+      docRef!.path,
       additionalAppUserInfo!,
     ];
   }
@@ -124,7 +124,7 @@ class AppUser extends Equatable {
     //     .doc(intitutionDocRef.path)
     //     .collection('users')
     //     .doc();
-    result.addAll({'docRef': docRef.path});
+    result.addAll({'docRef': docRef!.path});
     if (additionalAppUserInfo != null) {
       result.addAll({'additionalAppUserInfo': additionalAppUserInfo!.toMap()});
     }
