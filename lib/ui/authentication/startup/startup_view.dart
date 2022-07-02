@@ -6,8 +6,10 @@ import 'package:logger/logger.dart';
 import 'package:new_digitendance/ui/authentication/login/login_page.dart';
 import 'package:new_digitendance/ui/authentication/state/auth_state.dart';
 import 'package:new_digitendance/ui/home/admin/admin_homepage.dart';
+import 'package:new_digitendance/ui/shared/shimmers.dart';
 // import '../ui/startup/state/auth_notifier.dart';
 import '../startup/state/startup_state.dart';
+import '../../authentication/state/authentication_notifier.dart';
 import '../state/institution_state.dart';
 
 class StartupView extends ConsumerWidget {
@@ -25,34 +27,44 @@ class StartupView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final startupState = ref.watch<StartupState>(startupStateNotifierProvider);
-    ref.listen<StartupState>(startupStateNotifierProvider,
-        (StartupState? previous, StartupState next) {
-int x;
-        x = 2;
+    final startupState = ref.watch(startupStateNotifierProvider);
+    // ref.listen<StartupState>(startupStateNotifierProvider,
+    //     (StartupState? previous, StartupState next) {
+    //   int x;
+    //   x = 2;
 
+    //   if (next.hasAuthentiatedUser) {
+    //     ref
+    //         .read(authenticationNotifierProvider.notifier)
+    //         .grabAppUserFromDb(next.currentFirebaseUser!)
+    //         .then((appUser) {
+    //       log.d(
+    //           'Detected existing user and now\n Grabbing AppUser from DB ${appUser.toString()}');
+    //       ref
+    //           .read(authenticationNotifierProvider.notifier)
+    //           .setAuthenticatedUser(appUser: appUser);
+    //       ref.read(authenticationNotifierProvider.notifier).setBusyTo = false;
+    //       ref.read(institutionNotifierProvider.notifier).setDocRefOnInstitution(
+    //           appUser.docRef!.parent.parent
+    //               as DocumentReference<Map<String, dynamic>>);
+    //     });
+    //   }
+    // });
+// startupState.hasAuthentiatedUser
+    // return asyncStartupState.when(
+    //   data: (data) {
+    if (startupState.hasAuthentiatedUser) {
+      final AuthenticationNotifier =
+          ref.read(authenticationNotifierProvider.notifier);
+      AuthenticationNotifier.grabAppUserFromDb(
+              startupState.currentFirebaseUser!)
+          .then((appUser) {
+        log.d('Grabbing AppUser from DB ${appUser.toString()}');
+        AuthenticationNotifier.setAuthenticatedUser(appUser: appUser);
+      });
 
-      if (next.hasAuthentiatedUser) {
-        
-        ref
-            .read(authenticationNotifierProvider.notifier)
-            .grabAppUserFromDb(next.currentFirebaseUser!)
-            .then((appUser) {
-          log.d(
-              'Detected existing user and now\n Grabbing AppUser from DB ${appUser.toString()}');
-          ref
-              .read(authenticationNotifierProvider.notifier)
-              .setAuthenticatedUser(appUser: appUser);
-          ref.read(institutionNotifierProvider.notifier).setDocRefOnInstitution(
-              appUser.docRef!.parent.parent
-                  as DocumentReference<Map<String, dynamic>>);
-        });
-      }
-    });
-
-    return startupState.hasAuthentiatedUser
-        ? AdminAppHomePage()
-        : //return Login Page
-        const LoginPage();
+      return AdminAppHomePage();
+    } else {}
+    return const LoginPage();
   }
 }

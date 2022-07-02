@@ -31,9 +31,7 @@ class _LoginFormState extends ConsumerState<SignupForm> {
   late Institution _institution;
   late AuthenticationNotifier authStateNotifier;
   late AuthenticationState authState;
-       var log = Logger(
-    printer: PrettyPrinter()
-  );
+  var log = Logger(printer: PrettyPrinter());
   @override
   void dispose() {
     emailController.dispose();
@@ -45,7 +43,6 @@ class _LoginFormState extends ConsumerState<SignupForm> {
   Widget build(BuildContext context) {
     authStateNotifier = ref.read(authenticationNotifierProvider.notifier);
     authState = ref.watch(authenticationNotifierProvider);
- 
 
     // return ?
     // builSignUpForm(context):Materialpa;
@@ -103,7 +100,7 @@ class _LoginFormState extends ConsumerState<SignupForm> {
     _formkey.currentState?.save();
 
     log.i('CREATING INSTITUTION ${_institution.toString()}');
-    authStateNotifier.setBusyTo=true;
+    authStateNotifier.setBusyTo = true;
     var signedupUser = await authStateNotifier
         .signUpUser(
             email: _email,
@@ -113,7 +110,9 @@ class _LoginFormState extends ConsumerState<SignupForm> {
         .then((value) {
       log.i(value.toString());
       authStateNotifier.setAuthenticatedUser(appUser: value);
-      ref.read(institutionNotifierProvider.notifier).setInstitution(_institution);
+      ref
+          .read(institutionNotifierProvider.notifier)
+          .setInstitution(_institution);
       // final adminNotifier =ref.read(adminStateNotifierProvider.notifier);
       // adminNotifier.
       Navigator.of(context).pop();
@@ -121,7 +120,8 @@ class _LoginFormState extends ConsumerState<SignupForm> {
           MaterialPageRoute(builder: (context) => AdminAppHomePage()));
     });
 
-    authStateNotifier.setBusyTo=false;
+    authStateNotifier.setBusyTo = false;
+    // ref.read(authenticationNotifierProvider.notifier).up
   }
 
   buildSignupButton() {
@@ -194,6 +194,7 @@ class _LoginFormState extends ConsumerState<SignupForm> {
             _institution = Institution(
                 title: newValue!,
                 id: 'not set',
+                address: 'not set',
                 docRef: DbApi().dbAppUser.db.collection('institutions').doc());
           },
           // validator: (value) {},

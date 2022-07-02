@@ -35,115 +35,118 @@ class AdminAppHomePage extends ConsumerWidget {
         thisRef.read(authenticationNotifierProvider.notifier);
     thisRef = ref;
     _context = context;
-    Institution institution = ref.read(institutionNotifierProvider);
-    ;
+var asyncInstitution = ref.watch(institutionNotifierProvider);
+    
 
+    // ref.listen<StartupState>(startupStateNotifierProvider,
+    //     (StartupState? previous, StartupState next) {
+    //   int x;
+    //   x = 2;
 
-    ref.listen<StartupState>(startupStateNotifierProvider,
-        (StartupState? previous, StartupState next) {
-int x;
-        x = 2;
+    //   if (next.hasAuthentiatedUser) {
+    //     ref
+    //         .read(authenticationNotifierProvider.notifier)
+    //         .grabAppUserFromDb(next.currentFirebaseUser!)
+    //         .then((appUser) {
+    //       log.d(
+    //           'Detected existing user and now\n Grabbing AppUser from DB ${appUser.toString()}');
+    //       ref
+    //           .read(authenticationNotifierProvider.notifier)
+    //           .setAuthenticatedUser(appUser: appUser);
+    //       ref.read(institutionNotifierProvider.notifier).setDocRefOnInstitution(appUser
+    //           .docRef!
+    //           .parent
+    //           .parent as DocumentReference<Map<String, dynamic>>);
+    //     });
+    //   }
+    // });
 
+    return asyncInstitution.when(
 
-      if (next.hasAuthentiatedUser) {
-        
-        ref
-            .read(authenticationNotifierProvider.notifier)
-            .grabAppUserFromDb(next.currentFirebaseUser!)
-            .then((appUser) {
-          log.d(
-              'Detected existing user and now\n Grabbing AppUser from DB ${appUser.toString()}');
-          ref
-              .read(authenticationNotifierProvider.notifier)
-              .setAuthenticatedUser(appUser: appUser);
-          ref.read(institutionNotifierProvider.notifier).setDocRefOnInstitution(
-              appUser.docRef!.parent.parent
-                  as DocumentReference<Map<String, dynamic>>);
-        });
-      }
-    });
-
-
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () {
-              // AuthenticationNotifier notifier =
-              //     thisRef.read(authenticationNotifierProvider.notifier);
-              authNotifier.signOut();
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: ((context) => LoginPage())));
-            },
-            icon: const Icon(Icons.logout),
-            iconSize: 40,
-          ),
-        ],
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  institution.title!,
-                  // style: Theme.of(context).textTheme.headline3),
+      data: (institution) => 
+      Scaffold(
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              onPressed: () {
+                // AuthenticationNotifier notifier =
+                //     thisRef.read(authenticationNotifierProvider.notifier);
+                authNotifier.signOut();
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: ((context) => const LoginPage())));
+              },
+              icon: const Icon(Icons.logout),
+              iconSize: 40,
+            ),
+          ],
+        ),
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    institution.title,
+                  style: Theme.of(context).textTheme.headline3,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 32),
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  // ignore: prefer_const_literals_to_create_immutables
-                  children: [
-                    const HomeMenuCard(
-                      iconData: Icons.auto_stories,
-                      title: 'Courses',
-                    ),
-                    const HomeMenuCard(
-                      // assetName: 'student.jpg',
-                      iconData: Icons.people,
-                      title: 'Students',
-                    ),
-                    const HomeMenuCard(
-                      // assetName: 'faculty.png',
-                      iconData: Icons.school,
-                      title: 'Faculty',
-                    ),
-                    const HomeMenuCard(
-                      // assetName: 'about.png',
-                      iconData: Icons.info,
-                      title: 'About Digitendance',
-                    ),
-                    const HomeMenuCard(
-                      // assetName: 'settings.png',
-                      iconData: Icons.settings,
-                      title: 'Settings',
-                    ),
-                    const HomeMenuCard(
-                      // assetName: 'reports.jpg',
-                      iconData: Icons.bar_chart_sharp,
-                      title: 'Reports',
-                    ),
-                  ],
+                const SizedBox(height: 20),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: [
+                      const HomeMenuCard(
+                        iconData: Icons.auto_stories,
+                        title: 'Courses',
+                      ),
+                      const HomeMenuCard(
+                        // assetName: 'student.jpg',
+                        iconData: Icons.people,
+                        title: 'Students',
+                      ),
+                      const HomeMenuCard(
+                        // assetName: 'faculty.png',
+                        iconData: Icons.school,
+                        title: 'Faculty',
+                      ),
+                      const HomeMenuCard(
+                        // assetName: 'about.png',
+                        iconData: Icons.info,
+                        title: 'About Digitendance',
+                      ),
+                      const HomeMenuCard(
+                        // assetName: 'settings.png',
+                        iconData: Icons.settings,
+                        title: 'Settings',
+                      ),
+                      const HomeMenuCard(
+                        // assetName: 'reports.jpg',
+                        iconData: Icons.bar_chart_sharp,
+                        title: 'Reports',
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    authNotifier.signOut();
-                  },
-                  child: Text('Log out ')),
-            ],
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      authNotifier.signOut();
+                    },
+                    child: const Text('Log out ')),
+              ],
+            ),
           ),
         ),
       ),
+    error:(e,st)=>Center(child: Text(e.toString())), 
+    loading:()=> const Center(child: BusyShimmer()),
     );
 
     // ListView.builder(itemBuilder: (context,index){return ListTile(title: Text(availableCourses![index].courseTitle!),);}),
@@ -180,7 +183,7 @@ class HomeMenuCard extends StatelessWidget {
     return Material(
       child: Container(
         width: MediaQuery.of(context).size.width * 0.20,
-        margin: EdgeInsets.all(8),
+        margin: const EdgeInsets.all(8),
         height: 220,
         child: InkWell(
           hoverColor: Colors.purple.shade300,
@@ -200,7 +203,7 @@ class HomeMenuCard extends StatelessWidget {
                   color: Theme.of(context).primaryColor.withOpacity(0.8),
                   size: 80,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Text(

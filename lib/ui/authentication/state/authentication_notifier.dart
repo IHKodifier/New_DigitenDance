@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:new_digitendance/ui/authentication/startup/state/startup_state.dart';
 import 'package:new_digitendance/ui/authentication/state/auth_state.dart';
 import 'package:new_digitendance/ui/authentication/state/institution_state.dart';
 import '../../../app/contants.dart';
@@ -34,10 +35,21 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
 
   ///function to sign out the currently Signed in [AppUser]
   /// also signs out the [FireBaseAuth] users
-  signOut() {
-    FirebaseAuth.instance.signOut();
-    state = state.copyWith(authenticatedUser: null);
-    // ref.read(institutionNotifierProvider.notifier).state = null as Institution;
+  signOut() async {
+    await FirebaseAuth.instance.signOut();
+    // ref.read(startupStateNotifierProvider.notifier).state = state.copyWith(
+    //   authenticatedUser: null,
+    // ) as StartupState;
+    // setBusyTo = false;
+
+    state = state.copyWith(
+      authenticatedUser: null,
+      // setb
+    );
+    state.isBusy = false;
+    // setBusyTo = false;
+    // ref.read(authenticationNotifierProvider.notifier).setBusyTo
+    // ref.read(institutionNotifierProvider.notifier).state = null as <AsyncValue<Institution>.data(null);
   }
 
   ///function to set the [state.isBusy]  to [val]
@@ -46,7 +58,14 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
   }
 
   void setAuthenticatedUser({required AppUser appUser}) {
-    state = state.copyWith(authenticatedUser: appUser);
+    if (state.authenticatedUser != null) {
+      state = state.copyWith(authenticatedUser: appUser);
+    } else {
+      state = AuthenticationState(
+        authenticatedUser: appUser,
+        isBusy: true,
+      );
+    }
   }
 
   /// function to login an [AppUser] with the provided
@@ -54,7 +73,7 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
   /// grab the [AppUser] by calling [grabAppUserFromDb] then
   /// set the [authenticatedUser] ,[selectedRole]
   /// on the [AuthenticationState]
-  /// and [Institution] on the [InstitutionNotifier] by calling [getInstitutionforUser]
+  /// and [Institution] on the [InstitutionNotifier] by calling [getUserInstitution]
 
   Future login({
     required LoginProviderType loginProvider,
@@ -77,9 +96,9 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
       grabAppUserFromDb(attemptedUser).then((appUser) {
         log.d('Grabbing AppUser from DB ${appUser.toString()}');
         setAuthenticatedUser(appUser: appUser);
-        ref.read(institutionNotifierProvider.notifier).setDocRefOnInstitution(
-            appUser.docRef!.parent.parent
-                as DocumentReference<Map<String, dynamic>>);
+        // ref.read(institutionNotifierProvider.notifier).setDocRefOnInstitution(
+        //     appUser.docRef!.parent.parent
+        //         as DocumentReference<Map<String, dynamic>>);
 
         // ref.read(institutionNotifierProvider).docRef = appUser
         //     .docRef.parent.parent as DocumentReference<Map<String, dynamic>>;
@@ -123,14 +142,16 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
   }
 
   ///function to grab [Institution] of the provided [User]
-  void getInstitutionforUser() async {
+  Future<Institution> getUserInstitution() async {
     var userEmail =
         ref.read(authenticationNotifierProvider).authenticatedUser?.email;
+
+    ///get db doc for [Institution]
     var userQuerySnapshot = await db
         .collectionGroup('users')
         .where('userId', isEqualTo: userEmail)
         .get();
-    log.d(' user\'s retrived : ${userQuerySnapshot.docs[0].data().toString()}');
+    log.d(' user\'s retrived : ${userQuerySnapshot.docs[0].data()['email']}');
     log.d(
         ' user\'s institutionPath : ${userQuerySnapshot.docs[0].reference.parent.parent?.path}');
 
@@ -139,12 +160,12 @@ class AuthenticationNotifier extends StateNotifier<AuthenticationState> {
     var _institutionDocRef = userQuerySnapshot.docs[0].reference.parent.parent!;
 
     var instituionData = await db.doc(_institutionDocRef.path).get();
-    Institution institution = Institution.fromMap(instituionData.data()!);
-    ref.read(institutionNotifierProvider.notifier).setInstitution(institution);
+    return Institution.fromMap(instituionData.data()!);
+    //   ref.read(institutionNotifierProvider.notifier).setInstitution(institution);
   }
 
-  /// function to grab [AppUser doc] from [db] and transform it
-  /// to [AppUser] and then set the state
+  /// function to grab [AppUser]  from [db] and transform it
+  /// to [AppUser] and then r
 
   Future<AppUser> grabAppUserFromDb(User user) async {
     /// to grab an [AppUser] db doc, the  [AppUser]'s institution needs to retreived  first

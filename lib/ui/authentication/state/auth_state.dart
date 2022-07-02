@@ -49,7 +49,7 @@ class AuthenticationState extends Equatable {
   @override
   // TODO: implement props
   List<Object> get props => [
-        isBusy,
+        // isBusy,
         authenticatedUser!,
         [selectedRole]
       ];

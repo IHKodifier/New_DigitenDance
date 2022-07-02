@@ -10,12 +10,12 @@ import '../../../authentication/state/institution_state.dart';
 var logger = Logger(printer: PrettyPrinter());
 final allCoursesStreamProvider = StreamProvider<List<Course>>((ref) async* {
   // StreamController<QuerySnapshot<Map<String, dynamic>>>
-  if (ref.read(institutionNotifierProvider).docRef == null) {
+  if (ref.read(institutionNotifierProvider).value?.docRef == null) {
     throw Exception('Institution Doc Ref is null');
   }
   var fireStream = ref
       .read(dbProvider)
-      .doc(ref.read(institutionNotifierProvider).docRef!.path)
+      .doc(ref.read(institutionNotifierProvider).value!.docRef!.path)
       .collection('courses')
       .snapshots()
       .transform(streamTransformer(Course.fromMap));
