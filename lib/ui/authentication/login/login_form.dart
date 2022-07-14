@@ -146,7 +146,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
     final notifier = ref.read(authenticationNotifierProvider.notifier);
     return Material(
       child: Center(
-        child: (state.isBusy) ?BusyShimmer()
+        child: (state.isBusy) ? AdminFullPageShimmer(count: 4,)
         :
         SingleChildScrollView(
           child: Column(

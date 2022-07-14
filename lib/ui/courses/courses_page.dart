@@ -1,15 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:new_digitendance/ui/authentication/state/institution_state.dart';
-import 'package:new_digitendance/ui/home/admin/add_new_course.dart';
-import 'package:new_digitendance/ui/home/admin/course_card.dart';
+import 'package:new_digitendance/ui/courses/add_new_course_page.dart';
+import 'package:new_digitendance/ui/home/admin/admin_homepage.dart';
+import 'package:new_digitendance/ui/shared/course_card.dart';
 import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
 import 'package:new_digitendance/ui/shared/shimmers.dart';
-
-import '../../authentication/startup/state/startup_state.dart';
-import '../../authentication/state/auth_state.dart';
 
 class CoursesPage extends ConsumerWidget {
   CoursesPage({Key? key}) : super(key: key);
@@ -23,13 +20,26 @@ class CoursesPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var brightnessNotifier = ref.read(themeBrightnessProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Digitendance > Courses'),
+        actions: [
+          
+          IconButton(
+              onPressed: () {
+                brightnessNotifier.toggleBrightness(context);
+              },
+              icon: const Icon(Icons.dark_mode)),
+          SizedBox(
+            width: 40,
+          ),
+        ],
         // centerTitle: true,
       ),
       body: CoursesList(),
       floatingActionButton: FloatingActionButton.extended(
+        // backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {
           ref.refresh(institutionNotifierProvider);
           final courseNotifier = ref.watch(currentCourseProvider.notifier);
@@ -97,7 +107,7 @@ class CoursesList extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const BusyShimmer(),
+      loading: () => Center(child: AdminFullPageShimmer(count: 4)),
       data: (courses) {
         log.i('length of courses ${courses.length.toString()}');
         return ListView.builder(

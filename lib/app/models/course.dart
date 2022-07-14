@@ -6,16 +6,16 @@ import 'package:equatable/equatable.dart';
 import 'package:new_digitendance/app/models/session.dart';
 
 class Course extends Equatable {
-  String? courseId;
-  String? courseTitle;
-  int? credits;
+  String courseId;
+  String courseTitle;
+  int credits;
   DocumentReference docRef;
   List<Course>? preReqs = [];
   List<Session>? sessions = [];
   Course({
-    this.courseId,
-    this.courseTitle,
-    this.credits,
+    required this.courseId,
+    required this.courseTitle,
+    required this.credits,
     required this.docRef,
     this.preReqs,
     this.sessions,
@@ -27,6 +27,7 @@ class Course extends Equatable {
     int? credits,
     List<Course>? preReqs,
     List<Session>? sessions,
+    DocumentReference? docRef,
   }) {
     return Course(
       courseId: courseId ?? this.courseId,
@@ -34,7 +35,7 @@ class Course extends Equatable {
       credits: credits ?? this.credits,
       preReqs: preReqs ?? this.preReqs,
       sessions: sessions ?? this.sessions,
-      docRef: docRef,
+      docRef: docRef!,
     );
   }
 
@@ -55,6 +56,9 @@ class Course extends Equatable {
     }
     if (sessions != null) {
       result.addAll({'sessions': sessions!.map((x) => x.toMap()).toList()});
+    }
+    if (docRef != null) {
+      result.addAll({'docRef': this.docRef.path});
     }
 
     return result;
@@ -82,7 +86,7 @@ class Course extends Equatable {
 
   @override
   String toString() {
-    return 'Course(courseId: $courseId, courseTitle: $courseTitle, credits: $credits, preReqs: $preReqs, sessions: $sessions)';
+    return 'Course(courseId: $courseId, courseTitle: $courseTitle, credits: $credits, preReqs: $preReqs, sessions: $sessions, docRef: ${docRef.path})';
   }
 
   @override

@@ -1,25 +1,57 @@
-
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../courses/courses_page.dart';
 
-class BusyShimmer extends StatelessWidget {
-  const BusyShimmer({
+class ShimmerCard extends StatelessWidget {
+  const ShimmerCard({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      child: SizedBox(
-        width: 292,
-        height: 212,
+    return
+        // Shimmer
+        Shimmer.fromColors(
+      child: Container(
+        margin: EdgeInsets.all(8),
         child: Container(
-          color: const Color.fromARGB(221, 97, 92, 92),
+          width: 292,
+          height: 236,
+          child: Card(
+            color: Theme.of(context).hintColor,
+          ),
         ),
       ),
       baseColor: Theme.of(context).primaryColor,
       highlightColor: const Color.fromARGB(131, 255, 255, 255),
+    );
+  }
+}
+
+class AdminFullPageShimmer extends StatelessWidget {
+  final int count ;
+   AdminFullPageShimmer({Key? key, required this.count}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              runSpacing: 30,
+              children: List.generate(count, (index) => ShimmerCard()),
+              
+              
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

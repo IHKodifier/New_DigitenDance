@@ -21,6 +21,12 @@ final allCoursesStreamProvider = StreamProvider<List<Course>>((ref) async* {
       .transform(streamTransformer(Course.fromMap));
   yield* fireStream;
 
+
+
+
+
+  
+
   //////////////////////////////////
   // logger.d(ref.read(institutionNotifierProvider).docRef.path);
   // await ref
@@ -48,7 +54,7 @@ final currentCourseProvider =
     StateNotifierProvider<CourseNotifier, Course>((ref) {
   DocumentReference docRef =
       ref.read(dbApiProvider).documentReferenceFromPath('/instiution/default');
-  return CourseNotifier(Course(docRef: docRef), ref);
+  return CourseNotifier(Course(docRef: docRef, courseTitle: '', courseId: '', credits: 0), ref);
 });
 
 class CourseNotifier extends StateNotifier<Course> {

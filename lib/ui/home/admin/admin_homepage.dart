@@ -10,14 +10,17 @@ import 'package:new_digitendance/app/models/institution.dart';
 import 'package:new_digitendance/app/utilities.dart';
 import 'package:new_digitendance/ui/authentication/login/login_page.dart';
 import 'package:new_digitendance/ui/authentication/state/institution_state.dart';
-import 'package:new_digitendance/ui/home/admin/courses_page.dart';
+import 'package:new_digitendance/ui/courses/courses_page.dart';
 import 'package:new_digitendance/ui/shared/shimmers.dart';
 
 import '../../authentication/startup/state/startup_state.dart';
 import '../../authentication/state/auth_state.dart';
 import '../../authentication/state/authentication_notifier.dart';
 import 'state/admin_state.dart';
-
+  final themeBrightnessProvider =
+      StateNotifierProvider<BrightnessNotifier, Brightness>((ref) {
+    return BrightnessNotifier(Brightness.light);
+  });
 class AdminAppHomePage extends ConsumerWidget {
   AdminAppHomePage({Key? key}) : super(key: key);
 
@@ -26,17 +29,20 @@ class AdminAppHomePage extends ConsumerWidget {
 
   late BuildContext _context;
 
+
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     thisRef = ref;
     // final allAdminCourses = ref.watch(allCoursesStreamProvider);
     final startupNotifier = ref.read(startupStateNotifierProvider.notifier);
+    final brightnessNotifier = ref.watch(themeBrightnessProvider.notifier);
     AuthenticationNotifier authNotifier =
         thisRef.read(authenticationNotifierProvider.notifier);
     thisRef = ref;
     _context = context;
-var asyncInstitution = ref.watch(institutionNotifierProvider);
-    
+    var asyncInstitution = ref.watch(institutionNotifierProvider);
+    // Theme.of(context).copyWith(brightness: brightnessNotifier.state);
 
     // ref.listen<StartupState>(startupStateNotifierProvider,
     //     (StartupState? previous, StartupState next) {
@@ -62,18 +68,24 @@ var asyncInstitution = ref.watch(institutionNotifierProvider);
     // });
 
     return asyncInstitution.when(
-
-      data: (institution) => 
-      Scaffold(
+      data: (institution) => Scaffold(
         appBar: AppBar(
           actions: [
+            IconButton(
+                onPressed: () {
+                  brightnessNotifier.toggleBrightness(context);
+                },
+                icon: const Icon(Icons.dark_mode)),
+            SizedBox(
+              width: 40,
+            ),
             IconButton(
               onPressed: () {
                 // AuthenticationNotifier notifier =
                 //     thisRef.read(authenticationNotifierProvider.notifier);
                 authNotifier.signOut();
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: ((context) => const LoginPage())));
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: ((context) => const LoginPage())));
               },
               icon: const Icon(Icons.logout),
               iconSize: 40,
@@ -87,13 +99,15 @@ var asyncInstitution = ref.watch(institutionNotifierProvider);
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(28),
                   child: Text(
                     institution.title,
-                  style: Theme.of(context).textTheme.headline3,
+                    style: Theme.of(context).textTheme.headline1,
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(
+                  height: 20,
+                ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 32),
                   child: Wrap(
@@ -145,27 +159,38 @@ var asyncInstitution = ref.watch(institutionNotifierProvider);
           ),
         ),
       ),
-    error:(e,st)=>Center(child: Text(e.toString())), 
-    loading:()=> const Center(child: BusyShimmer()),
+      error: (e, st) => Center(child: Text(e.toString())),
+      loading: () => Center(
+          child: AdminFullPageShimmer(
+        count: 4,
+      )),
     );
 
-    // ListView.builder(itemBuilder: (context,index){return ListTile(title: Text(availableCourses![index].courseTitle!),);}),
-    // Column(
-    //   mainAxisAlignment: MainAxisAlignment.center,
-    //   children: [
-    //     const Text('Admin Home'),
-    //     ElevatedButton(
-    //         onPressed: () {
-    //           thisRef.read(authStateNotifierProvider.notifier).signOut();
-    //           Navigator.of(context).pushReplacement(
-    //             MaterialPageRoute(
-    //               builder: ((context) => LoginPage()),
-    //             ),
-    //           );
-    //         },
-    //         child: const Text('Log out ')),
-    // ],
-    // );
+  }
+}
+
+class BrightnessNotifier extends StateNotifier<Brightness> {
+  BrightnessNotifier(Brightness state) : super(state);
+
+  void toggleBrightness(BuildContext context) {
+    if (state == Brightness.light) {
+      // state = Brightness.dark;
+      var newState = state;
+      newState = Brightness.dark;
+      state = newState;
+      // Theme.of(context).copyWith(brightness: Brightness.dark);
+    } else {
+      // state = Brightness.light;
+      var newState = state;
+      newState = Brightness.light;
+      state = newState;
+      // state = Brightness.light;
+
+
+
+
+      // Theme.of(context).copyWith(brightness: Brightness.light);
+    }
   }
 }
 
@@ -186,8 +211,8 @@ class HomeMenuCard extends StatelessWidget {
         margin: const EdgeInsets.all(8),
         height: 220,
         child: InkWell(
-          hoverColor: Colors.purple.shade300,
-          splashColor: Colors.purple.shade100,
+          // hoverColor: Colors.purple.shade300,
+          // splashColor: Colors.purple.shade100,
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (context) => CoursesPage()));
@@ -200,7 +225,7 @@ class HomeMenuCard extends StatelessWidget {
               children: [
                 Icon(
                   iconData,
-                  color: Theme.of(context).primaryColor.withOpacity(0.8),
+                  color: Theme.of(context).iconTheme.color,
                   size: 80,
                 ),
                 const SizedBox(
