@@ -78,41 +78,44 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
   void onCancel() {}
 
   Widget _buildButtonBar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Expanded(
-          flex: 8,
-          child: TextButton(
-              onPressed: onCancel,
-              // icon: const Icon(Icons.cancel),
-              child: const Text(
-                'Cancel',
-                style: TextStyle(fontSize: 24),
-              )),
-        ),
-        const Spacer(flex: 1),
-        Expanded(
-          flex: 8,
-          child: TextButton(
-              onPressed: onReset,
-              child: const Text(
-                'RESET',
-                style: TextStyle(fontSize: 24),
-              )),
-        ),
-        const Spacer(flex: 1),
-        Expanded(
-          flex: 8,
-          child: ElevatedButton.icon(
-              onPressed: onSave,
-              icon: const Icon(Icons.save),
-              label: const Text(
-                'Save',
-                style: TextStyle(fontSize: 24),
-              )),
-        ),
-      ],
+    return Container(
+      height: 80,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Expanded(
+            flex: 8,
+            child: TextButton(
+                onPressed: onCancel,
+                // icon: const Icon(Icons.cancel),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(fontSize: 24),
+                )),
+          ),
+          const Spacer(flex: 1),
+          Expanded(
+            flex: 8,
+            child: TextButton(
+                onPressed: onReset,
+                child: const Text(
+                  'RESET',
+                  style: TextStyle(fontSize: 24),
+                )),
+          ),
+          const Spacer(flex: 1),
+          Expanded(
+            flex: 8,
+            child: ElevatedButton.icon(
+                onPressed: onSave,
+                icon: const Icon(Icons.save),
+                label: const Text(
+                  'Save',
+                  style: TextStyle(fontSize: 24),
+                )),
+          ),
+        ],
+      ),
     );
   }
 
@@ -125,7 +128,7 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
       child: Container(
         width: MediaQuery.of(context).size.width * .75,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Form(
               key: _formKey,
@@ -133,14 +136,11 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    ///[CourseId] Form  Field
-                    // AnimatedList(itemBuilder: itemBuilder)
                     TextFormField(
                       controller: courseIdController,
                       decoration: const InputDecoration(
-                        // prefixIcon: Icon(Icons.person),
                         icon: Icon(Icons.person),
                         hintText: 'Unique ID of this course',
                         labelText: 'Course Id *',

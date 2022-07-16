@@ -92,9 +92,9 @@ class Course extends Equatable {
   @override
   List<Object> get props {
     return [
-      courseId ?? '',
-      courseTitle ?? '',
-      credits ?? 0,
+      courseId,
+      courseTitle,
+      credits,
       preReqs ?? <Course>[],
       sessions ?? <Session>[],
       docRef.path
