@@ -21,12 +21,6 @@ final allCoursesStreamProvider = StreamProvider<List<Course>>((ref) async* {
       .transform(streamTransformer(Course.fromMap));
   yield* fireStream;
 
-
-
-
-
-  
-
   //////////////////////////////////
   // logger.d(ref.read(institutionNotifierProvider).docRef.path);
   // await ref
@@ -52,9 +46,9 @@ final allCoursesStreamProvider = StreamProvider<List<Course>>((ref) async* {
 
 final currentCourseProvider =
     StateNotifierProvider<CourseNotifier, Course>((ref) {
-  DocumentReference docRef =
-      ref.read(dbApiProvider).documentReferenceFromPath('/instiution/default');
-  return CourseNotifier(Course(docRef: docRef, courseTitle: '', courseId: '', credits: 0), ref);
+  // DocumentReference docRef =
+  //     ref.read(dbApiProvider).documentReferenceFromPath('/instiution/default');
+  return CourseNotifier(Course.initial(), ref);
 });
 
 class CourseNotifier extends StateNotifier<Course> {
@@ -72,6 +66,7 @@ class CourseNotifier extends StateNotifier<Course> {
   //         'added ${element.data().toString()} to selected Course\'s preREQs ');
   //   });
   // }
+  void setCourseState(Course course) => state = course;
 
   void setSessiononCourseProvider(
       QuerySnapshot<Map<String, dynamic>> data, String courseId) {
@@ -97,4 +92,5 @@ class CourseNotifier extends StateNotifier<Course> {
   //     state = newState;
   //   }
   // }
+
 }
