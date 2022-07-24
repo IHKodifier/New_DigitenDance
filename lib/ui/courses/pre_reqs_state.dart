@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:new_digitendance/ui/authentication/state/institution_state.dart';
-import 'package:new_digitendance/ui/courses/pre_reqs.dart';
 
 import '../../app/models/course.dart';
 import '../home/admin/state/admin_state.dart';
