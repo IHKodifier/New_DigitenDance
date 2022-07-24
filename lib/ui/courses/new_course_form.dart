@@ -189,7 +189,9 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
 
                     const SpacerVertical(30),
                     const PreReqsWidget(),
-                    FacultySelectionCard(),
+
+                    ///widget below is not required in New course form 
+                    // FacultySelectionCard(),
 
                     const SizedBox(
                       height: 20,
