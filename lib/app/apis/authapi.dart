@@ -6,7 +6,6 @@ import 'package:new_digitendance/app/apis/app_services.dart';
 import 'package:new_digitendance/app/contants.dart';
 import 'package:new_digitendance/app/models/app_user.dart';
 import 'package:new_digitendance/app/models/institution.dart';
-import 'package:new_digitendance/app/utilities.dart';
 
 final authApiProvider =
     Provider<AuthApi>((ref) => AuthApi(FirebaseAuth.instance));
@@ -99,7 +98,7 @@ class AuthApi {
     await AppServices.dbService.dbAppUser.createInstitution(_institution!);
     AppUser _appUser = AppUser(
       userId: _email,
-      docRef: AppServices.dbService.documentReferenceFromPath(_path),
+      docRef: AppServices.dbService.documentReferenceFromStringPath(_path),
       roles: const <UserRole>[
         UserRole.admin,
         UserRole.faculty,

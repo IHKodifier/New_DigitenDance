@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_digitendance/ui/authentication/state/institution_state.dart';
 
 import '../../app/models/course.dart';
+import '../../app/models/pre_reqs.dart';
 import '../home/admin/state/admin_state.dart';
 
 final preReqsEditingProvider =
@@ -16,8 +17,8 @@ final preReqsEditingProvider =
   final allPreReqs = ref.read(allCoursesStreamProvider).value;
 
   PreReqsEditingState initialState = PreReqsEditingState(
-      allPreReqs: Set.from(ref.read(allCoursesStreamProvider).value!),
-      availablePreReqs: Set.from(ref.read(allCoursesStreamProvider).value!));
+      allPreReqs: Set.from(ref.read(allCoursesStreamProvider).value!.map((e) => e.toPreReq())),
+      availablePreReqs: Set.from(ref.read(allCoursesStreamProvider).value!.map((e) => e.toPreReq())));
   // initialState.allPreReqs =
   //     Set.from(ref.read(allCoursesStreamProvider).value!.toList());
   initialState.selectedPreReqs = {};
@@ -32,32 +33,35 @@ class PreReqsEditingNotifier extends StateNotifier<PreReqsEditingState> {
   final ref;
 
   void getAllPreReqs() {
-    state.allPreReqs = Set.from(ref.read(allCoursesStreamProvider).value);
-  }
-
-  void addPreReq(Course course) {
-    ///check if the pre req already exists in the [state.selectedPreReqs]
-    ///and [state.selectedPreReqs] isnot empty
-    if (!(state.selectedPreReqs!.contains(course) &&
-        state.selectedPreReqs!.isNotEmpty)) {
-      state.selectedPreReqs!.add(course);
-
-      state.availablePreReqs.remove(course);
-
-      state = state.copyWith();
-    }
-  }
-
-  void removePreReq(Course course) {
-   if ((state.selectedPreReqs!.contains(course) &&
-        state.selectedPreReqs!.isNotEmpty)) {
-      state.availablePreReqs.add(course);
-
-      state.selectedPreReqs?.remove(course);
-
-      state = state.copyWith();
+    Set<Course> courses = Set.from(ref.read(allCoursesStreamProvider).value);
+    for (var element in courses) {
+      state.allPreReqs.add(element.toPreReq());
     }
     
+  }
+
+  void addPreReq(PreReqs preReq) {
+    ///check if the pre req already exists in the [state.selectedPreReqs]
+    ///and [state.selectedPreReqs] isnot empty
+    if (!(state.selectedPreReqs!.contains(preReq) &&
+        state.selectedPreReqs!.isNotEmpty)) {
+      state.selectedPreReqs!.add(preReq);
+
+      state.availablePreReqs.remove(preReq);
+
+      state = state.copyWith();
+    }
+  }
+
+  void removePreReq(PreReqs preReq) {
+    if ((state.selectedPreReqs!.contains(preReq) &&
+        state.selectedPreReqs!.isNotEmpty)) {
+      state.availablePreReqs.add(preReq);
+
+      state.selectedPreReqs?.remove(preReq);
+
+      state = state.copyWith();
+    }
   }
 }
 
@@ -68,10 +72,9 @@ class PreReqsEditingState extends Equatable {
       this.selectedPreReqs})
       : super();
 
-  late Set<Course> allPreReqs;
-
-  late Set<Course> availablePreReqs;
-  late Set<Course>? selectedPreReqs = {};
+  late Set<PreReqs> allPreReqs;
+  late Set<PreReqs> availablePreReqs;
+  late Set<PreReqs>? selectedPreReqs = {};
 
   @override
   // TODO: implement props
@@ -81,9 +84,9 @@ class PreReqsEditingState extends Equatable {
   // // bool get isNotModified => !isModified;
 
   PreReqsEditingState copyWith({
-    Set<Course>? allPreReqs,
-    Set<Course>? availablePreReqs,
-    Set<Course>? selectedPreReqs,
+    Set<PreReqs>? allPreReqs,
+    Set<PreReqs>? availablePreReqs,
+    Set<PreReqs>? selectedPreReqs,
   }) {
     return PreReqsEditingState(
       allPreReqs: allPreReqs ?? this.allPreReqs,

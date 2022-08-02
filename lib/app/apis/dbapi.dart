@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_digitendance/app/apis/app_services.dart';
 import 'package:new_digitendance/app/apis/db_appuser.dart';
@@ -7,7 +6,6 @@ import 'package:new_digitendance/app/apis/db_course.dart';
 import 'package:new_digitendance/app/apis/db_faculty.dart';
 import 'package:new_digitendance/app/apis/db_session.dart';
 
-import '../models/course.dart';
 import 'db_faculty.dart';
 ///TODO add license info
 
@@ -48,7 +46,7 @@ class DbApi {
 
   /// helper function to conveert a document path to
   ///  a [DocumentReference]
-  DocumentReference<Map<String, dynamic>> documentReferenceFromPath(
+  DocumentReference<Map<String, dynamic>> documentReferenceFromStringPath(
           String path) =>
       _db.doc(path);
 

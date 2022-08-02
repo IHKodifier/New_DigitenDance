@@ -16,10 +16,10 @@ class CourseCard extends ConsumerWidget {
     
     return Card(
       elevation: 5,
-      margin: EdgeInsets.all(8),
+      margin: const EdgeInsets.all(8),
       child: ListTile(
         // color: Colors.purple,
-        title: Text(course.courseId),
+        title: Text(course.id),
       ),
     );
   }

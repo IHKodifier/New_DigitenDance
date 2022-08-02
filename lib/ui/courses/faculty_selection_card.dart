@@ -10,7 +10,7 @@ class FacultySelectionCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var faculty = ref.watch(currentCourseProvider).faculty;
+    // var faculty = ref.watch(currentCourseProvider).faculty;
     _context = context;
     return Card(
       color: Theme.of(context).canvasColor,
@@ -38,16 +38,16 @@ class FacultySelectionCard extends ConsumerWidget {
             child: Column(
               children: [
                 Container(),
-                faculty?.userId == 'not Initialized'
-                    ? Container(
-                        // width: 50,
-                        height: 20,
-                        child: Text('Please select Faculty'),
-                        color: Colors.yellow,
-                      )
-                    : SelectedFacultyCard(
-                        faculty: faculty!,
-                      ),
+              //   faculty?.userId == 'not Initialized'
+              //       ? Container(
+              //           // width: 50,
+              //           height: 20,
+              //           child: Text('Please select Faculty'),
+              //           color: Colors.yellow,
+              //         )
+              //       : SelectedFacultyCard(
+              //           faculty: faculty!,
+              //         ),
               ],
             ),
           ),

@@ -20,7 +20,7 @@ class Faculty extends Equatable {
       userId: map['userId'] ?? '',
       firstName: map['firstName'],
       photoURL: map['photoURL'],
-      docRef: map['docRef'],
+      docRef: DbApi().documentReferenceFromStringPath(map['docRef']),
     );
   }
 
@@ -45,7 +45,7 @@ class Faculty extends Equatable {
       userId: 'not Initialized',
       firstName: 'not Initialized',
       photoURL: 'not Initialized',
-      docRef: DbApi().documentReferenceFromPath('institutions/default'),
+      docRef: DbApi().documentReferenceFromStringPath('institutions/default'),
     );
   }
 

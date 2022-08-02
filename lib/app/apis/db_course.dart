@@ -1,5 +1,6 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:new_digitendance/app/contants.dart';
@@ -15,15 +16,31 @@ class DbCourse {
   Logger log = Logger();
 
   ///
-  Future<DocumentReference> addNewCourse({required Course course, required ProviderRef ref}) {
-    ///TODO add institutionalized scope saving
-    // final institution =
-    log.d('Adding new course to DB ${course.toString()}');
+  FutureOr<DocumentReference> addNewCourse(
+      {required Course course, required WidgetRef ref}) {
+    ///get current [Institution]
+    final institution = ref.read(institutionNotifierProvider).value;
+    log.d(
+        'Adding new course ${course.toString()}to  Instution Id ${institution?.docRef?.id} ');
+
+    ///save the course to DB
+    ///update course docRef to actual
+    var _docRef = ref
+        .read(dbApiProvider)
+        .dbCourse
+        .getDocRefForNewCourse(ref as ProviderRef<dynamic>);
+    course.docRef = _docRef;
 
     return FirebaseFirestore.instance
+// .collection('institutions')
+        .doc(institution!.docRef!.path)
         .collection('courses')
         .add(course.toMap())
-        .then((value) => value);
+        .then((value) {
+      log.d('${course.id} successfully written to ${value.path.toString()}');
+
+      return value;
+    });
   }
 
   DocumentReference<Map<String, dynamic>> getDocRefForNewCourse(

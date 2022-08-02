@@ -2,15 +2,18 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:new_digitendance/app/models/course.dart';
 
 import 'package:new_digitendance/app/models/course_registration.dart';
 import 'package:new_digitendance/app/models/faculty.dart';
+import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
 
 class Session extends Equatable {
   Session({
     this.sessionId,
     this.sessionTitle,
-    required this.parentCourseId,
+    required this.courseId,
     this.registrationStartDate,
     this.registrationEndDate,
     this.faculty,
@@ -24,7 +27,7 @@ class Session extends Equatable {
     return Session(
       sessionId: map['sessionId'],
       sessionTitle: map['sessionTitle'],
-      parentCourseId: map['parentCourseId'] ?? '',
+      courseId: map['parentCourseId'] ?? '',
       registrationStartDate: map['registrationStartDate'] != null
           ? DateTime.fromMillisecondsSinceEpoch(map['registrationStartDate'])
           : null,
@@ -40,7 +43,7 @@ class Session extends Equatable {
 
   List<CourseRegistration>? courseRegistrations;
   Faculty? faculty;
-  String parentCourseId;
+  String courseId;
   Timestamp? registrationEndDate;
   DateTime? registrationStartDate;
   String? sessionId;
@@ -50,19 +53,19 @@ class Session extends Equatable {
   @override
   List<Object> get props {
     return [
-      sessionId ?? '',
+      // sessionId ?? '',
       sessionTitle ?? '',
-      parentCourseId,
-      registrationStartDate!,
-      registrationEndDate!,
-      faculty!,
-      courseRegistrations ?? <CourseRegistration>[],
+      // parentCourseId,
+      // registrationStartDate!,
+      // registrationEndDate!,
+      // faculty!,
+      // courseRegistrations ?? <CourseRegistration>[],
     ];
   }
 
   Session copyWith({
-    String? sessionId,
-    String? sessionTitle,
+    String? id,
+    String? title,
     String? parentCourseId,
     DateTime? registrationStartDate,
     Timestamp? registrationEndDate,
@@ -70,15 +73,27 @@ class Session extends Equatable {
     List<CourseRegistration>? courseRegistrations,
   }) {
     return Session(
-      sessionId: sessionId ?? this.sessionId,
-      sessionTitle: sessionTitle ?? this.sessionTitle,
-      parentCourseId: parentCourseId ?? this.parentCourseId,
+      sessionId: id ?? sessionId,
+      sessionTitle: title ?? sessionTitle,
+      courseId: parentCourseId ?? courseId,
       registrationStartDate:
           registrationStartDate ?? this.registrationStartDate,
       registrationEndDate: registrationEndDate ?? this.registrationEndDate,
       faculty: faculty ?? this.faculty,
       courseRegistrations: courseRegistrations ?? this.courseRegistrations,
     );
+  }
+
+  static Session initial() {
+    var session = Session(courseId: Course.initial().id);
+    session.courseRegistrations = [CourseRegistration.initial()];
+    session.faculty = Faculty.initial();
+    session.registrationEndDate = Timestamp.now();
+    session.registrationStartDate = DateTime.now();
+    session.sessionStatus = SessionStatus.inProgress;
+    session.sessionTitle = 'title not initialized';
+    session.sessionId = 'id not initialized';
+    return session;
   }
 
   Map<String, dynamic> toMap() {
@@ -90,7 +105,7 @@ class Session extends Equatable {
     if (sessionTitle != null) {
       result.addAll({'sessionTitle': sessionTitle});
     }
-    result.addAll({'parentCourseId': parentCourseId});
+    result.addAll({'parentCourseId': courseId});
     if (registrationStartDate != null) {
       result.addAll({
         'registrationStartDate': registrationStartDate!.millisecondsSinceEpoch
@@ -119,6 +134,7 @@ enum RegistrationStatus {
   registrationOpened,
   registrationClosed,
 }
+
 enum SessionStatus {
   closed,
   inProgress,

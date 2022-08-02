@@ -6,7 +6,14 @@ import '../../app/apis/app_services.dart';
 import '../../app/models/course.dart';
 
 class CourseNotifier extends StateNotifier<Course> {
-  CourseNotifier(state, this.ref) : super(state?? Course(docRef: AppServices.dbService.documentReferenceFromPath('institutions/intial'), courseId: '', courseTitle: '', credits: 21));
+  CourseNotifier(state, this.ref)
+      : super(state ??
+            Course(
+                docRef: AppServices.dbService
+                    .documentReferenceFromStringPath('institutions/intial'),
+                id: '',
+                title: '',
+                credits: 21));
 
   var logger = Logger(printer: PrettyPrinter());
   final StateNotifierProviderRef<CourseNotifier, Course> ref;

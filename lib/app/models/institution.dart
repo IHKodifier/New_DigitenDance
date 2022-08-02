@@ -5,31 +5,29 @@ import 'package:equatable/equatable.dart';
 import 'package:new_digitendance/app/apis/dbapi.dart';
 
 class Institution extends Equatable {
-  Institution(
-    {
-     required this.title,
-     required this.id,
+  Institution({
+    required this.title,
+    required this.id,
     required this.address,
-     this.docRef,
-  }
-  );
+    this.docRef,
+  });
 
   factory Institution.fromJson(String source) =>
       Institution.fromMap(json.decode(source));
 
   factory Institution.fromMap(Map<String, dynamic> map) {
-    final _docRef = DbApi().documentReferenceFromPath(map['docRef']);
+    final _docRef = DbApi().documentReferenceFromStringPath(map['docRef']);
     return Institution(
         title: map['title'] ?? '',
         id: map['id'] ?? '',
-        address: map['address']??'',
+        address: map['address'] ?? '',
         docRef: _docRef);
   }
 
   String address;
-   DocumentReference<Map<String, dynamic>>? docRef;
-   String id;
-   String title;
+  DocumentReference<Map<String, dynamic>>? docRef;
+  String id;
+  String title;
 
   @override
   // TODO: implement props

@@ -4,11 +4,12 @@ import 'package:new_digitendance/ui/courses/pre_reqs_state.dart';
 import 'package:new_digitendance/ui/shared/spacers.dart';
 
 import '../../app/models/course.dart';
+import '../../app/models/pre_reqs.dart';
 
 class PreReqsWidget extends ConsumerWidget {
   const PreReqsWidget({Key? key}) : super(key: key);
 
-  Widget buildChip(Course e, BuildContext context, WidgetRef ref) {
+  Widget buildChip(PreReqs  e, BuildContext context, WidgetRef ref) {
     return ConstrainedBox(
       constraints: BoxConstraints(
           maxWidth: (MediaQuery.of(context).size.width - 40) / 3),
@@ -101,7 +102,7 @@ class PreReqsWidget extends ConsumerWidget {
 }
 
 class PreReqsActionChip extends StatelessWidget {
-  final Course e;
+  final PreReqs e;
   final Function action;
   const PreReqsActionChip({
     Key? key,
@@ -122,7 +123,7 @@ class PreReqsActionChip extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(4.0),
           child: Text(
-            e.courseId,
+            e.id,
             style: const TextStyle(
               // fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -141,7 +142,7 @@ class PreReqsActionChip extends StatelessWidget {
             padding: const EdgeInsets.all(4.0),
             child: FittedBox(
               child: Text(
-                e.courseTitle,
+                e.title,
                 overflow: TextOverflow.ellipsis,
                 style:
                     const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
