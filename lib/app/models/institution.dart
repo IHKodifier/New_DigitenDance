@@ -31,7 +31,7 @@ class Institution extends Equatable {
 
   @override
   // TODO: implement props
-  List<Object> get props => [title, id, address ?? 'not set', docRef!.path];
+  List<Object> get props => [title, id, address ];
 
   @override
   String toString() {

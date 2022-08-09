@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:new_digitendance/app/contants.dart';
+import 'package:new_digitendance/app/models/institution.dart';
 import 'package:new_digitendance/ui/authentication/state/institution_state.dart';
 
 import '../models/course.dart';
@@ -21,14 +22,13 @@ class DbCourse {
     ///get current [Institution]
     final institution = ref.read(institutionNotifierProvider).value;
     log.d(
-        'Adding new course ${course.toString()}to  Instution Id ${institution?.docRef?.id} ');
-
+        'Adding new course ${course.toString()}to  Instution Id ${institution?.title} \n at path ${institution?.docRef?.path}');
     ///save the course to DB
     ///update course docRef to actual
     var _docRef = ref
         .read(dbApiProvider)
         .dbCourse
-        .getDocRefForNewCourse(ref as ProviderRef<dynamic>);
+        .getDocRefForNewCourse(ref as WidgetRef);
     course.docRef = _docRef;
 
     return FirebaseFirestore.instance
@@ -44,7 +44,7 @@ class DbCourse {
   }
 
   DocumentReference<Map<String, dynamic>> getDocRefForNewCourse(
-      ProviderRef ref) {
+      WidgetRef ref) {
     var docref = ref
         .read(dbProvider)
         .doc(ref.read(institutionNotifierProvider).value!.docRef!.path)

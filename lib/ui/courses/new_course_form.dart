@@ -26,7 +26,7 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
   TextEditingController courseTitleController = TextEditingController();
   TextEditingController facultyController = TextEditingController();
   var log = Logger();
-  Course? newSate;
+  Course? newState;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -55,7 +55,7 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
     var _docRef = ref
         .read(dbApiProvider)
         .dbCourse
-        .getDocRefForNewCourse(ref as ProviderRef);
+        .getDocRefForNewCourse(ref );
     newState.docRef = _docRef;
 
     ref.read(dbApiProvider).dbCourse.addNewCourse(course: newState, ref: ref);
@@ -67,16 +67,16 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
   }
 
   void onSavePrssed() {
-    newSate = Course.initial();
+    newState = Course.initial();
 
     if (!_formKey.currentState!.validate()) {
       return;
     } else {
       _formKey.currentState?.save();
-      newSate = newSate?.copyWith(
+      newState = newState?.copyWith(
           preReqs: ref.read(preReqsEditingProvider).selectedPreReqs?.toList());
-      newSate = newSate?.copyWith(sessions: [Session.initial()]);
-      ref.read(dbApiProvider).dbCourse.addNewCourse(course: newSate!, ref: ref);
+      newState = newState?.copyWith(sessions: [Session.initial()]);
+      ref.read(dbApiProvider).dbCourse.addNewCourse(course: newState!, ref: ref);
     }
   }
 
@@ -136,7 +136,7 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
       ),
       onSaved: (String? value) {
         // newSate = newSate?.copyWith(courseId: value);
-        newSate?.title = value!;
+        newState?.title = value!;
         // This optional block of code can be used to run
         // code when the user saves the form.
         // newState
@@ -160,7 +160,7 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
       onSaved: (String? value) {
         // This optional block of code can be used to run
         // code when the user saves the form.
-        newSate?.credits = int.parse(value!);
+        newState?.credits = int.parse(value!);
         // newSate = newSate?.copyWith(credits: int.parse(value!));
       },
       validator: (String? value) {
@@ -182,7 +182,7 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
       onSaved: (String? value) {
         // This optional block of code can be used to run
         // code when the user saves the form.
-        newSate?.id = value!;
+        newState?.id = value!;
         // newSate = newSate!.copyWith(courseId: value);
       },
       validator: (String? value) {

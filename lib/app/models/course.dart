@@ -20,7 +20,7 @@ class Course extends Equatable {
   factory Course.fromJson(String source) => Course.fromMap(json.decode(source));
 
   factory Course.fromMap(Map<String, dynamic> map) {
-    Course retval = Course(
+    Course retval =      Course(
       id: map['courseId'],
       title: map['courseTitle'],
       credits: map['credits']?.toInt(),
@@ -30,7 +30,7 @@ class Course extends Equatable {
       sessions: map['sessions'] != null
           ? List<Session>.from(map['sessions']?.map((x) => Session.fromMap(x)))
           : null,
-      docRef: DbApi().documentReferenceFromStringPath(map['docRef'].path),
+      docRef: DbApi().documentReferenceFromStringPath(map['docRef']),
     );
     return retval;
   }
@@ -41,6 +41,7 @@ class Course extends Equatable {
   List<PreReqs?>? preReqs = [];
   List<Session?>? sessions = [];
   String title;
+
 
   @override
   List<Object> get props {

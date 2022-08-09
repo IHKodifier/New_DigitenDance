@@ -11,7 +11,7 @@ StreamTransformer<QuerySnapshot<Map<String, dynamic>>, List<T>>
             QuerySnapshot<Map<String, dynamic>> data,
             EventSink<List<T>> sink,
           ) {
-            sink.add(data.docs.map((e) => fromJson(e.data())).toList());
+            sink.add(data.docs.map((e) => fromJson(e .data())).toList());
 
             // final snaps = data.docs.map((doc) => doc.data()).toList();
             // final sessions = snaps.map((json) => fromJson(json)).toList();

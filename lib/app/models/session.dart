@@ -29,10 +29,10 @@ class Session extends Equatable {
       sessionTitle: map['sessionTitle'],
       courseId: map['parentCourseId'] ?? '',
       registrationStartDate: map['registrationStartDate'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['registrationStartDate'])
+          ? (map['registrationStartDate'] as Timestamp).toDate()
           : null,
       registrationEndDate:
-          map['registrationEndDate']! ?? map['registrationEndDate'].toDate(),
+          map['registrationEndDate']! ?? (map['registrationEndDate']as Timestamp).toDate(),
       faculty: map['faculty'] != null ? Faculty.fromMap(map['faculty']) : null,
       courseRegistrations: map['courseRegistrations'] != null
           ? List<CourseRegistration>.from(map['courseRegistrations']
@@ -108,7 +108,7 @@ class Session extends Equatable {
     result.addAll({'parentCourseId': courseId});
     if (registrationStartDate != null) {
       result.addAll({
-        'registrationStartDate': registrationStartDate!.millisecondsSinceEpoch
+        'registrationStartDate': registrationStartDate
       });
     }
     if (registrationEndDate != null) {

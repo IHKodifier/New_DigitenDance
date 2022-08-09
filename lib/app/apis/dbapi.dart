@@ -7,6 +7,7 @@ import 'package:new_digitendance/app/apis/db_faculty.dart';
 import 'package:new_digitendance/app/apis/db_session.dart';
 
 import 'db_faculty.dart';
+
 ///TODO add license info
 
 final appServicesProvider = Provider<AppServices>((ref) {
@@ -17,14 +18,10 @@ final dbProvider = Provider<FirebaseFirestore>((ref) {
   return FirebaseFirestore.instance;
 });
 
-
-
-
 /// [DbApi] is the system's only API to READ/ WRITE to the [FirebaseFirestore.instance].
 /// it uses cascaded sub clasess of
 /// [DbAppUser],[DbCourse],[DbSession],[DbFaculty]
 /// TODO add more sub classes when updated
-
 
 class DbApi {
   late QuerySnapshot<Map<String, dynamic>> querySnapshot;
@@ -47,15 +44,10 @@ class DbApi {
   /// helper function to conveert a document path to
   ///  a [DocumentReference]
   DocumentReference<Map<String, dynamic>> documentReferenceFromStringPath(
-          String path) =>
-      _db.doc(path);
-
-
-
-
-
-
-
+      String path) {
+    var _ref = _db.doc(path);
+    return _ref;
+  }
 
   // DocumentReference? get institutionDocRef {
   //   if (_institutionDocRef != null) {
@@ -65,13 +57,5 @@ class DbApi {
   //     return null;
   //   }
   // }
-
-
-
-
-
-
-
-
 
 }

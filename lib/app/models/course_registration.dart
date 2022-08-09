@@ -1,17 +1,18 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class CourseRegistration extends Equatable {
   final String studentId;
-  final DateTime registrationDate;
+  final Timestamp registrationDate;
   CourseRegistration({
     required this.studentId,
     required this.registrationDate,
   });
   static CourseRegistration initial() {
     var registration = CourseRegistration(
-        studentId: 'not initialized', registrationDate: DateTime.now());
+        studentId: 'not initialized', registrationDate: DateTime.now() as Timestamp);
     return registration;
   }
 
@@ -21,7 +22,7 @@ class CourseRegistration extends Equatable {
   }) {
     return CourseRegistration(
       studentId: studentId ?? this.studentId,
-      registrationDate: registrationDate ?? this.registrationDate,
+      registrationDate: registrationDate as Timestamp 
     );
   }
 
@@ -39,7 +40,7 @@ class CourseRegistration extends Equatable {
     return CourseRegistration(
       studentId: map['studentId'] ?? '',
       registrationDate:
-          DateTime.fromMillisecondsSinceEpoch(map['registrationDate']),
+          (map['registrationDate'])as Timestamp,
     );
   }
 

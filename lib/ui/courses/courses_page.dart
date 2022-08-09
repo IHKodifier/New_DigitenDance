@@ -110,13 +110,17 @@ class CoursesList extends ConsumerWidget {
       loading: () => Center(child: AdminFullPageShimmer(count: 4)),
       data: (courses) {
         log.i('length of courses ${courses.length.toString()}');
-        return ListView.builder(
-          itemCount: courses.length,
-          itemBuilder: (context, index) {
-            return CourseCard(
-              course: courses[index],
-            );
-          },
+        
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Wrap(
+              runAlignment: WrapAlignment.center,
+              runSpacing: 16,
+              spacing: 12,
+              children: courses.map((e) => CourseCard(course: e)).toList(),
+                ),
+          ),
         );
       },
     );
