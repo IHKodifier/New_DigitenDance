@@ -12,17 +12,17 @@ class CourseRegistration extends Equatable {
   });
   static CourseRegistration initial() {
     var registration = CourseRegistration(
-        studentId: 'not initialized', registrationDate: DateTime.now() as Timestamp);
+        studentId: 'not initialized', registrationDate: Timestamp.now() );
     return registration;
   }
 
   CourseRegistration copyWith({
     String? studentId,
-    DateTime? registrationDate,
+    Timestamp? registrationDate,
   }) {
     return CourseRegistration(
       studentId: studentId ?? this.studentId,
-      registrationDate: registrationDate as Timestamp 
+      registrationDate: registrationDate?? Timestamp.now()
     );
   }
 
@@ -31,7 +31,7 @@ class CourseRegistration extends Equatable {
 
     result.addAll({'studentId': studentId});
     result
-        .addAll({'registrationDate': registrationDate.millisecondsSinceEpoch});
+        .addAll({'registrationDate': registrationDate});
 
     return result;
   }

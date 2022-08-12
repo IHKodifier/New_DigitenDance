@@ -17,12 +17,13 @@ class DbCourse {
   Logger log = Logger();
 
   ///
-  FutureOr<DocumentReference> addNewCourse(
+  Future<DocumentReference> addNewCourse(
       {required Course course, required WidgetRef ref}) {
     ///get current [Institution]
     final institution = ref.read(institutionNotifierProvider).value;
     log.d(
         'Adding new course ${course.toString()}to  Instution Id ${institution?.title} \n at path ${institution?.docRef?.path}');
+
     ///save the course to DB
     ///update course docRef to actual
     var _docRef = ref
@@ -41,10 +42,10 @@ class DbCourse {
 
       return value;
     });
+    return Future.value(null);
   }
 
-  DocumentReference<Map<String, dynamic>> getDocRefForNewCourse(
-      WidgetRef ref) {
+  DocumentReference<Map<String, dynamic>> getDocRefForNewCourse(WidgetRef ref) {
     var docref = ref
         .read(dbProvider)
         .doc(ref.read(institutionNotifierProvider).value!.docRef!.path)

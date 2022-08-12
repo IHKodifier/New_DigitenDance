@@ -29,7 +29,7 @@ class Session extends Equatable {
       sessionTitle: map['sessionTitle'],
       courseId: map['parentCourseId'] ?? '',
       registrationStartDate: map['registrationStartDate'] != null
-          ? (map['registrationStartDate'] as Timestamp).toDate()
+          ? (map['registrationStartDate'] as Timestamp)
           : null,
       registrationEndDate:
           map['registrationEndDate']! ?? (map['registrationEndDate']as Timestamp).toDate(),
@@ -45,7 +45,7 @@ class Session extends Equatable {
   Faculty? faculty;
   String courseId;
   Timestamp? registrationEndDate;
-  DateTime? registrationStartDate;
+  Timestamp? registrationStartDate;
   String? sessionId;
   SessionStatus? sessionStatus;
   String? sessionTitle;
@@ -67,7 +67,7 @@ class Session extends Equatable {
     String? id,
     String? title,
     String? parentCourseId,
-    DateTime? registrationStartDate,
+    Timestamp? registrationStartDate,
     Timestamp? registrationEndDate,
     Faculty? faculty,
     List<CourseRegistration>? courseRegistrations,
@@ -77,7 +77,7 @@ class Session extends Equatable {
       sessionTitle: title ?? sessionTitle,
       courseId: parentCourseId ?? courseId,
       registrationStartDate:
-          registrationStartDate ?? this.registrationStartDate,
+          registrationStartDate ?? this.registrationStartDate as Timestamp,
       registrationEndDate: registrationEndDate ?? this.registrationEndDate,
       faculty: faculty ?? this.faculty,
       courseRegistrations: courseRegistrations ?? this.courseRegistrations,
@@ -89,7 +89,7 @@ class Session extends Equatable {
     session.courseRegistrations = [CourseRegistration.initial()];
     session.faculty = Faculty.initial();
     session.registrationEndDate = Timestamp.now();
-    session.registrationStartDate = DateTime.now();
+    session.registrationStartDate = Timestamp.now();
     session.sessionStatus = SessionStatus.inProgress;
     session.sessionTitle = 'title not initialized';
     session.sessionId = 'id not initialized';
