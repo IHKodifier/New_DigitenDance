@@ -14,46 +14,6 @@ class CourseCard extends ConsumerWidget {
   late Size size;
     double tileWidth = 150;
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var log = Logger(printer: PrettyPrinter());
-    size = MediaQuery.of(context).size;
-    log.i(course.toString());
-    Color bgColor = randomColor.randomColor(
-      colorBrightness: ColorBrightness.light,
-    );
-    var width = MediaQuery.of(context).size.width;
-if (width>800) {tileWidth= 250;
-  }else {
-  tileWidth=150;
-}
-
-
-
-
-
-    
-    return Container(
-      width: tileWidth,
-      decoration: BoxDecoration(
-        color: Colors.blueGrey.shade100,
-        borderRadius: const BorderRadius.only(
-          topRight: Radius.circular(30),
-          bottomLeft: Radius.circular(30),
-        ),
-      ),
-      height: 150,
-      child: Stack(
-        children: [
-          buildIdPositioned(context),
-          buildTitle(context),
-          buildCredits(context),
-          buildRegistrationCount(context),
-        ],
-      ),
-    );
-  }
-
   Positioned buildIdPositioned(BuildContext context) {
     return Positioned(
       
@@ -144,5 +104,46 @@ if (width>800) {tileWidth= 250;
         top: 100,
         left: 0,
         child: Text(' PRE-REQUISITES: ${course.preReqs!.length.toString()}'));
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    var log = Logger(printer: PrettyPrinter());
+    size = MediaQuery.of(context).size;
+    log.i(course.toString());
+    Color bgColor = randomColor.randomColor(
+      colorBrightness: ColorBrightness.light,
+    );
+    var width = MediaQuery.of(context).size.width;
+if (width>800) {tileWidth= 250;
+  }else {
+  tileWidth=150;
+}
+
+
+
+
+
+    
+    return Container(
+      width: tileWidth,
+      decoration: BoxDecoration(
+        color: Colors.blueGrey.shade100,
+        borderRadius:  BorderRadius.circular(
+          // topRight: Radius.circular(30),
+          // bottomLeft: Radius.circular(30),
+          30
+        ),
+      ),
+      height: 150,
+      child: Stack(
+        children: [
+          buildIdPositioned(context),
+          buildTitle(context),
+          buildCredits(context),
+          buildRegistrationCount(context),
+        ],
+      ),
+    );
   }
 }

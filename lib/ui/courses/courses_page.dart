@@ -114,12 +114,15 @@ class CoursesList extends ConsumerWidget {
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Center(
-            child: Wrap(
-              runAlignment: WrapAlignment.center,
-              runSpacing: 16,
-              spacing: 12,
-              children: courses.map((e) => CourseCard(course: e)).toList(),
-                ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal:16.0),
+              child: Wrap(
+                runAlignment: WrapAlignment.center,
+                runSpacing: 24,
+                spacing: 16,
+                children: courses.map((e) => CourseCard(course: e)).toList(),
+                  ),
+            ),
           ),
         );
       },

@@ -10,6 +10,7 @@ import 'package:new_digitendance/ui/shared/spacers.dart';
 
 import '../../app/models/course.dart';
 import '../home/admin/state/admin_state.dart';
+import 'couse_saving_dialog.dart';
 
 class NewCourseForm extends ConsumerStatefulWidget {
   const NewCourseForm({Key? key}) : super(key: key);
@@ -41,45 +42,8 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
     courseCreditController.text = '';
   }
 
-  void onCourseSaved() {
-    ref.read(preReqsEditingProvider).selectedPreReqs;
-
-    //prep a new course object
-    Course newState = Course(
-        id: courseIdController.text,
-        title: courseTitleController.text,
-        credits: int.parse(courseCreditController.text),
-        preReqs: ref.read(preReqsEditingProvider).selectedPreReqs?.toList(),
-        sessions: [
-          Session.initial(),
-          Session.initial(),
-          Session.initial(),
-        ],
-        docRef: ref
-            .read(dbApiProvider)
-            .documentReferenceFromStringPath('institutions/Not_INItialized'));
-    var _docRef = ref.read(dbApiProvider).dbCourse.getDocRefForNewCourse(ref);
-    newState.docRef = _docRef;
-
-    ref
-        .read(dbApiProvider)
-        .dbCourse
-        .addNewCourse(course: newState, ref: ref)
-        .then(
-      (value) {
-        ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-          SnackBar(
-            content: Text(
-                'New Course with Course ID  ${newState.title} ]] has been Successsfully Saved'),
-          ),
-        );
-      },
-    );
-
-    
-  }
-
   void onSavePrssed() {
+
     newState = Course.initial();
 
     if (!_formKey.currentState!.validate()) {
@@ -89,10 +53,28 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
       newState = newState?.copyWith(
           preReqs: ref.read(preReqsEditingProvider).selectedPreReqs?.toList());
       newState = newState?.copyWith(sessions: [Session.initial()]);
+          showDialog(
+      context: context,
+      builder: (context) => CourseSavingDialog(
+        course: newState!,
+      ),
+    );
       ref
           .read(dbApiProvider)
           .dbCourse
-          .addNewCourse(course: newState!, ref: ref);
+          .addNewCourse(course: newState!, ref: ref)
+          .then((value) {
+            
+        ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.black87,
+            content: Text(
+                'New Course with  ID\n   ${newState?.id} \n  has been Successsfully Saved'),
+          ),
+        );
+        Navigator.pop(context);
+        Navigator.pop(context);
+      });
     }
   }
 

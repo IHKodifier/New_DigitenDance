@@ -22,27 +22,20 @@ class DbCourse {
     ///get current [Institution]
     final institution = ref.read(institutionNotifierProvider).value;
     log.d(
-        'Adding new course ${course.toString()}to  Instution Id ${institution?.title} \n at path ${institution?.docRef?.path}');
+        'Adding new course ${course.id}to  Instution Id ${institution?.id} \n at path ${institution?.docRef?.path}');
 
     ///save the course to DB
     ///update course docRef to actual
-    var _docRef = ref
-        .read(dbApiProvider)
-        .dbCourse
-        .getDocRefForNewCourse(ref as WidgetRef);
+    var _docRef = ref.read(dbApiProvider).dbCourse.getDocRefForNewCourse(ref);
     course.docRef = _docRef;
 
+//
     return FirebaseFirestore.instance
-// .collection('institutions')
-        .doc(institution!.docRef!.path)
-        .collection('courses')
-        .add(course.toMap())
-        .then((value) {
-      log.d('${course.id} successfully written to ${value.path.toString()}');
+        .doc(_docRef.path)
+        .set(course.toMap())
+        .then((value) => _docRef);
 
-      return value;
-    });
-    return Future.value(null);
+    
   }
 
   DocumentReference<Map<String, dynamic>> getDocRefForNewCourse(WidgetRef ref) {
