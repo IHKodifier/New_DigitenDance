@@ -43,7 +43,6 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
   }
 
   void onSavePrssed() {
-
     newState = Course.initial();
 
     if (!_formKey.currentState!.validate()) {
@@ -53,18 +52,17 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
       newState = newState?.copyWith(
           preReqs: ref.read(preReqsEditingProvider).selectedPreReqs?.toList());
       newState = newState?.copyWith(sessions: [Session.initial()]);
-          showDialog(
-      context: context,
-      builder: (context) => CourseSavingDialog(
-        course: newState!,
-      ),
-    );
+      showDialog(
+        context: context,
+        builder: (context) => CourseSavingDialog(
+          course: newState!,
+        ),
+      );
       ref
           .read(dbApiProvider)
           .dbCourse
           .addNewCourse(course: newState!, ref: ref)
           .then((value) {
-            
         ScaffoldMessenger.maybeOf(context)?.showSnackBar(
           SnackBar(
             backgroundColor: Colors.black87,

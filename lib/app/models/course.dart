@@ -42,7 +42,6 @@ class Course extends Equatable {
   List<Session?>? sessions = [];
   String title;
 
-
   @override
   List<Object> get props {
     return [
@@ -100,6 +99,24 @@ class Course extends Equatable {
     if (sessions != null) {
       result.addAll({'sessions': sessions!.map((x) => x?.toMap()).toList()});
     }
+    result.addAll({'docRef': docRef.path});
+
+    return result;
+  }
+
+/// toShallowMap does not return deeply nested collections to facilate  writing top level document to the forestore
+  Map<String, dynamic> toShallowMap() {
+    final result = <String, dynamic>{};
+
+    result.addAll({'courseId': id});
+    result.addAll({'courseTitle': title});
+    result.addAll({'credits': credits});
+    if (preReqs != null) {
+      result.addAll({'preReqs': preReqs!.map((x) => x?.toMap()).toList()});
+    }
+  
+      result.addAll({'sessions': <Session>[]});
+    
     result.addAll({'docRef': docRef.path});
 
     return result;

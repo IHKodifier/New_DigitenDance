@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
 import 'package:random_color/random_color.dart';
 
 import '../../app/models/course.dart';
 import 'dart:math' as math;
+
+import '../courses/course_details_page.dart';
 
 class CourseCard extends ConsumerWidget {
   CourseCard({required this.course, Key? key}) : super(key: key);
@@ -12,12 +15,11 @@ class CourseCard extends ConsumerWidget {
   final Course course;
   RandomColor randomColor = RandomColor();
   late Size size;
-    double tileWidth = 150;
+  double tileWidth = 150;
 
   Positioned buildIdPositioned(BuildContext context) {
     return Positioned(
-      
-      left: (tileWidth/2)-20,
+      left: (tileWidth / 2) - 20,
       top: 0,
       child: Row(
         children: [
@@ -66,8 +68,10 @@ class CourseCard extends ConsumerWidget {
                         color: Colors.yellow,
                       ),
                 ),
-              Icon(Icons.donut_small_outlined,
-              color: Colors.yellow,),
+                Icon(
+                  Icons.donut_small_outlined,
+                  color: Colors.yellow,
+                ),
               ],
             ),
           ),
@@ -115,34 +119,34 @@ class CourseCard extends ConsumerWidget {
       colorBrightness: ColorBrightness.light,
     );
     var width = MediaQuery.of(context).size.width;
-if (width>800) {tileWidth= 250;
-  }else {
-  tileWidth=150;
-}
+    if (width > 800) {
+      tileWidth = 250;
+    } else {
+      tileWidth = 150;
+    }
 
-
-
-
-
-    
-    return Container(
-      width: tileWidth,
-      decoration: BoxDecoration(
-        color: Colors.blueGrey.shade100,
-        borderRadius:  BorderRadius.circular(
-          // topRight: Radius.circular(30),
-          // bottomLeft: Radius.circular(30),
-          30
+    return InkWell(
+      onTap: () {
+        ref.read(currentCourseProvider.notifier).setCurrentCourse(course);
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => CourseDetailsPage()));
+      },
+      hoverColor: Colors.green.shade900,
+      child: Container(
+        width: tileWidth,
+        decoration: BoxDecoration(
+          color: Colors.blueGrey.shade100,
+          borderRadius: BorderRadius.circular(50),
         ),
-      ),
-      height: 150,
-      child: Stack(
-        children: [
-          buildIdPositioned(context),
-          buildTitle(context),
-          buildCredits(context),
-          buildRegistrationCount(context),
-        ],
+        height: 150,
+        child: Stack(
+          children: [
+            buildIdPositioned(context),
+            buildTitle(context),
+            buildCredits(context),
+            buildRegistrationCount(context),
+          ],
+        ),
       ),
     );
   }

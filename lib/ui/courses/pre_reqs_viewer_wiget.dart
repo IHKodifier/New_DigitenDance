@@ -6,8 +6,8 @@ import 'package:new_digitendance/ui/shared/spacers.dart';
 import '../../app/models/course.dart';
 import '../../app/models/pre_reqs.dart';
 
-class PreReqsWidget extends ConsumerWidget {
-  const PreReqsWidget({Key? key}) : super(key: key);
+class PreReqsViewerWidget extends ConsumerWidget {
+  const PreReqsViewerWidget({Key? key}) : super(key: key);
 
   Widget buildChip(PreReqs e, BuildContext context, WidgetRef ref) {
     return ConstrainedBox(
@@ -215,7 +215,9 @@ class SelectedPreReqsWrap extends StatelessWidget {
                   .map(
                     (e) => PreReqsActionChip(
                       e: e,
-                      action: ref.read(preReqsEditingProvider.notifier).removePreReq,
+                      action: ref
+                          .read(preReqsEditingProvider.notifier)
+                          .removePreReq,
                     ),
                   )
                   .toList(),
@@ -225,6 +227,14 @@ class SelectedPreReqsWrap extends StatelessWidget {
       ),
     );
   }
+}
+
+ editinNotAllowed(BuildContext context) {
+  showDialog(context: context, builder: (_)=>AlertDialog(
+    title: Text('Cannot Edit PreReqs here' ),
+    content: Text('Click on Edit Course to edite PreReqs'),
+
+  ));
 }
 
 class PreReqsHint extends ConsumerWidget {
@@ -264,7 +274,7 @@ class PreReqsTitle extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Text(
-        'Course Pre Requisites ',
+        'Course Pre Requisites Viewer',
         // state.allPreReqs.length.toString() +
         // ')',
         style: Theme.of(context)
