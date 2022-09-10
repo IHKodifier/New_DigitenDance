@@ -48,7 +48,10 @@ class CourseDetailsBody extends ConsumerWidget {
           const SizedBox(
             height: 25,
           ),
-          // PreReqsViewerWidget(),
+           const PreReqsWidget(
+            mode: PreReqsWidgetMode.ViewOnly,
+            
+          ),
           // SessionsViewerWidget(),
         ],
       ),

@@ -31,7 +31,6 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  // SearchApi searchService = SearchApi();
 
   @override
   void initState() {
@@ -200,6 +199,7 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
         width: MediaQuery.of(context).size.width * .75,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Form(
               key: _formKey,
@@ -215,7 +215,7 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
                     //   courseIdController: courseIdController,
                     //   formKey: _formKey,
                     // ),
-                    const SpacerVertical(30),
+                    const SpacerVertical(15),
 
                     ///[courseTitle FormField]
                     _courseTitleField(),
@@ -223,7 +223,7 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
                     //   courseTitleController: courseTitleController,
                     //   formKey: _formKey,
                     // ),
-                    const SpacerVertical(30),
+                    const SpacerVertical(15),
 
                     ///[courseCredits] Form Field
                     _coureseCreditsField(),
@@ -231,16 +231,19 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
                     //   courseCreditController: courseCreditController,
                     //   formKey: _formKey,
                     // ),
-                    const SpacerVertical(30),
+                    const SpacerVertical(15),
 
-                    const SpacerVertical(30),
-                    const PreReqsWidget(),
+                    const SpacerVertical(15),
+                    const PreReqsWidget(
+                      mode: PreReqsWidgetMode.Editable,
+                    ),
 
                     ///widget below is not required in New course form
                     // FacultySelectionCard(),
 
                     const SizedBox(
                       height: 20,
+                      width: 50,
                     ),
 
                     _buildButtonBar(),

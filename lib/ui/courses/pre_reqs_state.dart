@@ -17,8 +17,10 @@ final preReqsEditingProvider =
   final allPreReqs = ref.read(allCoursesStreamProvider).value;
 
   PreReqsEditingState initialState = PreReqsEditingState(
-      allPreReqs: Set.from(ref.read(allCoursesStreamProvider).value!.map((e) => e.toPreReq())),
-      availablePreReqs: Set.from(ref.read(allCoursesStreamProvider).value!.map((e) => e.toPreReq())));
+      allPreReqs: Set.from(
+          ref.read(allCoursesStreamProvider).value!.map((e) => e.toPreReq())),
+      availablePreReqs: Set.from(
+          ref.read(allCoursesStreamProvider).value!.map((e) => e.toPreReq())));
   // initialState.allPreReqs =
   //     Set.from(ref.read(allCoursesStreamProvider).value!.toList());
   initialState.selectedPreReqs = {};
@@ -37,10 +39,10 @@ class PreReqsEditingNotifier extends StateNotifier<PreReqsEditingState> {
     for (var element in courses) {
       state.allPreReqs.add(element.toPreReq());
     }
-    
+    // state = state.copyWith();
   }
 
-  void addPreReq(PreReqs preReq) {
+  void addPreReq({required PreReqs preReq}) {
     ///check if the pre req already exists in the [state.selectedPreReqs]
     ///and [state.selectedPreReqs] isnot empty
     if (!(state.selectedPreReqs!.contains(preReq) &&
@@ -53,7 +55,7 @@ class PreReqsEditingNotifier extends StateNotifier<PreReqsEditingState> {
     }
   }
 
-  void removePreReq(PreReqs preReq) {
+  void removePreReq({required PreReqs preReq}) {
     if ((state.selectedPreReqs!.contains(preReq) &&
         state.selectedPreReqs!.isNotEmpty)) {
       state.availablePreReqs.add(preReq);
@@ -62,6 +64,11 @@ class PreReqsEditingNotifier extends StateNotifier<PreReqsEditingState> {
 
       state = state.copyWith();
     }
+  }
+
+  set currentPreReq(PreReqs preReq) {
+    state.currentPreReq = preReq;
+    state = state.copyWith();
   }
 }
 
@@ -74,11 +81,12 @@ class PreReqsEditingState extends Equatable {
 
   late Set<PreReqs> allPreReqs;
   late Set<PreReqs> availablePreReqs;
+  PreReqs? currentPreReq = PreReqs(id: 'id', title: 'title', credits: 99);
   late Set<PreReqs>? selectedPreReqs = {};
 
   @override
   // TODO: implement props
-  List<Object?> get props => [selectedPreReqs];
+  List<Object?> get props => [selectedPreReqs, currentPreReq];
 
   // bool get isModified => (previousPreReqsState != newPreReqsState);
   // // bool get isNotModified => !isModified;

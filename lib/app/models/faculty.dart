@@ -53,16 +53,17 @@ class Faculty extends Equatable {
     String? userId,
     String? firstName,
     String? lastName,
-    title,
+    // title,
     String? photoURL,
     DocumentReference? docRef,
-    Faculty? faculty,
+    // Faculty? faculty,
   }) {
     return Faculty(
       userId: userId ?? this.userId,
       firstName: firstName ?? this.firstName,
       photoURL: photoURL ?? this.photoURL,
       docRef: docRef ?? this.docRef,
+      // title:
     );
   }
 

@@ -107,6 +107,7 @@ class AdminAppHomePage extends ConsumerWidget {
                 ),
                 const SizedBox(
                   height: 20,
+                  width: 150,
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -148,6 +149,7 @@ class AdminAppHomePage extends ConsumerWidget {
                 ),
                 const SizedBox(
                   height: 20,
+                  width: 150,
                 ),
                 ElevatedButton(
                     onPressed: () {
@@ -230,6 +232,7 @@ class HomeMenuCard extends StatelessWidget {
                 ),
                 const SizedBox(
                   height: 10,
+                  width: 100,
                 ),
                 Text(
                   title,

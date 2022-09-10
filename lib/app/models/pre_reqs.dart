@@ -20,9 +20,9 @@ class PreReqs extends Equatable {
     );
   }
 
+  final int credits;
   final String id;
   final String title;
-  final int credits;
 
   @override
   List<Object> get props => [id, title, credits];

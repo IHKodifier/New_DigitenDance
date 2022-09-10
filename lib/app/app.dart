@@ -25,21 +25,17 @@ class MyApp extends ConsumerWidget {
 // pr
           // primarySwatch: Colors.green,
           // ),
-      theme: ThemeData.from(
-        colorScheme: Theme.of(context).colorScheme.copyWith(
-          brightness: brightnessState,
-          primary: const Color.fromARGB(249, 33, 102, 4),
-          secondary: const Color.fromARGB(249, 22, 69, 3),
-          tertiary: const Color.fromARGB(248, 112, 3, 121),
-          // onPrimary: Color.fromARGB(248, 157, 228, 115),
-          onSurface: const Color.fromARGB(248, 27, 70, 1),
-          background: const Color.fromARGB(248, 238, 239, 237),
-          surface: const Color.fromARGB(169, 131, 181, 83),
-          
-        ),
+      theme: ThemeData(
         
+        // ),
+        colorSchemeSeed: Color.fromARGB(255, 222, 6, 238),
+          brightness: brightnessState,
         useMaterial3: true,
       ),
+
+
+
+
       home: FutureBuilder(
         future: _initializeApp,
         builder: (context, snapshot) {
