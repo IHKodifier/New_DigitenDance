@@ -31,7 +31,6 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -69,6 +68,8 @@ class _NewCourseFormState extends ConsumerState<NewCourseForm> {
                 'New Course with  ID\n   ${newState?.id} \n  has been Successsfully Saved'),
           ),
         );
+        ref.refresh(preReqsEditingProvider);
+
         Navigator.pop(context);
         Navigator.pop(context);
       });

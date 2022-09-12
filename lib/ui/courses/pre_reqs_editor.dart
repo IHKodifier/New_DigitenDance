@@ -7,21 +7,6 @@ import 'package:new_digitendance/ui/shared/spacers.dart';
 class PreReqsEditor extends ConsumerWidget {
   const PreReqsEditor({Key? key}) : super(key: key);
 
-  preReqsTitle(BuildContext context) => Text(
-        'Course Pre-Requisites',
-        style: Theme.of(context).textTheme.headline4,
-      );
-
-  preReqsHint(BuildContext context) => Text(
-        'Tap on a Course to Add/Remove',
-        style: Theme.of(context).textTheme.headline5,
-      );
-
-  preReqsCount(BuildContext context, PreReqsEditingState state) => Text(
-        'Selected Pre-Requisites (${state.selectedPreReqs?.length.toString()})',
-        style: Theme.of(context).textTheme.headline5,
-      );
-
   Widget availableGrid(BuildContext context, PreReqsEditingState state,
       PreReqsEditingNotifier notifier) {
     return SizedBox(
@@ -36,107 +21,140 @@ class PreReqsEditor extends ConsumerWidget {
     );
   }
 
-  InkWell availablePreReqCard(PreReqsEditingNotifier notifier, PreReqs e) {
-    return InkWell(
-      child: Card(
-        elevation: 5,
-        child: InkWell(
-          onTap: () => notifier.addPreReq(preReq: e),
-          hoverColor: Colors.green.shade200,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CircleAvatar(
-                      radius: 35,
-                      child: FittedBox(child: Text(e.id)),
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          e.title,
-                          softWrap: true,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          e.credits.toString(),
-                          softWrap: true,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  InkWell selectedPreReqCard(PreReqsEditingNotifier notifier, PreReqs e) {
-    return InkWell(
-      child: Card(
-        elevation: 5,
-        child: InkWell(
-          onTap: () => notifier.removePreReq(preReq: e),
-          hoverColor: Colors.red.shade200,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CircleAvatar(
-                      radius: 35,
-                      child: FittedBox(child: Text(e.id)),
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          e.title,
-                          softWrap: true,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          e.credits.toString(),
-                          softWrap: true,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget selectedGrid(BuildContext context, PreReqsEditingState state,
       PreReqsEditingNotifier notifier) {
     return SizedBox(
-      height: 150,
-      child: GridView.count(
-        crossAxisCount: 3,
-        crossAxisSpacing: 10,
-        children: state.selectedPreReqs!
-            .map((e) => selectedPreReqCard(notifier, e))
-            .toList(),
+      height: 100,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Material(
+          // color: Colors.green.shade200,
+          elevation: 15,
+          shadowColor: Colors.black87,
+          child: GridView.count(
+            crossAxisCount: 3,
+            crossAxisSpacing: 10,
+            children: state.selectedPreReqs!
+                .map((e) => selectedPreReqCard(context, notifier, e))
+                .toList(),
+          ),
+        ),
       ),
+    );
+  }
+
+  Widget availablePreReqCard(PreReqsEditingNotifier notifier, PreReqs e) {
+    return Wrap(
+      children: [
+        Card(
+          elevation: 5,
+          child: InkWell(
+            onTap: () => notifier.addPreReq(preReq: e),
+            hoverColor: Colors.green.shade200,
+            child: SizedBox(
+              height: 100,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        CircleAvatar(
+                          radius: 35,
+                          child: FittedBox(child: Text(e.id)),
+                        ),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              e.title,
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              e.credits.toString(),
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget selectedPreReqCard(
+      context, PreReqsEditingNotifier notifier, PreReqs e) {
+    return Wrap(
+      children: [
+        InkWell(
+          onTap: () => notifier.removePreReq(preReq: e),
+          hoverColor: Colors.red.shade200,
+          child: Stack(
+            children: [
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: ClipOval(
+                child: Container(
+                  color: Colors.green.shade200,
+                  child: Icon(
+                    Icons.done,
+                    color: Theme.of(context).primaryColor,
+                    size: 35,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      CircleAvatar(
+                        radius: 35,
+                        child: FittedBox(child: Text(e.id)),
+                      ),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            e.title,
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            e.credits.toString(),
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ], 
+          clipBehavior: Clip.none,
+          
+          ),
+        ),
+      ],
     );
   }
 
@@ -146,25 +164,83 @@ class PreReqsEditor extends ConsumerWidget {
     final state = ref.watch(preReqsEditingProvider);
     return Card(
       elevation: 10,
-      margin: EdgeInsets.all(8),
-      surfaceTintColor: Color.fromARGB(255, 242, 148, 225),
+      margin: const EdgeInsets.all(8),
+      surfaceTintColor: const Color.fromARGB(255, 242, 148, 225),
       color: Colors.white70,
       child: Container(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            preReqsTitle(context),
+            const PreReqsTitle(),
             const SpacerVertical(12),
-            preReqsHint(context),
+            const PreReqsCount(),
             const SpacerVertical(12),
-            preReqsCount(context, state),
+            state.selectedPreReqs!.isEmpty
+                ? const PreReqsHint()
+                : Flexible(
+                    flex: 1,
+                    child: selectedGrid(context, state, notifier),
+                    fit: FlexFit.loose,
+                  ),
             const SpacerVertical(12),
-            Flexible(flex: 1, child: selectedGrid(context, state, notifier)),
-            const SpacerVertical(12),
-            Flexible(flex: 3, child: availableGrid(context, state, notifier)),
+            Flexible(
+              flex: 1,
+              child: availableGrid(context, state, notifier),
+              fit: FlexFit.loose,
+            ),
             const SpacerVertical(12),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class PreReqsTitle extends StatelessWidget {
+  const PreReqsTitle({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        'Course Pre-Requisites',
+        style: Theme.of(context).textTheme.headline3?.copyWith(
+              color: Theme.of(context).primaryColor,
+            ),
+      ),
+    );
+  }
+}
+
+class PreReqsCount extends ConsumerWidget {
+  const PreReqsCount({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(preReqsEditingProvider);
+    return Text(
+      '${state.selectedPreReqs?.length.toString()} Pre-Requisites selected',
+      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            color: Theme.of(context).primaryColor,
+          ),
+    );
+  }
+}
+
+class PreReqsHint extends ConsumerWidget {
+  const PreReqsHint({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(preReqsEditingProvider);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        'Tap on a preRequisite to add /remove',
+        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+              color: Colors.blueGrey.shade800,
+            ),
       ),
     );
   }

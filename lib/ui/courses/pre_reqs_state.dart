@@ -42,6 +42,10 @@ class PreReqsEditingNotifier extends StateNotifier<PreReqsEditingState> {
     // state = state.copyWith();
   }
 
+  void reset() {
+    // state = state.copyWith(selectedPreReqs:);
+  }
+
   void addPreReq({required PreReqs preReq}) {
     ///check if the pre req already exists in the [state.selectedPreReqs]
     ///and [state.selectedPreReqs] isnot empty
