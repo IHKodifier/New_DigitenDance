@@ -12,7 +12,7 @@ class PreReqsEditor extends ConsumerWidget {
     return SizedBox(
       height: 100,
       child: GridView.count(
-        crossAxisCount: 3,
+        crossAxisCount: 4,
         crossAxisSpacing: 10,
         children: state.availablePreReqs
             .map((e) => availablePreReqCard(notifier, e))
@@ -55,31 +55,26 @@ class PreReqsEditor extends ConsumerWidget {
               height: 100,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    CircleAvatar(
+                      radius: 35,
+                      child: FittedBox(child: Text(e.id)),
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CircleAvatar(
-                          radius: 35,
-                          child: FittedBox(child: Text(e.id)),
+                        Text(
+                          e.title,
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              e.title,
-                              softWrap: true,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Text(
-                              e.credits.toString(),
-                              softWrap: true,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
+                        Text(
+                          e.credits.toString(),
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
@@ -128,21 +123,15 @@ class PreReqsEditor extends ConsumerWidget {
                         radius: 35,
                         child: FittedBox(child: Text(e.id)),
                       ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            e.title,
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            e.credits.toString(),
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+                      Text(
+                        e.title,
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        e.credits.toString(),
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),

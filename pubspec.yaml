@@ -48,7 +48,7 @@ dependencies:
   shimmer: ^2.0.0
   search_choices: ^2.0.14
   random_color: 1.0.6-nullsafety
-  lottie: ^1.2.1
+  lottie: ^1.4.2
   syncfusion_flutter_pdf: ^19.3.57-beta
   # syncfusion_flutter_datepicker: ^19.3.57
   syncfusion_flutter_signaturepad: ^19.3.57

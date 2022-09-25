@@ -34,6 +34,7 @@ class CoursesPage extends ConsumerWidget {
           SizedBox(
             width: 40,
           ),
+          
         ],
         // centerTitle: true,
       ),
@@ -118,8 +119,8 @@ class CoursesList extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal:16.0),
               child: Wrap(
                 runAlignment: WrapAlignment.center,
-                runSpacing: 24,
-                spacing: 16,
+                runSpacing: 48,
+                spacing: 48,
                 children: courses.map((e) => CourseCard(course: e)).toList(),
                   ),
             ),

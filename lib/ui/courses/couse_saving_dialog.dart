@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../app/models/course.dart';
 
@@ -27,7 +28,7 @@ class CourseSavingDialog extends ConsumerWidget {
             style: Theme.of(context).textTheme.headline3,
           ),
           content: Center(
-            child: isBusy ? const CircularProgressIndicator() : Container(),
+            child: isBusy ? const CircularProgressIndicator() : Container(child: Lottie.network('https://assets5.lottiefiles.com/private_files/lf30_nrnx3s.json'),),
           ),
           // actions: [
           //   Container(

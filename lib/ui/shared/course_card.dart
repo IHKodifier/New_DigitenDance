@@ -19,8 +19,9 @@ class CourseCard extends ConsumerWidget {
 
   Positioned buildIdPositioned(BuildContext context) {
     return Positioned(
-      left: (tileWidth / 2) - 20,
-      top: 0,
+      left: 3,
+      top: 2,
+      right: 3,
       child: Row(
         children: [
           Container(
@@ -52,30 +53,14 @@ class CourseCard extends ConsumerWidget {
     );
   }
 
-  Positioned buildCredits(BuildContext context) {
-    return Positioned(
-        bottom: 4,
-        right: 4,
-        child: Container(
-          color: Colors.black87,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Text(
-                  '${course.credits.toString()}',
-                  style: Theme.of(context).textTheme.caption?.copyWith(
-                        color: Colors.yellow,
-                      ),
-                ),
-                Icon(
-                  Icons.donut_small_outlined,
-                  color: Colors.yellow,
-                ),
-              ],
-            ),
+  Widget buildCredits(BuildContext context) {
+    return Text(
+      '${course.credits.toString()} credits',
+      style: Theme.of(context).textTheme.caption?.copyWith(
+            color: Colors.yellow,
+            fontSize:16,
           ),
-        ));
+    );
   }
 
   Positioned buildTitle(BuildContext context) {
@@ -105,9 +90,25 @@ class CourseCard extends ConsumerWidget {
 
   Widget buildRegistrationCount(BuildContext context) {
     return Positioned(
-        top: 100,
+        // top: 100,
+        bottom: 0,
         left: 0,
-        child: Text(' PRE-REQUISITES: ${course.preReqs!.length.toString()}'));
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(4),
+              child: Text('${course.preReqs!.length.toString()} Pre-Requisites',
+              style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                color: Colors.white,
+                fontSize: 14
+              ),),
+            ),
+
+
+            buildCredits(context),
+          ],
+        ));
   }
 
   @override
@@ -117,6 +118,7 @@ class CourseCard extends ConsumerWidget {
     log.i(course.toString());
     Color bgColor = randomColor.randomColor(
       colorBrightness: ColorBrightness.light,
+      colorSaturation: ColorSaturation.highSaturation,
     );
     var width = MediaQuery.of(context).size.width;
     if (width > 800) {
@@ -131,19 +133,23 @@ class CourseCard extends ConsumerWidget {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (_) => CourseDetailsPage()));
       },
-      hoverColor: Colors.green.shade900,
+      hoverColor: Theme.of(context).primaryColor,
       child: Container(
         width: tileWidth,
         decoration: BoxDecoration(
-          color: Colors.blueGrey.shade100,
-          borderRadius: BorderRadius.circular(50),
+          color: randomColor.randomColor(
+            colorBrightness: ColorBrightness.light
+          ),
+          borderRadius: BorderRadius.circular(10),
+        gradient: LinearGradient(colors: [randomColor.randomColor(),Colors.black],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter)
         ),
         height: 150,
         child: Stack(
           children: [
             buildIdPositioned(context),
             buildTitle(context),
-            buildCredits(context),
             buildRegistrationCount(context),
           ],
         ),
