@@ -15,18 +15,21 @@ class Course extends Equatable {
     required this.docRef,
     this.preReqs,
     this.sessions,
+    this.description
   });
 
   factory Course.fromJson(String source) => Course.fromMap(json.decode(source));
 
   factory Course.fromMap(Map<String, dynamic> map) {
-    Course retval =      Course(
+    Course retval = Course(
       id: map['courseId'],
       title: map['courseTitle'],
       credits: map['credits']?.toInt(),
+      
       preReqs: map['preReqs'] != null
           ? List<PreReqs>.from(map['preReqs']?.map((x) => PreReqs.fromMap(x)))
           : null,
+          description: map['description'],
       sessions: map['sessions'] != null
           ? List<Session>.from(map['sessions']?.map((x) => Session.fromMap(x)))
           : null,
@@ -36,11 +39,12 @@ class Course extends Equatable {
   }
 
   int credits;
-  DocumentReference<Map<String, dynamic>>  docRef;
+  DocumentReference<Map<String, dynamic>> docRef;
   String id;
   List<PreReqs?>? preReqs = [];
   List<Session?>? sessions = [];
   String title;
+  String? description;
 
   @override
   List<Object> get props {
@@ -50,13 +54,14 @@ class Course extends Equatable {
       credits,
       preReqs ?? <PreReqs>[],
       sessions ?? <Session>[],
-      docRef.path
+      docRef.path,
+      description!
     ];
   }
 
   @override
   String toString() {
-    return 'Course(courseId: $id, courseTitle: $title, credits: $credits, preReqs: ${preReqs ?? ''}, sessions: $sessions, docRef: ${docRef.path})';
+    return 'Course(courseId: $id, courseTitle: $title, credits: $credits, preReqs: ${preReqs ?? ''}, sessions: $sessions, docRef: ${docRef.path}) description ${description}';
   }
 
   static Course initial() {
@@ -75,9 +80,10 @@ class Course extends Equatable {
     int? credits,
     List<PreReqs>? preReqs,
     List<Session>? sessions,
-   DocumentReference<Map<String, dynamic>>?  docRef,
+    String? description,
+    DocumentReference<Map<String, dynamic>>? docRef,
   }) {
-    return Course(
+    Course course = Course(
       id: courseId ?? id,
       title: courseTitle ?? title,
       credits: credits ?? this.credits,
@@ -85,6 +91,8 @@ class Course extends Equatable {
       sessions: sessions ?? this.sessions,
       docRef: docRef ?? this.docRef,
     );
+    course.description = description ?? this.description;
+    return course;
   }
 
   Map<String, dynamic> toMap() {
@@ -92,6 +100,7 @@ class Course extends Equatable {
 
     result.addAll({'courseId': id});
     result.addAll({'courseTitle': title});
+    result.addAll({'description': description});
     result.addAll({'credits': credits});
     if (preReqs != null) {
       result.addAll({'preReqs': preReqs!.map((x) => x?.toMap()).toList()});
@@ -104,19 +113,20 @@ class Course extends Equatable {
     return result;
   }
 
-/// toShallowMap does not return deeply nested collections to facilate  writing top level document to the forestore
+  /// toShallowMap does not return deeply nested collections to facilate  writing top level document to the forestore
   Map<String, dynamic> toShallowMap() {
     final result = <String, dynamic>{};
 
     result.addAll({'courseId': id});
     result.addAll({'courseTitle': title});
     result.addAll({'credits': credits});
+      result.addAll({'description': description});
     if (preReqs != null) {
       result.addAll({'preReqs': preReqs!.map((x) => x?.toMap()).toList()});
     }
-  
-      result.addAll({'sessions': <Session>[]});
-    
+
+    result.addAll({'sessions': <Session>[]});
+
     result.addAll({'docRef': docRef.path});
 
     return result;

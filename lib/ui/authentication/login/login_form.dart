@@ -5,6 +5,7 @@ import 'package:new_digitendance/app/contants.dart';
 import 'package:new_digitendance/ui/authentication/signup/signup_page.dart';
 import 'package:new_digitendance/ui/home/admin/admin_homepage.dart';
 import 'package:new_digitendance/ui/shared/shimmers.dart';
+import 'package:new_digitendance/ui/shared/spacers.dart';
 
 import '../state/auth_state.dart';
 
@@ -173,6 +174,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                   buildSignUpButton(ref),
                 ],
               ),
+                  SpacerVertical(16),
             ],
           ),
         ),

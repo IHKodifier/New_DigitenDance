@@ -28,27 +28,7 @@ final allCoursesStreamProvider = StreamProvider<List<Course>>((ref) async* {
 
   yield* fireStream;
 
-  //////////////////////////////////
-  // logger.d(ref.read(institutionNotifierProvider).docRef.path);
-  // await ref
-  //     .read(dbProvider)
-  //     .doc(ref.read(institutionNotifierProvider).docRef.path)
-  //     .collection('courses')
-  //     .snapshots()
-  //     .map((snapshot) async* {
-  //   logger
-  //       .i('snapshot has ${snapshot.docs.length.toString()} documents inside');
-  //   snapshot.docs.map((e) async* {
-  //     logger.i('Course Received....${e.data().toString()}');
-  //     yield Course.fromMap(e.data());
-  //   });
-  // });
 
-  // .map((event) => event.docs
-  //     .map(
-  //       (e) => Course.fromMap(e.data()),
-  //     )
-  // );
 });
 
 ///-[currentCourseProvider] provides the currently selected [Course] for the current operation
