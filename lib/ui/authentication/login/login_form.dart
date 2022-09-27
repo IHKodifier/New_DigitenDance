@@ -36,27 +36,29 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       child: Container(
         // width: 300,
         height: 50,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32.0),
-          child: ElevatedButton(
-              // icon: FaIcon(FontAwesomeIcons.key, size: 40),
-              onPressed: () async {
-                notifier.setBusyTo = true;
-                var loginSuccess = await notifier.login(
-                    loginProvider: LoginProviderType.EmailPassword,
-                    email: emailController.text,
-                    password: passwordController.text);
-                notifier.setBusyTo = false;
-                if (loginSuccess) {
-                  // notifier.se
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (_) => AdminAppHomePage()));
-                }
-              },
-              child: const Text(
-                'Sign In',
-                style: TextStyle(fontSize: 22),
-              )),
+        child: OnHoverButton(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+            child: ElevatedButton(
+                // icon: FaIcon(FontAwesomeIcons.key, size: 40),
+                onPressed: () async {
+                  notifier.setBusyTo = true;
+                  var loginSuccess = await notifier.login(
+                      loginProvider: LoginProviderType.EmailPassword,
+                      email: emailController.text,
+                      password: passwordController.text);
+                  notifier.setBusyTo = false;
+                  if (loginSuccess) {
+                    // notifier.se
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (_) => AdminAppHomePage()));
+                  }
+                },
+                child: const Text(
+                  'Sign In',
+                  style: TextStyle(fontSize: 22),
+                )),
+          ),
         ),
       ),
     );
@@ -70,16 +72,18 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         // width: 300,
         height: 50,
         child: Padding(
-          padding: const EdgeInsets.all(0),
-          child: TextButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (_) => const SignupPage()));
-              },
-              child: const Text(
-                'SIGN UP',
-                style: TextStyle(fontSize: 22),
-              )),
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: OnHoverButton(
+            child: OutlinedButton(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (_) => const SignupPage()));
+                },
+                child: const Text(
+                  'SIGN UP',
+                  style: TextStyle(fontSize: 22),
+                )),
+          ),
         ),
       ),
     );
@@ -147,38 +151,70 @@ class _LoginFormState extends ConsumerState<LoginForm> {
     final notifier = ref.read(authenticationNotifierProvider.notifier);
     return Material(
       child: Center(
-        child: (state.isBusy) ? AdminFullPageShimmer(count: 4,)
-        :
-        SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Text(
-                  'LOGIN',
-                  style: Theme.of(context).textTheme.headline3,
+        child: (state.isBusy)
+            ? AdminFullPageShimmer(
+                count: 4,
+              )
+            : SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: Text(
+                        'LOGIN',
+                        style: Theme.of(context).textTheme.headline3,
+                      ),
+                    ),
+                    _emailTextField(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    _passwordTextField(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        buildLoginButton(ref),
+                        buildSignUpButton(ref),
+                      ],
+                    ),
+                    SpacerVertical(16),
+                  ],
                 ),
               ),
-              _emailTextField(),
-              SizedBox(
-                height: 20,
-              ),
-              _passwordTextField(),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  buildLoginButton(ref),
-                  buildSignUpButton(ref),
-                ],
-              ),
-                  SpacerVertical(16),
-            ],
-          ),
-        ),
       ),
     );
+  }
+}
+
+class OnHoverButton extends StatefulWidget {
+  OnHoverButton({Key? key, required this.child}) : super(key: key);
+  final Widget child;
+
+  @override
+  State<OnHoverButton> createState() => _OnHoverButtonState();
+}
+
+class _OnHoverButtonState extends State<OnHoverButton> {
+  bool isHovered = false;
+  @override
+  Widget build(BuildContext context) {
+  final hoveredTransform = Matrix4.identity()..translate(8,-8,0);
+  final  transform = isHovered ? hoveredTransform:Matrix4.identity();
+    return MouseRegion(
+        onEnter: (event) => onMouseEntered(true),
+        onExit: (event) => onMouseEntered(false),
+        child: AnimatedContainer(
+            duration: Duration(milliseconds: 100),
+            transform:transform ,
+             child: widget.child));
+  }
+
+  onMouseEntered(bool isHovered) {
+    setState(() {
+      this.isHovered = isHovered;
+    });
   }
 }
