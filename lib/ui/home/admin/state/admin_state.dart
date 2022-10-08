@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:new_digitendance/app/apis/db_course.dart';
 import 'package:new_digitendance/app/contants.dart';
 import 'package:new_digitendance/app/models/institution.dart';
 import 'package:new_digitendance/ui/authentication/state/auth_state.dart';
@@ -9,6 +10,8 @@ import '../../../../app/models/course.dart';
 import '../../../authentication/state/institution_state.dart';
 
 var log = Logger(printer: PrettyPrinter());
+
+
 
 /// [allCoursesStreamProvider] provides a stream of all courses in the current users [Institution]
 final allCoursesStreamProvider = StreamProvider<List<Course>>((ref) async* {
@@ -27,9 +30,10 @@ final allCoursesStreamProvider = StreamProvider<List<Course>>((ref) async* {
       .transform(streamTransformer(Course.fromMap));
 
   yield* fireStream;
-
-
 });
+
+
+
 
 ///-[currentCourseProvider] provides the currently selected [Course] for the current operation
 final currentCourseProvider =
@@ -54,20 +58,7 @@ class CourseNotifier extends StateNotifier<Course> {
   // }
   void setCurrentCourse(Course course) => state = course;
 
-  void setSessiononCourseProvider(
-      QuerySnapshot<Map<String, dynamic>> data, String courseId) {
-    state.sessions!.clear();
-    // var courseId = ref.read(currentCourseProvider).courseId!;
-    for (var element in data.docs) {
-      // Utilities.log(element.data().toString());
 
-      // state.sessions!
-      //     .add(Session.fromDataAndCourseId(element.data(), courseId));
-
-      log.i(
-          'ADDED  ${element.data()['sessionId'] + element.data()['facultyId']} to selected Course\'s SESSIONS ');
-    }
-  }
 
   // void removePreReq(Course courseElement) {
   //   final newState = state.copyWith();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:new_digitendance/app/apis/db_course.dart';
 import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
 import 'package:random_color/random_color.dart';
 
@@ -13,6 +14,7 @@ class CourseCard extends ConsumerWidget {
   CourseCard({required this.course, Key? key}) : super(key: key);
 
   final Course course;
+  late CourseNotifier notifier;
   RandomColor randomColor = RandomColor();
   late Size size;
   double tileWidth = 150;
@@ -58,7 +60,7 @@ class CourseCard extends ConsumerWidget {
       '${course.credits.toString()} credits',
       style: Theme.of(context).textTheme.caption?.copyWith(
             color: Colors.yellow,
-            fontSize:16,
+            fontSize: 16,
           ),
     );
   }
@@ -98,14 +100,14 @@ class CourseCard extends ConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(4),
-              child: Text('${course.preReqs!.length.toString()} Pre-Requisites',
-              style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                color: Colors.white,
-                fontSize: 14
-              ),),
+              child: Text(
+                '${course.preReqs!.length.toString()} Pre-Requisites',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1
+                    ?.copyWith(color: Colors.white, fontSize: 14),
+              ),
             ),
-
-
             buildCredits(context),
           ],
         ));
@@ -113,6 +115,7 @@ class CourseCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    notifier = ref.read(currentCourseProvider.notifier);
     var log = Logger(printer: PrettyPrinter());
     size = MediaQuery.of(context).size;
     log.i(course.toString());
@@ -130,6 +133,11 @@ class CourseCard extends ConsumerWidget {
     return InkWell(
       onTap: () {
         ref.read(currentCourseProvider.notifier).setCurrentCourse(course);
+        // DbCourse().getSessionsForCourse(ref);
+        // ref
+        //     .read(currentCourseProvider.notifier)
+        //     // .setSessiononCourseProvider(data, courseId);
+        //     .getSessionsforCurrentCourse();
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (_) => CourseDetailsPage()));
       },
@@ -137,14 +145,13 @@ class CourseCard extends ConsumerWidget {
       child: Container(
         width: tileWidth,
         decoration: BoxDecoration(
-          color: randomColor.randomColor(
-            colorBrightness: ColorBrightness.light
-          ),
-          borderRadius: BorderRadius.circular(10),
-        gradient: LinearGradient(colors: [randomColor.randomColor(),Colors.black],
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter)
-        ),
+            color:
+                randomColor.randomColor(colorBrightness: ColorBrightness.light),
+            borderRadius: BorderRadius.circular(10),
+            gradient: LinearGradient(
+                colors: [randomColor.randomColor(), Colors.black],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter)),
         height: 150,
         child: Stack(
           children: [

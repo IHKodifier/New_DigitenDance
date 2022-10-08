@@ -6,8 +6,11 @@ import 'package:logger/logger.dart';
 import 'package:new_digitendance/app/apis/db_session.dart';
 import 'package:new_digitendance/app/contants.dart';
 import 'package:new_digitendance/app/models/institution.dart';
+import 'package:new_digitendance/app/models/session.dart';
 import 'package:new_digitendance/ui/authentication/state/institution_state.dart';
+import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
 
+import '../../ui/home/admin/state/transformer.dart';
 import '../models/course.dart';
 import 'dbapi.dart';
 
@@ -18,8 +21,7 @@ class DbCourse {
   Logger log = Logger();
 
   ///
-  Future<void> addNewCourse(
-      {required Course course, required WidgetRef ref}) {
+  Future<void> addNewCourse({required Course course, required WidgetRef ref}) {
     ///get current [Institution]
     final institution = ref.read(institutionNotifierProvider).value;
     log.d(
@@ -36,9 +38,9 @@ class DbCourse {
 
     //add all sessions to batch
 
-    course.sessions?.forEach((element) {
+    course.sessions?.forEach((session) {
       writeBatch.set(
-          course.docRef.collection('sessions').doc(), element?.toMap());
+          course.docRef.collection('sessions').doc(), session?.toMap());
     });
     writeBatch.set(course.docRef, course.toShallowMap());
 
@@ -57,4 +59,17 @@ class DbCourse {
         .doc();
     return docref;
   }
+
+  // ///gets all the [Session]s for the  currently selected Course as provided  by [currentCourseProvider]
+  // getSessionsForCourse(dynamic ref) async* {
+  //   //get the docref for the currently selected Course
+  //   var docRef = ref.read(currentCourseProvider).docRef;
+  //   var sessionFireStream = ref
+  //       .read(dbProvider)
+  //       .doc(docRef.path)
+  //       .collection('sessions')
+  //       .snapshots()
+  //       .transform(streamTransformer(Session.fromMap));
+  //   yield* sessionFireStream;
+  // }
 }

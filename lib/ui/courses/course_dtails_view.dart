@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_digitendance/ui/courses/pre_reqs_wiget.dart';
+import 'package:new_digitendance/ui/courses/session_card.dart';
+import 'package:new_digitendance/ui/courses/session_state.dart';
 import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
 import 'package:new_digitendance/ui/shared/spacers.dart';
+
+import '../../app/models/session.dart';
+import '../shared/shimmers.dart';
 
 class CouurseDetailsView extends ConsumerWidget {
   const CouurseDetailsView({Key? key}) : super(key: key);
@@ -10,6 +15,7 @@ class CouurseDetailsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(currentCourseProvider);
+    final sessionStream = ref.watch(sessionStreamProvider);
 
     return Center(
       child: Container(
@@ -55,50 +61,69 @@ class CouurseDetailsView extends ConsumerWidget {
                           style: Theme.of(context)
                               .textTheme
                               .headline5
-                              ?.copyWith(
-                                  color: Theme.of(context).primaryColor),
+                              ?.copyWith(color: Theme.of(context).primaryColor),
                         ),
                       ),
                       PreReqsWidget(mode: PreReqsWidgetMode.ViewOnly),
                     ],
                   ),
                 ),
-                Divider(thickness:1 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Sessions (${state.sessions?.length.toString()} )',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline5
-                              ?.copyWith(
-                                  color: Theme.of(context).primaryColor),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(64.0),
-                        child: Text(
-                          state.description==''? 'NA':state.description!,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1
-                              ?.copyWith(
-                                  color: Theme.of(context).primaryColor),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                Divider(thickness: 1),
+                SessionViewingCard(),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+}
+
+class SessionViewingCard extends ConsumerWidget {
+  late BuildContext localContext;
+   SessionViewingCard({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+     localContext = context;
+    return ref
+        .watch(sessionStreamProvider)
+        .when(data: whenData, error: whenError, loading: whenLoading);
+  }
+
+  Widget whenData(
+    List<Session> data,
+  ) {
+    return Container(
+      // width: 500,
+      // height: 600,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(60),
+          color: Colors.white,
+          border: Border.all(
+            color: Theme.of(localContext).primaryColor,
+            width: 3,
+          )),
+      child: Wrap(
+        children: 
+      
+          data
+              .map((e) => SessionTile(
+                    state: e,
+                  ))
+              .toList(),
+        
+      ),
+    );
+  }
+
+  Widget whenLoading() {
+    return ShimmerCard();
+  }
+
+  Widget whenError(Object error, StackTrace? stackTrace) {
+    return Text(error.toString() + stackTrace.toString());
   }
 }
