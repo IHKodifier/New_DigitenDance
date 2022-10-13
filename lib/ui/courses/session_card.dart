@@ -9,8 +9,47 @@ class SessionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Text(state.sessionId!),
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      width: size.width/4.5,
+      color: Colors.deepPurple.shade50,
+      // height: 250,
+      margin: EdgeInsets.all(8),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Material(
+          color: Colors.deepPurple.shade50,
+          elevation: 10,
+          child: Row(
+            children: [
+            CircleAvatar(
+              // color: Colors.red,
+              radius: size.width/30,
+              // width: size.height/6,
+              child: Align(
+                alignment: Alignment.center,
+                child: FittedBox(child: Text(state.sessionId!))),
+              ),
+            Expanded(child: Container()),
+             Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(state.sessionTitle!,
+                style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.bold),
+                
+                ),
+                Text(state.faculty!.title!+' '+state.faculty!.firstName!,
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  color: Theme.of(context).primaryColor,
+                ),),
+                Text(state.registrationStartDate!.toDate().toString()),
+                Text(state.sessionTitle!),
+              ],
+                       ),
+         ], ),
+        ),
+      ),
     );
   }
 }

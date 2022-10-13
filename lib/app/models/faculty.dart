@@ -10,6 +10,7 @@ class Faculty extends Equatable {
     this.firstName,
     this.photoURL,
     this.docRef,
+    this.title
   });
 
   factory Faculty.fromJson(String source) =>
@@ -20,6 +21,7 @@ class Faculty extends Equatable {
       userId: map['userId'] ?? '',
       firstName: map['firstName'],
       photoURL: map['photoURL'],
+      title: map['title'],
       docRef: DbApi().documentReferenceFromStringPath(map['docRef']),
     );
   }
@@ -53,7 +55,7 @@ class Faculty extends Equatable {
     String? userId,
     String? firstName,
     String? lastName,
-    // title,
+    title,
     String? photoURL,
     DocumentReference? docRef,
     // Faculty? faculty,
@@ -63,7 +65,7 @@ class Faculty extends Equatable {
       firstName: firstName ?? this.firstName,
       photoURL: photoURL ?? this.photoURL,
       docRef: docRef ?? this.docRef,
-      // title:
+      title:title??this.title
     );
   }
 

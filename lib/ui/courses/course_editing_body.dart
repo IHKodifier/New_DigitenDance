@@ -226,6 +226,7 @@ class SessionEditingCard extends ConsumerWidget {
         .when(data: whenData, error: whenError, loading: whenLoading);
   }
 
+
   Widget whenData(
     List<Session> data,
   ) {
@@ -233,30 +234,33 @@ class SessionEditingCard extends ConsumerWidget {
       width: 500,
       height: 600,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(60),
+          borderRadius: BorderRadius.circular(20),
           color: Colors.white,
           border: Border.all(
             color: Theme.of(localContext).primaryColor,
             width: 3,
           )),
-      child: Wrap(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: FloatingActionButton(
-              child: Icon(
-                Icons.add,
-                size: 45,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Wrap(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: FloatingActionButton(
+                child: Icon(
+                  Icons.add,
+                  size: 45,
+                ),
+                onPressed: () {},
               ),
-              onPressed: () {},
             ),
-          ),
-          ...data
-              .map((e) => SessionTile(
-                    state: e,
-                  ))
-              .toList(),
-        ],
+            ...data
+                .map((e) => SessionTile(
+                      state: e,
+                    ))
+                .toList(),
+          ],
+        ),
       ),
     );
   }

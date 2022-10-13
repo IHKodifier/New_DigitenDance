@@ -100,21 +100,24 @@ class SessionViewingCard extends ConsumerWidget {
       // width: 500,
       // height: 600,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(60),
+          borderRadius: BorderRadius.circular(20),
           color: Colors.white,
           border: Border.all(
             color: Theme.of(localContext).primaryColor,
             width: 3,
           )),
-      child: Wrap(
-        children: 
-      
-          data
-              .map((e) => SessionTile(
-                    state: e,
-                  ))
-              .toList(),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Wrap(
+          children: 
         
+            data
+                .map((e) => SessionTile(
+                      state: e,
+                    ))
+                .toList(),
+          
+        ),
       ),
     );
   }

@@ -13,7 +13,7 @@ class Session extends Equatable {
   Session({
     this.sessionId,
     this.sessionTitle,
-    required this.courseId,
+    // required this.courseId,
     this.registrationStartDate,
     this.registrationEndDate,
     this.faculty,
@@ -27,7 +27,7 @@ class Session extends Equatable {
     return Session(
       sessionId: map['sessionId'],
       sessionTitle: map['sessionTitle'],
-      courseId: map['parentCourseId'] ?? '',
+      // courseId: map['parentCourseId'] ?? '',
       registrationStartDate: map['registrationStartDate'] != null
           ? (map['registrationStartDate'] as Timestamp)
           : null,
@@ -43,8 +43,8 @@ class Session extends Equatable {
 
   List<CourseRegistration>? courseRegistrations;
   Faculty? faculty;
-  String courseId;
   Timestamp? registrationEndDate;
+
   Timestamp? registrationStartDate;
   String? sessionId;
   SessionStatus? sessionStatus;
@@ -75,7 +75,7 @@ class Session extends Equatable {
     return Session(
       sessionId: id ?? sessionId,
       sessionTitle: title ?? sessionTitle,
-      courseId: parentCourseId ?? courseId,
+      // courseId: parentCourseId ?? courseId,
       registrationStartDate:
           registrationStartDate ?? this.registrationStartDate as Timestamp,
       registrationEndDate: registrationEndDate ?? this.registrationEndDate,
@@ -85,7 +85,7 @@ class Session extends Equatable {
   }
 
   static Session initial() {
-    var session = Session(courseId: Course.initial().id);
+    var session = Session();
     session.courseRegistrations = [CourseRegistration.initial()];
     session.faculty = Faculty.initial();
     session.registrationEndDate = Timestamp.now();
@@ -105,7 +105,7 @@ class Session extends Equatable {
     if (sessionTitle != null) {
       result.addAll({'sessionTitle': sessionTitle});
     }
-    result.addAll({'parentCourseId': courseId});
+    // result.addAll({'parentCourseId': courseId});
     if (registrationStartDate != null) {
       result.addAll({
         'registrationStartDate': registrationStartDate
