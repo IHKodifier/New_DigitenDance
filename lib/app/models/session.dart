@@ -2,17 +2,14 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:new_digitendance/app/models/course.dart';
 
 import 'package:new_digitendance/app/models/course_registration.dart';
 import 'package:new_digitendance/app/models/faculty.dart';
-import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
 
 class Session extends Equatable {
   Session({
-    this.sessionId,
-    this.sessionTitle,
+    this.id,
+    this.title,
     // required this.courseId,
     this.registrationStartDate,
     this.registrationEndDate,
@@ -25,8 +22,8 @@ class Session extends Equatable {
 
   factory Session.fromMap(Map<String, dynamic> map) {
     return Session(
-      sessionId: map['sessionId'],
-      sessionTitle: map['sessionTitle'],
+      id: map['id'],
+      title: map['title'],
       // courseId: map['parentCourseId'] ?? '',
       registrationStartDate: map['registrationStartDate'] != null
           ? (map['registrationStartDate'] as Timestamp)
@@ -35,26 +32,26 @@ class Session extends Equatable {
           map['registrationEndDate']! ?? (map['registrationEndDate']as Timestamp).toDate(),
       faculty: map['faculty'] != null ? Faculty.fromMap(map['faculty']) : null,
       courseRegistrations: map['courseRegistrations'] != null
-          ? List<CourseRegistration>.from(map['courseRegistrations']
-              ?.map((x) => CourseRegistration.fromMap(x)))
+          ? List<Registration>.from(map['courseRegistrations']
+              ?.map((x) => Registration.fromMap(x)))
           : null,
     );
   }
 
-  List<CourseRegistration>? courseRegistrations;
+  List<Registration>? courseRegistrations;
   Faculty? faculty;
   Timestamp? registrationEndDate;
 
   Timestamp? registrationStartDate;
-  String? sessionId;
+  String? id;
   SessionStatus? sessionStatus;
-  String? sessionTitle;
+  String? title;
 
   @override
   List<Object> get props {
     return [
-      // sessionId ?? '',
-      sessionTitle ?? '',
+      // id ?? '',
+      title ?? '',
       // parentCourseId,
       // registrationStartDate!,
       // registrationEndDate!,
@@ -70,11 +67,11 @@ class Session extends Equatable {
     Timestamp? registrationStartDate,
     Timestamp? registrationEndDate,
     Faculty? faculty,
-    List<CourseRegistration>? courseRegistrations,
+    List<Registration>? courseRegistrations,
   }) {
     return Session(
-      sessionId: id ?? sessionId,
-      sessionTitle: title ?? sessionTitle,
+      id: id ?? id,
+      title: title ?? title,
       // courseId: parentCourseId ?? courseId,
       registrationStartDate:
           registrationStartDate ?? this.registrationStartDate as Timestamp,
@@ -86,24 +83,24 @@ class Session extends Equatable {
 
   static Session initial() {
     var session = Session();
-    session.courseRegistrations = [CourseRegistration.initial()];
+    session.courseRegistrations = [Registration.initial()];
     session.faculty = Faculty.initial();
     session.registrationEndDate = Timestamp.now();
     session.registrationStartDate = Timestamp.now();
     session.sessionStatus = SessionStatus.inProgress;
-    session.sessionTitle = 'title not initialized';
-    session.sessionId = 'id not initialized';
+    session.title = 'title not initialized';
+    session.id = 'id not initialized';
     return session;
   }
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
-    if (sessionId != null) {
-      result.addAll({'sessionId': sessionId});
+    if (id != null) {
+      result.addAll({'id': id});
     }
-    if (sessionTitle != null) {
-      result.addAll({'sessionTitle': sessionTitle});
+    if (title != null) {
+      result.addAll({'title': title});
     }
     // result.addAll({'parentCourseId': courseId});
     if (registrationStartDate != null) {

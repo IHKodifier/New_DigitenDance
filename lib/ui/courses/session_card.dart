@@ -28,13 +28,13 @@ class SessionTile extends StatelessWidget {
               // width: size.height/6,
               child: Align(
                 alignment: Alignment.center,
-                child: FittedBox(child: Text(state.sessionId!))),
+                child: FittedBox(child: Text(state.id!))),
               ),
             Expanded(child: Container()),
              Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(state.sessionTitle!,
+                Text(state.title!,
                 style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).primaryColor,
                 fontWeight: FontWeight.bold),
                 
@@ -44,7 +44,7 @@ class SessionTile extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                 ),),
                 Text(state.registrationStartDate!.toDate().toString()),
-                Text(state.sessionTitle!),
+                Text(state.title!),
               ],
                        ),
          ], ),

@@ -3,24 +3,24 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-class CourseRegistration extends Equatable {
+class Registration extends Equatable {
   final String studentId;
   final Timestamp registrationDate;
-  CourseRegistration({
+  const Registration({
     required this.studentId,
     required this.registrationDate,
   });
-  static CourseRegistration initial() {
-    var registration = CourseRegistration(
+  static Registration initial() {
+    var registration = Registration(
         studentId: 'not initialized', registrationDate: Timestamp.now() );
     return registration;
   }
 
-  CourseRegistration copyWith({
+  Registration copyWith({
     String? studentId,
     Timestamp? registrationDate,
   }) {
-    return CourseRegistration(
+    return Registration(
       studentId: studentId ?? this.studentId,
       registrationDate: registrationDate?? Timestamp.now()
     );
@@ -36,8 +36,8 @@ class CourseRegistration extends Equatable {
     return result;
   }
 
-  factory CourseRegistration.fromMap(Map<String, dynamic> map) {
-    return CourseRegistration(
+  factory Registration.fromMap(Map<String, dynamic> map) {
+    return Registration(
       studentId: map['studentId'] ?? '',
       registrationDate:
           (map['registrationDate'])as Timestamp,
@@ -46,8 +46,8 @@ class CourseRegistration extends Equatable {
 
   String toJson() => json.encode(toMap());
 
-  factory CourseRegistration.fromJson(String source) =>
-      CourseRegistration.fromMap(json.decode(source));
+  factory Registration.fromJson(String source) =>
+      Registration.fromMap(json.decode(source));
 
   @override
   String toString() =>
