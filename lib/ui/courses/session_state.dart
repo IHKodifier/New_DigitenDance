@@ -1,43 +1,25 @@
+import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:new_digitendance/app/apis/dbapi.dart';
-
-import '../../app/models/course.dart';
+import 'package:new_digitendance/ui/authentication/state/auth_state.dart';
+import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
+import '../../app/apis/db_session.dart';
 import '../../app/models/session.dart';
-import '../authentication/state/institution_state.dart';
-import '../home/admin/state/admin_state.dart';
-import '../home/admin/state/transformer.dart';
 
-final sessionStreamProvider = StreamProvider<List<Session>>((ref) async* {
-  var docRef = ref.watch(currentCourseProvider).docRef;
-  var sessionFireStream = ref
-      .read(dbProvider)
-      .doc(docRef.path)
-      .collection('sessions')
-      .snapshots()
-      .transform(streamTransformer(Session.fromMap));
-  yield* sessionFireStream;
-});
+final sessionStreamProvider = StreamProvider<Session>((ref) async* {
+  final _controller = StreamController<Session>();
+   Session session;
+  final subscription = ref.read(dbProvider)
 
-
-
-
-
-
-
-class SessionNotifier extends StateNotifier<Session> {
-  SessionNotifier(this.ref) : super( Session.initial());
-
-  final StateNotifierProviderRef<SessionNotifier,Session> ref;
-
-  void setCurentSessionState(Session session) {
-    state = session;
-    // ref.read(currentCourseProvider.notifier).;
-  }
-}
-
-/// [currentSessionProvider] provides the currently selected [Session] of [Course] provided by [currentCourseProvider]  for the current operation
-
-final currentSessionProvider =
-    StateNotifierProvider<SessionNotifier, Session>((ref) {
-  return SessionNotifier(ref);
+  .doc(ref.read(currentCourseProvider).docRef.path)
+  .collection('sessions')
+  .snapshots()
+  .listen((QuerySnapshot<Map<String, dynamic>> event) async {
+    for (final doc in event.docs) {
+       session = Session.fromMap(doc.data());
+      final faculty = await DbSession().getFacultybyUserId(session, ref);
+      session.faculty=faculty;
+       _controller.sink.add(session);
+     }});
+yield* _controller.stream.map((event) => event);
 });

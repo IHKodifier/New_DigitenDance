@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 import 'package:new_digitendance/ui/courses/pre_reqs_wiget.dart';
 import 'package:new_digitendance/ui/courses/session_card.dart';
 import 'package:new_digitendance/ui/courses/session_state.dart';
@@ -80,22 +83,38 @@ class CouurseDetailsView extends ConsumerWidget {
 }
 
 class SessionViewingCard extends ConsumerWidget {
-  late BuildContext localContext;
-   SessionViewingCard({
+  SessionViewingCard({
     Key? key,
   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-     localContext = context;
-    return ref
-        .watch(sessionStreamProvider)
-        .when(data: whenData, error: whenError, loading: whenLoading);
+  late BuildContext localContext;
+
+  Widget whenLoading() {
+    return ShimmerCard();
   }
 
-  Widget whenData(
-    List<Session> data,
-  ) {
+  Widget whenError(Object error, StackTrace? stackTrace) {
+    Logger log = Logger();
+   log.d(error.toString);
+    log.d(stackTrace.toString);
+    return Text(error.toString() + stackTrace.toString());
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    localContext = context;
+    return ref
+        .watch(sessionStreamProvider)
+        .when(data: whensessionStreamDone ,
+         error: whenError, 
+         loading: whenLoading);
+  }
+
+
+
+  Widget whensessionStreamDone(Session data) {
+// return Container();
+  
     return Container(
       // width: 500,
       // height: 600,
@@ -108,25 +127,8 @@ class SessionViewingCard extends ConsumerWidget {
           )),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Wrap(
-          children: 
-        
-            data
-                .map((e) => SessionTile(
-                      state: e,
-                    ))
-                .toList(),
-          
-        ),
+        child:SessionTile(state: data)
       ),
     );
-  }
-
-  Widget whenLoading() {
-    return ShimmerCard();
-  }
-
-  Widget whenError(Object error, StackTrace? stackTrace) {
-    return Text(error.toString() + stackTrace.toString());
   }
 }

@@ -21,29 +21,30 @@ class Session extends Equatable {
       Session.fromMap(json.decode(source));
 
   factory Session.fromMap(Map<String, dynamic> map) {
-    return Session(
+    Session session = Session(
       id: map['id'],
       title: map['title'],
       // courseId: map['parentCourseId'] ?? '',
       registrationStartDate: map['registrationStartDate'] != null
           ? (map['registrationStartDate'] as Timestamp)
           : null,
-      registrationEndDate:
-          map['registrationEndDate']! ?? (map['registrationEndDate']as Timestamp).toDate(),
-      faculty: map['faculty'] != null ? Faculty.fromMap(map['faculty']) : null,
+      registrationEndDate: map['registrationEndDate']! ??
+          (map['registrationEndDate'] as Timestamp).toDate(),
+      faculty: map['faculty'] != null ? Faculty(userId: map['faculty']) : null,
       courseRegistrations: map['courseRegistrations'] != null
-          ? List<Registration>.from(map['courseRegistrations']
-              ?.map((x) => Registration.fromMap(x)))
+          ? List<Registration>.from(
+              map['courseRegistrations']?.map((x) => Registration.fromMap(x)))
           : null,
     );
+    return session;
   }
 
+  
   List<Registration>? courseRegistrations;
   Faculty? faculty;
-  Timestamp? registrationEndDate;
-
-  Timestamp? registrationStartDate;
   String? id;
+  Timestamp? registrationEndDate;
+  Timestamp? registrationStartDate;
   SessionStatus? sessionStatus;
   String? title;
 
@@ -104,9 +105,7 @@ class Session extends Equatable {
     }
     // result.addAll({'parentCourseId': courseId});
     if (registrationStartDate != null) {
-      result.addAll({
-        'registrationStartDate': registrationStartDate
-      });
+      result.addAll({'registrationStartDate': registrationStartDate});
     }
     if (registrationEndDate != null) {
       result.addAll({'registrationEndDate': registrationEndDate!});

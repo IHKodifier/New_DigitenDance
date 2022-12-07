@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:new_digitendance/app/apis/dbapi.dart';
+import 'package:new_digitendance/app/models/social_links.dart';
 
 class Faculty extends Equatable {
   Faculty({
@@ -10,28 +11,44 @@ class Faculty extends Equatable {
     this.firstName,
     this.photoURL,
     this.docRef,
-    this.title
+    this.jobTitle,
+    this.prefix = 'Mr.',
+    this.phone = 'Not available',
+    this.links = const [],
   });
 
   factory Faculty.fromJson(String source) =>
       Faculty.fromMap(json.decode(source));
+  factory Faculty.minimalFromUserId(String userId) => Faculty(userId: userId);
 
-  factory Faculty.fromMap(Map<String, dynamic> map) {
-    return Faculty(
-      userId: map['userId'] ?? '',
-      firstName: map['firstName'],
-      photoURL: map['photoURL'],
-      title: map['title'],
-      docRef: DbApi().documentReferenceFromStringPath(map['docRef']),
-    );
+  factory Faculty.fromMap(Map<String, dynamic> dataMap) {
+    List<SocialLink> social_links=[];
+    for (var element in dataMap['links']) {
+      social_links.add(SocialLink.fromMap(element));
+      
+    }
+    
+    Faculty faculty = Faculty(
+        userId: dataMap['userId'] ?? '',
+        firstName: dataMap['firstName'],
+        photoURL: dataMap['photoURL'],
+        jobTitle: dataMap['jobTitle'],
+        prefix: dataMap['prefix'],
+        docRef: DbApi().documentReferenceFromStringPath(dataMap['docRef'].path),
+        phone: dataMap['phone'],
+        links: social_links);
+    return faculty;
   }
 
   late DocumentReference? docRef;
   String? firstName;
+  late String? jobTitle;
   late String? lastName;
   late String? photoURL;
-  late String? title;
+  final String prefix;
   final String userId;
+  final String phone;
+  final List<SocialLink> links;
 
   @override
   // TODO: implement props
@@ -39,7 +56,7 @@ class Faculty extends Equatable {
 
   @override
   String toString() {
-    return 'Faculty(userId: $userId, firstName: $firstName, photoURL: $photoURL, docRef: $docRef)';
+    return 'Faculty(userId: $userId, $prefix firstName: $firstName $jobTitle, photoURL: $photoURL, docRef: $docRef),phone $phone links $links';
   }
 
   static Faculty initial() {
@@ -47,6 +64,7 @@ class Faculty extends Equatable {
       userId: 'not Initialized',
       firstName: 'not Initialized',
       photoURL: 'not Initialized',
+      prefix: 'Mr.',
       docRef: DbApi().documentReferenceFromStringPath('institutions/default'),
     );
   }
@@ -55,18 +73,22 @@ class Faculty extends Equatable {
     String? userId,
     String? firstName,
     String? lastName,
-    title,
+    String? jobTitle,
+    String? prefix,
     String? photoURL,
     DocumentReference? docRef,
+    String? phone,
+    List<SocialLink>? links,
     // Faculty? faculty,
   }) {
     return Faculty(
-      userId: userId ?? this.userId,
-      firstName: firstName ?? this.firstName,
-      photoURL: photoURL ?? this.photoURL,
-      docRef: docRef ?? this.docRef,
-      title:title??this.title
-    );
+        userId: userId ?? this.userId,
+        firstName: firstName ?? this.firstName,
+        photoURL: photoURL ?? this.photoURL,
+        phone: phone ?? this.phone,
+        links: links ?? this.links,
+        docRef: docRef ?? this.docRef,
+        jobTitle: jobTitle ?? this.jobTitle);
   }
 
   Map<String, dynamic> toMap() {
@@ -76,9 +98,21 @@ class Faculty extends Equatable {
     if (firstName != null) {
       result.addAll({'firstName': firstName});
     }
-    result.addAll({'photoURL': photoURL});
     if (docRef != null) {
       result.addAll({'docRef': docRef!.path});
+    }
+    result.addAll({'photoURL': photoURL});
+    if (jobTitle != null) {
+      result.addAll({'jobTitle': jobTitle});
+    }
+    if (prefix != null) {
+      result.addAll({'prefix': prefix});
+    }
+    if (phone != null) {
+      result.addAll({'phone': phone});
+    }
+    if (links != null) {
+      result.addAll({'links': links});
     }
 
     return result;

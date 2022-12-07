@@ -228,7 +228,7 @@ class SessionEditingCard extends ConsumerWidget {
 
 
   Widget whenData(
-    List<Session> data,
+    data,
   ) {
     return Container(
       width: 500,

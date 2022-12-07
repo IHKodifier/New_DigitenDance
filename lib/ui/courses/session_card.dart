@@ -14,7 +14,7 @@ class SessionTile extends StatelessWidget {
       width: size.width/4.5,
       color: Colors.deepPurple.shade50,
       // height: 250,
-      margin: EdgeInsets.all(8),
+      margin: const EdgeInsets.all(8),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Material(
@@ -39,7 +39,7 @@ class SessionTile extends StatelessWidget {
                 fontWeight: FontWeight.bold),
                 
                 ),
-                Text(state.faculty!.title!+' '+state.faculty!.firstName!,
+                Text(state.faculty!.jobTitle!+' '+state.faculty!.firstName!,
                 style: Theme.of(context).textTheme.bodyText1!.copyWith(
                   color: Theme.of(context).primaryColor,
                 ),),
