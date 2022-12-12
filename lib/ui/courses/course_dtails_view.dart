@@ -102,6 +102,7 @@ class SessionViewingCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+  
     localContext = context;
     return ref
         .watch(sessionStreamProvider)
