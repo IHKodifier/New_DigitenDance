@@ -1,54 +1,55 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:new_digitendance/app/apis/db_session.dart';
-import 'package:new_digitendance/app/models/faculty.dart';
+// import 'dart:async';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:new_digitendance/ui/authentication/state/auth_state.dart';
+// import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
+// import '../../app/apis/db_session.dart';
+// import '../../app/models/session.dart';
 
-import '../../app/models/course.dart';
-import '../../app/models/session.dart';
-import '../ui/authentication/state/auth_state.dart';
-import 'home/admin/state/admin_state.dart';
-import 'home/admin/state/transformer.dart';
+// _handleSessionStreamEvent(QuerySnapshot<Map<String, dynamic>> data) async* {
+//    for (final doc in data.docs) {
+//       final  session = Session.fromMap(doc.data());
+//       final faculty = await DbSession().getFacultybyUserId(session, ref);
+//       session.faculty=faculty;
+//        yield* session;}
 
-final sessionStreamProvider = StreamProvider<List<Session>>((ref) async* {
-  var docRef = ref.watch(currentCourseProvider).docRef;
-  var sessionFireStream = ref
-      .read(dbProvider)
-      .doc(docRef.path)
-      .collection('sessions')
-      .snapshots()     .transform(streamTransformer(Session.fromMap)).asyncMap((sessions) async*{
-        yield sessions.map((session)   async {
-            DbSession().getFacultybyUserId( session,ref).then((value) { session.faculty=value;});
-          // session.faculty=faculty;   
-          // session.
-          return session;
-        }).toList();
-      });
-  // yield* sessionFireStream;
-  ///
-  //
-  //
-  
-});
+// }
+// final sessionStreamProvider = StreamProvider<Session>((ref) async* {
+//   final _controller = StreamController<Session>();
+//    Session session=Session();
+//   final subscription = ref.read(dbProvider)
+//   .doc(ref.read(currentCourseProvider).docRef.path)
+//   .collection('sessions')
+//   .snapshots()
+//   // ignore: void_checks
+//   .listen(
+// _handleSessionStreamEvent(ref)
+// );
 
-
-
-
+//     // 
+//     //   //  _controller.sink.add(session);
+//     //  });
+// });
 
 
 
-class SessionNotifier extends StateNotifier<Session> {
-  SessionNotifier(this.ref) : super( Session.initial());
 
-  final StateNotifierProviderRef<SessionNotifier,Session> ref;
 
-  void setCurentSessionState(Session session) {
-    state = session;
-    // ref.read(currentCourseProvider.notifier).;
-  }
-}
 
-/// [currentSessionProvider] provides the currently selected [Session] of [Course] provided by [currentCourseProvider]  for the current operation
+// class SessionNotifier extends StateNotifier<Session> {
+//   SessionNotifier(this.ref) : super( Session.initial());
 
-final currentSessionProvider =
-    StateNotifierProvider<SessionNotifier, Session>((ref) {
-  return SessionNotifier(ref);
-});
+//   final StateNotifierProviderRef<SessionNotifier,Session> ref;
+
+//   void setCurentSessionState(Session session) {
+//     state = session;
+//     // ref.read(currentCourseProvider.notifier).;
+//   }
+// }
+
+// /// [currentSessionProvider] provides the currently selected [Session] of [Course] provided by [currentCourseProvider]  for the current operation
+
+// final currentSessionProvider =
+//     StateNotifierProvider<SessionNotifier, Session>((ref) {
+//   return SessionNotifier(ref);
+// });
