@@ -4,19 +4,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_digitendance/ui/authentication/state/auth_state.dart';
 import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
 import '../../app/apis/db_session.dart';
+import '../../app/apis/db_session.dart';
 import '../../app/models/session.dart';
 
 
 
 
 final sessionStreamProvider = StreamProvider<Session>((ref) async* {
-  final _controller = StreamController<Session>();
-   Session session=Session();
-  final subscription = ref.read(dbProvider)
+  final _controller = StreamController<Session>();  
+  final firebaseStream =ref.read(dbProvider)
   .doc(ref.read(currentCourseProvider).docRef.path)
   .collection('sessions')
-  .snapshots()
+  .snapshots() ;
 
-    //   //  _controller.sink.add(session);
+  final subscription = firebaseStream.listen((event)  async {
+    final session = Session.fromMap(event.docs[0].data());
+    final faculty = await DbSession().getFacultybyUserId(session, ref);
+    session.faculty= faculty;
+      yield* session;
+
+   });
+  //  yield  _controller.stream;
+
     //  });
 });
+
