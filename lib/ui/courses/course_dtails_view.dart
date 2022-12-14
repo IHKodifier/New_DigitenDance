@@ -30,6 +30,7 @@ class CouurseDetailsView extends ConsumerWidget {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -56,6 +57,7 @@ class CouurseDetailsView extends ConsumerWidget {
                   padding: EdgeInsets.symmetric(horizontal: 8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -72,7 +74,10 @@ class CouurseDetailsView extends ConsumerWidget {
                   ),
                 ),
                 Divider(thickness: 1),
-                SessionViewingCard(),
+                Expanded(
+                  flex: 1,
+                  child: SessionViewingCard(),
+                ),
               ],
             ),
           ),
@@ -95,40 +100,35 @@ class SessionViewingCard extends ConsumerWidget {
 
   Widget whenError(Object error, StackTrace? stackTrace) {
     Logger log = Logger();
-   log.d(error.toString);
+    log.d(error.toString);
     log.d(stackTrace.toString);
-    return Text(error.toString() + stackTrace.toString());
+    return Text(error.toString());
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-  
     localContext = context;
-    return ref
-        .watch(sessionStreamProvider)
-        .when(data: whensessionStreamDone ,
-         error: whenError, 
-         loading: whenLoading);
+    return ref.watch(sessionStreamProvider).when(
+        data: whensessionStreamDone, error: whenError, loading: whenLoading);
   }
-
-
 
   Widget whensessionStreamDone(Session data) {
 // return Container();
-  
-    return Container(
-      // width: 500,
-      // height: 600,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.white,
-          border: Border.all(
-            color: Theme.of(localContext).primaryColor,
-            width: 3,
-          )),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child:SessionTile(state: data)
+
+    return SingleChildScrollView(
+      child: Container(
+        // width: 500,
+        // height: 600,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.white,
+            border: Border.all(
+              color: Theme.of(localContext).primaryColor,
+              width: 3,
+            )),
+        child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SessionTile(state: data)),
       ),
     );
   }

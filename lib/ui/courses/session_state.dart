@@ -7,25 +7,25 @@ import '../../app/apis/db_session.dart';
 import '../../app/apis/db_session.dart';
 import '../../app/models/session.dart';
 
-
-
-
 final sessionStreamProvider = StreamProvider<Session>((ref) async* {
-  final _controller = StreamController<Session>();  
-  final firebaseStream =ref.read(dbProvider)
-  .doc(ref.read(currentCourseProvider).docRef.path)
-  .collection('sessions')
-  .snapshots() ;
+  final _controller = StreamController<Session>();
+  final firebaseStream = ref
+      .read(dbProvider)
+      .doc(ref.read(currentCourseProvider).docRef.path)
+      .collection('sessions')
+      .snapshots();
 
-  final subscription = firebaseStream.listen((event)  async {
-    final session = Session.fromMap(event.docs[0].data());
-    final faculty = await DbSession().getFacultybyUserId(session, ref);
-    session.faculty= faculty;
-      yield* session;
-
-   });
-  //  yield  _controller.stream;
-
-    //  });
+  final subscription = firebaseStream.listen((event) {
+    print('eventevent event');
+  }, onError: _handleError, onDone: _handleDone);
 });
 
+//  final session = Session.fromMap(event.docs[0].data());
+//   final faculty = await DbSession().getFacultybyUserId(session, ref);
+//   session.faculty= faculty;
+//     yield* session;
+_handleError() {
+  // print(event);
+}
+
+void _handleDone() {}
