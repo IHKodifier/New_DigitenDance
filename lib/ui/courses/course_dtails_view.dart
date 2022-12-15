@@ -20,65 +20,68 @@ class CouurseDetailsView extends ConsumerWidget {
     final state = ref.watch(currentCourseProvider);
     final sessionStream = ref.watch(sessionStreamProvider);
 
-    return Center(
-      child: Container(
-        margin: const EdgeInsets.all(16),
-        child: Material(
-          elevation: 20,
-          shadowColor: Colors.black54,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    const Icon(
-                      Icons.auto_stories,
-                      size: 130,
-                    ),
-
-                    Text(
-                      state.title,
-                      style: Theme.of(context).textTheme.headline1,
-                    ),
-                    Text(
-                      '${state.credits.toString()} credits',
-                      style: Theme.of(context).textTheme.headline4,
-                    ),
-                    //  Expanded(
-                    //   child: Container(),
-                    // ),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
+    return SingleChildScrollView(
+      child: Center(
+        child: Container(
+          margin: const EdgeInsets.all(16),
+          child: Material(
+            elevation: 20,
+            shadowColor: Colors.black54,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Course Pre-Requisites (${state.preReqs?.length.toString()} )',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline5
-                              ?.copyWith(color: Theme.of(context).primaryColor),
-                        ),
+                      const Icon(
+                        Icons.auto_stories,
+                        size: 130,
                       ),
-                      PreReqsWidget(mode: PreReqsWidgetMode.ViewOnly),
+
+                      Text(
+                        state.title,
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                      Text(
+                        '${state.credits.toString()} credits',
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                      //  Expanded(
+                      //   child: Container(),
+                      // ),
                     ],
                   ),
-                ),
-                Divider(thickness: 1),
-                Expanded(
-                  flex: 1,
-                  child: SessionViewingCard(),
-                ),
-              ],
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Course Pre-Requisites (${state.preReqs?.length.toString()} )',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline5
+                                ?.copyWith(
+                                    color: Theme.of(context).primaryColor),
+                          ),
+                        ),
+                        PreReqsWidget(mode: PreReqsWidgetMode.ViewOnly),
+                      ],
+                    ),
+                  ),
+                  Divider(thickness: 1),
+                  Expanded(
+                    flex: 0,
+                    child: SessionViewingCard(),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
