@@ -7,28 +7,40 @@ import '../../app/apis/db_session.dart';
 import '../../app/apis/db_session.dart';
 import '../../app/models/session.dart';
 
-final sessionStreamProvider = StreamProvider<Session>((ref) async* {
-  // final _controller = StreamController<Session>();
-  var session = Session();
-  final firebaseStream = ref
+final sessionStreamProvider = StreamProvider<List<Session>>((ref)  {
+ return SessionGrabber(ref).stream;
+//
+});
+
+class SessionGrabber {
+  SessionGrabber(this.ref){
+    List<Session> sessions=<Session>[];
+
+    final firebaseStream = ref
       .read(dbProvider)
       .doc(ref.read(currentCourseProvider).docRef.path)
       .collection('sessions')
       .snapshots();
-
-  final subscription = firebaseStream.listen(
+ Session session;
+      final subscription = firebaseStream.listen(
+    // ignore: void_checks
     (event) async {
       for (var doc in event.docs) {
         session = Session.fromMap(doc.data());
         final faculty = await DbSession().getFacultybyUserId(session, ref);
         session.faculty = faculty;
+        sessions.add(session);
+
+  // yield session;
+  _controller.sink.add(sessions);
       }
     },
   );
+  }
 
-  yield session;
-//  final session = Session.fromMap(event.docs[0].data());
-//   final faculty = await DbSession().getFacultybyUserId(session, ref);
-//   session.faculty= faculty;
-//     yield* session;
-});
+  final StreamProviderRef ref;
+
+  final _controller= StreamController<List<Session>>();
+
+  Stream<List<Session>> get stream=>_controller.stream;
+}
