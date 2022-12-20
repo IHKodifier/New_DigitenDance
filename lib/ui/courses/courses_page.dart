@@ -121,7 +121,8 @@ class CoursesList extends ConsumerWidget {
                 runAlignment: WrapAlignment.center,
                 runSpacing: 48,
                 spacing: 48,
-                children: courses.map((e) => CourseCard(course: e)).toList(),
+                children: courses.map((e) => CourseCard(course: e))
+                .toList(),
                   ),
             ),
           ),
