@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:new_digitendance/ui/courses/faculty_selection_button.dart';
-import 'package:new_digitendance/ui/courses/selected_faculty_card.dart';
-import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
 
 class FacultySelectionCard extends ConsumerWidget {
   FacultySelectionCard({Key? key}) : super(key: key);
@@ -61,7 +58,7 @@ class FacultySelectionCard extends ConsumerWidget {
   }
 
   Widget buildFacultyListDialog(BuildContext context) {
-    return SimpleDialog(
+    return const SimpleDialog(
       children: [
         Text('Hello'),
         Text('Hello'),

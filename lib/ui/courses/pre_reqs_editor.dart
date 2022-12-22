@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_digitendance/app/models/pre_reqs.dart';
-import 'package:new_digitendance/ui/courses/pre_reqs_state.dart';
 import 'package:new_digitendance/ui/shared/spacers.dart';
+
+import '../../app/states/pre_reqs_state.dart';
 
 class PreReqsEditor extends ConsumerWidget {
   const PreReqsEditor({Key? key}) : super(key: key);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
+import 'package:new_digitendance/app/states/admin_state.dart';
 import 'package:new_digitendance/ui/shared/spacers.dart';
 import 'package:random_color/random_color.dart';
 

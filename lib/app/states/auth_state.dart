@@ -4,9 +4,9 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_digitendance/app/models/app_user.dart';
-import 'package:new_digitendance/ui/authentication/state/authentication_notifier.dart';
 
 import '../../../app/apis/authapi.dart';
+import 'authentication_notifier.dart';
 
 /// [dbProvider] provides an instance of [FirebaseFirestore.instance]
 /// to the entire system

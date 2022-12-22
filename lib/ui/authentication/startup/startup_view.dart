@@ -1,16 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:new_digitendance/ui/authentication/login/login_page.dart';
-import 'package:new_digitendance/ui/authentication/state/auth_state.dart';
 import 'package:new_digitendance/ui/home/admin/admin_homepage.dart';
-import 'package:new_digitendance/ui/shared/shimmers.dart';
+
+import '../../../app/states/auth_state.dart';
+import '../../../app/states/startup_state.dart';
 // import '../ui/startup/state/auth_notifier.dart';
-import '../startup/state/startup_state.dart';
-import '../../authentication/state/authentication_notifier.dart';
-import '../state/institution_state.dart';
 
 class StartupView extends ConsumerWidget {
   StartupView({Key? key}) : super(key: key);

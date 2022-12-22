@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:new_digitendance/app/apis/db_course.dart';
-import 'package:new_digitendance/app/contants.dart';
+import 'package:new_digitendance/app/apis/dbapi.dart';
 import 'package:new_digitendance/app/models/institution.dart';
-import 'package:new_digitendance/ui/authentication/state/auth_state.dart';
-import 'package:new_digitendance/ui/home/admin/state/transformer.dart';
+import 'package:new_digitendance/app/states/institution_state.dart';
+import 'package:new_digitendance/app/utilities/transformer.dart';
 import '../../../../app/models/course.dart';
-import '../../../authentication/state/institution_state.dart';
 
 var log = Logger(printer: PrettyPrinter());
 

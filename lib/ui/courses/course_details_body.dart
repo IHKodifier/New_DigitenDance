@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_digitendance/ui/courses/pre_reqs_wiget.dart';
-import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
 
 import '../../app/models/course.dart';
+import '../../app/states/admin_state.dart';
 import '../shared/spacers.dart';
 
 class CourseDetailsBody extends ConsumerWidget {

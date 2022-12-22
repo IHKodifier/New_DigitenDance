@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:new_digitendance/app/apis/db_course.dart';
-import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
 import 'package:random_color/random_color.dart';
 
 import '../../app/models/course.dart';
 import 'dart:math' as math;
 
+import '../../app/states/admin_state.dart';
 import '../courses/course_details_page.dart';
 
 class CourseCard extends ConsumerWidget {

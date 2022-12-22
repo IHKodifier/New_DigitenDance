@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:new_digitendance/ui/authentication/state/institution_state.dart';
+import 'package:new_digitendance/app/states/institution_state.dart';
 import 'package:new_digitendance/ui/courses/add_new_course_page.dart';
 import 'package:new_digitendance/ui/home/admin/admin_homepage.dart';
 import 'package:new_digitendance/ui/shared/course_card.dart';
-import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
 import 'package:new_digitendance/ui/shared/shimmers.dart';
+
+import '../../app/states/admin_state.dart';
 
 class CoursesPage extends ConsumerWidget {
   CoursesPage({Key? key}) : super(key: key);

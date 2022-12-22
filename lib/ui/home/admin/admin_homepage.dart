@@ -1,22 +1,15 @@
-import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:new_digitendance/app/models/course.dart';
-import 'package:new_digitendance/app/models/institution.dart';
-import 'package:new_digitendance/app/utilities.dart';
 import 'package:new_digitendance/ui/authentication/login/login_page.dart';
-import 'package:new_digitendance/ui/authentication/state/institution_state.dart';
 import 'package:new_digitendance/ui/courses/courses_page.dart';
 import 'package:new_digitendance/ui/shared/shimmers.dart';
 
-import '../../authentication/startup/state/startup_state.dart';
-import '../../authentication/state/auth_state.dart';
-import '../../authentication/state/authentication_notifier.dart';
-import 'state/admin_state.dart';
+import '../../../app/states/auth_state.dart';
+import '../../../app/states/authentication_notifier.dart';
+import '../../../app/states/institution_state.dart';
+import '../../../app/states/startup_state.dart';
   final themeBrightnessProvider =
       StateNotifierProvider<BrightnessNotifier, Brightness>((ref) {
     return BrightnessNotifier(Brightness.light);

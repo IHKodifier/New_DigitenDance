@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_digitendance/ui/courses/course_editing_body.dart';
 
-import '../home/admin/state/admin_state.dart';
+import '../../app/states/admin_state.dart';
+
 
 class EditCoursePage extends ConsumerWidget {
   const EditCoursePage({Key? key}) : super(key: key);

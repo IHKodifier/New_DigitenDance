@@ -3,14 +3,10 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:new_digitendance/app/apis/db_session.dart';
 import 'package:new_digitendance/app/contants.dart';
 import 'package:new_digitendance/app/models/institution.dart';
-import 'package:new_digitendance/app/models/session.dart';
-import 'package:new_digitendance/ui/authentication/state/institution_state.dart';
-import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
+import 'package:new_digitendance/app/states/institution_state.dart';
 
-import '../../ui/home/admin/state/transformer.dart';
 import '../models/course.dart';
 import 'dbapi.dart';
 

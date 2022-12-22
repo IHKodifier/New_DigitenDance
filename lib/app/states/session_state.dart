@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:new_digitendance/ui/authentication/state/auth_state.dart';
-import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
+import 'package:new_digitendance/app/apis/dbapi.dart';
+import 'package:new_digitendance/app/states/admin_state.dart';
 import '../../app/apis/db_session.dart';
 import '../../app/apis/db_session.dart';
 import '../../app/models/session.dart';

@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_digitendance/ui/courses/course_details_body.dart';
 import 'package:new_digitendance/ui/courses/course_dtails_view.dart';
 import 'package:new_digitendance/ui/courses/edit_course_page.dart';
-import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
+
+import '../../app/states/admin_state.dart';
 
 class CourseDetailsPage extends ConsumerWidget {
   CourseDetailsPage({Key? key}) : super(key: key);

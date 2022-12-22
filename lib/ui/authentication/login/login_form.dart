@@ -7,7 +7,8 @@ import 'package:new_digitendance/ui/home/admin/admin_homepage.dart';
 import 'package:new_digitendance/ui/shared/shimmers.dart';
 import 'package:new_digitendance/ui/shared/spacers.dart';
 
-import '../state/auth_state.dart';
+import '../../../app/states/auth_state.dart';
+
 
 class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({Key? key}) : super(key: key);

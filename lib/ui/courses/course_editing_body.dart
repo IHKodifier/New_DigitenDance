@@ -4,11 +4,11 @@ import 'package:new_digitendance/app/models/session.dart';
 import 'package:new_digitendance/ui/authentication/login/login_form.dart';
 import 'package:new_digitendance/ui/courses/pre_reqs_wiget.dart';
 import 'package:new_digitendance/ui/courses/session_card.dart';
-import 'package:new_digitendance/ui/courses/session_state.dart';
-import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
 import 'package:new_digitendance/ui/shared/shimmers.dart';
 
 import '../../app/models/course.dart';
+import '../../app/states/admin_state.dart';
+import '../../app/states/session_state.dart';
 import '../shared/spacers.dart';
 
 class CourseEditingBodyWidget extends ConsumerStatefulWidget {

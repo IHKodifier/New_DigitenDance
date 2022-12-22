@@ -5,7 +5,7 @@ import 'package:new_digitendance/ui/home/admin/admin_homepage.dart';
 import 'package:new_digitendance/ui/shared/spacers.dart';
 
 import '../../app/models/course.dart';
-import '../home/admin/state/admin_state.dart';
+import '../../app/states/admin_state.dart';
 
 class NewCourse extends ConsumerWidget {
   const NewCourse({Key? key}) : super(key: key);

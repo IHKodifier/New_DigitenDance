@@ -4,7 +4,7 @@ import 'package:logger/logger.dart';
 
 import 'package:new_digitendance/app/models/app_user.dart';
 import 'package:new_digitendance/app/models/institution.dart';
-import 'package:new_digitendance/ui/authentication/state/auth_state.dart';
+import 'package:new_digitendance/app/states/auth_state.dart';
 
 /// License Information
 ///

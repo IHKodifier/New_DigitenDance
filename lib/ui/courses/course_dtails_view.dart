@@ -5,11 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:new_digitendance/ui/courses/pre_reqs_wiget.dart';
 import 'package:new_digitendance/ui/courses/session_card.dart';
-import 'package:new_digitendance/ui/courses/session_state.dart';
-import 'package:new_digitendance/ui/home/admin/state/admin_state.dart';
 import 'package:new_digitendance/ui/shared/spacers.dart';
 
 import '../../app/models/session.dart';
+import '../../app/states/admin_state.dart';
+import '../../app/states/session_state.dart';
 import '../shared/shimmers.dart';
 
 class CouurseDetailsView extends ConsumerWidget {

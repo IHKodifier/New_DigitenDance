@@ -4,14 +4,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logger/logger.dart';
 import 'package:new_digitendance/app/apis/dbapi.dart';
 import 'package:new_digitendance/app/contants.dart';
-import 'package:new_digitendance/ui/authentication/startup/state/startup_state.dart';
 import 'package:new_digitendance/ui/home/admin/admin_homepage.dart';
 
 import '../../../app/models/institution.dart';
-import '../../../app/utilities.dart';
-import '../state/auth_state.dart';
-import '../state/authentication_notifier.dart';
-import '../state/institution_state.dart';
+import '../../../app/states/auth_state.dart';
+import '../../../app/states/authentication_notifier.dart';
+import '../../../app/states/institution_state.dart';
 
 class SignupForm extends ConsumerStatefulWidget {
   const SignupForm({Key? key}) : super(key: key);

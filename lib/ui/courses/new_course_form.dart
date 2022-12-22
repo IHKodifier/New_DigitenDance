@@ -5,11 +5,11 @@ import 'package:logger/logger.dart';
 import 'package:new_digitendance/app/contants.dart';
 import 'package:new_digitendance/app/models/session.dart';
 import 'package:new_digitendance/ui/courses/pre_reqs_wiget.dart';
-import 'package:new_digitendance/ui/courses/pre_reqs_state.dart';
 import 'package:new_digitendance/ui/shared/spacers.dart';
 
 import '../../app/models/course.dart';
-import '../home/admin/state/admin_state.dart';
+import '../../app/states/admin_state.dart';
+import '../../app/states/pre_reqs_state.dart';
 import 'couse_saving_dialog.dart';
 
 class NewCourseForm extends ConsumerStatefulWidget {
