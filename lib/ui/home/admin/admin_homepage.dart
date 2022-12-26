@@ -22,8 +22,6 @@ class AdminAppHomePage extends ConsumerWidget {
 
   late BuildContext _context;
 
-
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     thisRef = ref;
@@ -35,41 +33,14 @@ class AdminAppHomePage extends ConsumerWidget {
     thisRef = ref;
     _context = context;
     var asyncInstitution = ref.watch(institutionNotifierProvider);
-    // Theme.of(context).copyWith(brightness: brightnessNotifier.state);
-
-    // ref.listen<StartupState>(startupStateNotifierProvider,
-    //     (StartupState? previous, StartupState next) {
-    //   int x;
-    //   x = 2;
-
-    //   if (next.hasAuthentiatedUser) {
-    //     ref
-    //         .read(authenticationNotifierProvider.notifier)
-    //         .grabAppUserFromDb(next.currentFirebaseUser!)
-    //         .then((appUser) {
-    //       log.d(
-    //           'Detected existing user and now\n Grabbing AppUser from DB ${appUser.toString()}');
-    //       ref
-    //           .read(authenticationNotifierProvider.notifier)
-    //           .setAuthenticatedUser(appUser: appUser);
-    //       ref.read(institutionNotifierProvider.notifier).setDocRefOnInstitution(appUser
-    //           .docRef!
-    //           .parent
-    //           .parent as DocumentReference<Map<String, dynamic>>);
-    //     });
-    //   }
-    // });
-
-    return asyncInstitution.when(
-      data: (institution) => Scaffold(
-        appBar: AppBar(
+    var appBar = AppBar(
           actions: [
             IconButton(
                 onPressed: () {
                   brightnessNotifier.toggleBrightness(context);
                 },
                 icon: const Icon(Icons.dark_mode)),
-            SizedBox(
+            const SizedBox(
               width: 40,
             ),
             IconButton(
@@ -84,27 +55,20 @@ class AdminAppHomePage extends ConsumerWidget {
               iconSize: 40,
             ),
           ],
-        ),
-        body: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
+        );
+    
+
+    return asyncInstitution.when(
+      data: (institution) {
+        var institutionTitle = Padding(
                   padding: const EdgeInsets.all(28),
                   child: Text(
                     institution.title,
                     style: Theme.of(context).textTheme.headline1,
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                  width: 150,
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Wrap(
+                );
+        
+        var menuWrap = Wrap(
                     alignment: WrapAlignment.center,
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
@@ -138,22 +102,40 @@ class AdminAppHomePage extends ConsumerWidget {
                         title: 'Reports',
                       ),
                     ],
-                  ),
+                  );
+        var logOutButton = ElevatedButton(
+                    onPressed: () {
+                      authNotifier.signOut();
+                    },
+                    child: const Text('Log out '));
+        return Scaffold(
+        appBar: appBar,
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                institutionTitle,
+                const SizedBox(
+                  height: 20,
+                  width: 150,
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: menuWrap,
                 ),
                 const SizedBox(
                   height: 20,
                   width: 150,
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      authNotifier.signOut();
-                    },
-                    child: const Text('Log out ')),
+                logOutButton,
               ],
             ),
           ),
         ),
-      ),
+      );
+      },
       error: (e, st) => Center(child: Text(e.toString())),
       loading: () => Center(
           child: AdminFullPageShimmer(
@@ -169,22 +151,17 @@ class BrightnessNotifier extends StateNotifier<Brightness> {
 
   void toggleBrightness(BuildContext context) {
     if (state == Brightness.light) {
-      // state = Brightness.dark;
       var newState = state;
       newState = Brightness.dark;
       state = newState;
-      // Theme.of(context).copyWith(brightness: Brightness.dark);
     } else {
-      // state = Brightness.light;
       var newState = state;
       newState = Brightness.light;
       state = newState;
-      // state = Brightness.light;
 
 
 
 
-      // Theme.of(context).copyWith(brightness: Brightness.light);
     }
   }
 }

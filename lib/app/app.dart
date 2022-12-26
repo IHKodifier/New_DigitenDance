@@ -18,28 +18,26 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final brightnessNotifier = ref.read(themeBrightnessProvider.notifier);
     var brightnessState = ref.watch(themeBrightnessProvider);
-    return MaterialApp(
-      builder: ((context, widget) => ResponsiveWrapper.builder(
-            widget,
-            // maxWidth: 1200,
-            minWidth: 480,
-            defaultScale: true,
-            breakpoints: [
+    var _breakPoints= [
               const ResponsiveBreakpoint.resize(480, name: MOBILE),
               const ResponsiveBreakpoint.autoScale(800, name: TABLET),
               const ResponsiveBreakpoint.resize(1200, name: DESKTOP),
               const ResponsiveBreakpoint.autoScale(2460, name: '4K'),
               const ResponsiveBreakpoint.resize(3200, name: 'BILLBOARD'),
-            ],
+            ];
+  
+  
+  
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      builder: ((context, widget) => ResponsiveWrapper.builder(
+            widget,
+            minWidth: 480,
+            defaultScale: true,
+            breakpoints:_breakPoints,
           )),
       title: 'Digitendance 1.0',
-      debugShowCheckedModeBanner: false,
-      // theme: ThemeData(
-      //     useMaterial3: true,
-      //     brightness: brightnessState,
-// pr
-      // primarySwatch: Colors.green,
-      // ),
+   
       theme: ThemeData(
         // ),
         colorSchemeSeed: const Color.fromARGB(255, 222, 6, 238),
@@ -51,6 +49,7 @@ class MyApp extends ConsumerWidget {
         future: _initializeApp,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
+            print(snapshot.error.toString() );
             return Center(
               child: SelectableText('error ${snapshot.error.toString()}'),
             );

@@ -11,19 +11,20 @@ final authApiProvider =
     Provider<AuthApi>((ref) => AuthApi(FirebaseAuth.instance));
 
 class AuthApi {
+  AuthApi(this.instance);
+
+  late FirebaseAuth instance;
   // ignore: prefer_final_fields
   // String _phone = '';
   var logger = Logger(
     printer: PrettyPrinter()
   );
 
-  AuthApi(this.instance);
-
-  late FirebaseAuth instance;
   late UserCredential? userCredential;
 
   final String _defaultPhotoURL =
       ' https://www.kindpng.com/picc/m/78-786207_user-avatar-png-user-avatar-icon-png-transparent.png';
+
   String _email = '';
   Institution? _institution;
   String _password = '';

@@ -25,31 +25,7 @@ class StartupView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final startupState = ref.watch(startupStateNotifierProvider);
-    // ref.listen<StartupState>(startupStateNotifierProvider,
-    //     (StartupState? previous, StartupState next) {
-    //   int x;
-    //   x = 2;
-
-    //   if (next.hasAuthentiatedUser) {
-    //     ref
-    //         .read(authenticationNotifierProvider.notifier)
-    //         .grabAppUserFromDb(next.currentFirebaseUser!)
-    //         .then((appUser) {
-    //       log.d(
-    //           'Detected existing user and now\n Grabbing AppUser from DB ${appUser.toString()}');
-    //       ref
-    //           .read(authenticationNotifierProvider.notifier)
-    //           .setAuthenticatedUser(appUser: appUser);
-    //       ref.read(authenticationNotifierProvider.notifier).setBusyTo = false;
-    //       ref.read(institutionNotifierProvider.notifier).setDocRefOnInstitution(
-    //           appUser.docRef!.parent.parent
-    //               as DocumentReference<Map<String, dynamic>>);
-    //     });
-    //   }
-    // });
-// startupState.hasAuthentiatedUser
-    // return asyncStartupState.when(
-    //   data: (data) {
+  
     if (startupState.hasAuthentiatedUser) {
       final AuthenticationNotifier =
           ref.read(authenticationNotifierProvider.notifier);

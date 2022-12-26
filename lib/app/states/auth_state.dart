@@ -38,13 +38,27 @@ final authenticationNotifierProvider =
 /// provides methods like [signOut], [attemptLogin], [signUpUser]
 
 class AuthenticationState extends Equatable {
-   bool isBusy=false;
-  final AppUser? authenticatedUser;
-   UserRole? get  selectedRole=> authenticatedUser?.roles[0];
    AuthenticationState({
     this.authenticatedUser,
     this.isBusy = false,
   });
+
+  factory AuthenticationState.fromJson(String source) =>
+      AuthenticationState.fromMap(json.decode(source));
+
+  factory AuthenticationState.fromMap(Map<String, dynamic> map) {
+    return AuthenticationState(
+      authenticatedUser: map['authenticatedUser'] != null
+          ? AppUser.fromMap(map['authenticatedUser'])
+          : null,
+      // selectedRole: map['selectedRole'] != null
+      //     ? UserRole.fromMap(map['selectedRole'])
+      //     : null,
+    );
+  }
+
+  final AppUser? authenticatedUser;
+   bool isBusy=false;
 
   @override
   // TODO: implement props
@@ -53,6 +67,8 @@ class AuthenticationState extends Equatable {
         authenticatedUser!,
         [selectedRole]
       ];
+
+   UserRole? get  selectedRole=> authenticatedUser?.roles[0];
 
   AuthenticationState copyWith({
     AppUser? authenticatedUser,
@@ -79,19 +95,5 @@ class AuthenticationState extends Equatable {
     return result;
   }
 
-  factory AuthenticationState.fromMap(Map<String, dynamic> map) {
-    return AuthenticationState(
-      authenticatedUser: map['authenticatedUser'] != null
-          ? AppUser.fromMap(map['authenticatedUser'])
-          : null,
-      // selectedRole: map['selectedRole'] != null
-      //     ? UserRole.fromMap(map['selectedRole'])
-      //     : null,
-    );
-  }
-
   String toJson() => json.encode(toMap());
-
-  factory AuthenticationState.fromJson(String source) =>
-      AuthenticationState.fromMap(json.decode(source));
 }
