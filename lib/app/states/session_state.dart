@@ -30,10 +30,9 @@ class SessionGrabber {
         final faculty = await DbSession().getFacultybyUserId(session, ref);
         session.faculty = faculty;
         sessions.add(session);
-
-  // yield session;
-  _controller.sink.add(sessions);
       }
+
+  _controller.sink.add(sessions);
     },
   );
   }

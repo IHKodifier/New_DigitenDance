@@ -40,7 +40,8 @@ class AuthApi {
     _email = email;
     _password = password;
     dynamic returnvalue;
-    switch (loginProvider) {
+    switch (loginProvider) 
+    {
       case LoginProviderType.EmailPassword:
         returnvalue = await _signInwithEmail();
         break;

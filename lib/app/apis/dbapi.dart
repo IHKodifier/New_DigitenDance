@@ -31,7 +31,6 @@ class DbApi {
   final DbCourse _dbCourse = DbCourse();
   final DbFaculty _dbFaculty = DbFaculty();
   final DbSession _dbSession = DbSession();
-  late DocumentReference _institutionDocRef;
 
   DbAppUser get dbAppUser => _dbAppUser;
 
@@ -57,5 +56,4 @@ class DbApi {
   //     return null;
   //   }
   // }
-
 }

@@ -9,9 +9,10 @@ final courseSavingIsBuyProvider = Provider<bool>((ref) {
 });
 
 class CourseSavingDialog extends ConsumerWidget {
-  final Course course;
   // bool isBusy = true;
   CourseSavingDialog({required this.course, Key? key}) : super(key: key);
+
+  final Course course;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

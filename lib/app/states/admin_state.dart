@@ -6,6 +6,7 @@ import 'package:new_digitendance/app/models/institution.dart';
 import 'package:new_digitendance/app/states/institution_state.dart';
 import 'package:new_digitendance/app/utilities/transformer.dart';
 import '../../../../app/models/course.dart';
+import '../models/session.dart';
 
 var log = Logger(printer: PrettyPrinter());
 
@@ -57,14 +58,10 @@ class CourseNotifier extends StateNotifier<Course> {
   void setCurrentCourse(Course course) => state = course;
 
 
+void setSessionsOnCourse(List <Session> sessions){
+  state.sessions=sessions;
+  
+}
 
-  // void removePreReq(Course courseElement) {
-  //   final newState = state.copyWith();
-  //   if (newState.preReqs!.isNotEmpty) {
-  //     if (newState.preReqs!.contains(courseElement)) {
-  //       newState.preReqs!.remove(courseElement);
-  //     }
-  //     state = newState;
-  //   }
-  // }
+
 }

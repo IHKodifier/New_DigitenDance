@@ -100,6 +100,7 @@ class SessionViewingCard extends ConsumerWidget {
   }) : super(key: key);
 
   late BuildContext localContext;
+  late CourseNotifier courseNotifier;
 
   Widget whenLoading() {
     return ShimmerCard();
@@ -114,6 +115,8 @@ class SessionViewingCard extends ConsumerWidget {
 
   Widget whensessionStreamDone(List<Session> data) {
 // return Container();
+courseNotifier.setSessionsOnCourse(data);
+
 
     return SingleChildScrollView(
       child: Container(
@@ -137,6 +140,7 @@ class SessionViewingCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    courseNotifier= ref.read(currentCourseProvider.notifier);
     localContext = context;
     return ref.watch(sessionStreamProvider).when(
         data: whensessionStreamDone,

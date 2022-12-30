@@ -66,8 +66,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   }
 
   buildSignUpButton(WidgetRef ref) {
-    /// final authState = ref.watch(authStateProvider);
-    /// final notifier = ref.read(authStateProvider.notifier);
     return Expanded(
       child: Container(
         // width: 300,
@@ -192,6 +190,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
 class OnHoverButton extends StatefulWidget {
   OnHoverButton({Key? key, required this.child}) : super(key: key);
+
   final Widget child;
 
   @override
@@ -200,6 +199,13 @@ class OnHoverButton extends StatefulWidget {
 
 class _OnHoverButtonState extends State<OnHoverButton> {
   bool isHovered = false;
+
+  onMouseEntered(bool isHovered) {
+    setState(() {
+      this.isHovered = isHovered;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
   final hoveredTransform = Matrix4.identity()..translate(8,-8,0)..scale(1.05);
@@ -211,11 +217,5 @@ class _OnHoverButtonState extends State<OnHoverButton> {
             duration: Duration(milliseconds: 100),
             transform:transform ,
              child: widget.child));
-  }
-
-  onMouseEntered(bool isHovered) {
-    setState(() {
-      this.isHovered = isHovered;
-    });
   }
 }

@@ -52,8 +52,8 @@ class Course extends Equatable {
       id,
       title,
       credits,
-      preReqs ?? <PreReqs>[],
-      sessions ?? <Session>[],
+      preReqs!.toSet(),// ?? <PreReqs>[],
+      sessions!.toSet(),// ?? <Session>[],
       docRef.path,
       description!
     ];
