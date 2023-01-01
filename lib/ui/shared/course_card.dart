@@ -132,7 +132,8 @@ class CourseCard extends ConsumerWidget {
 
     return InkWell(
       onTap: () {
-        ref.read(currentCourseProvider.notifier).setCurrentCourse(course);
+        final notifier = ref.read(currentCourseProvider.notifier);
+        notifier.setCurrentCourse(course);
         // DbCourse().getSessionsForCourse(ref);
         // ref
         //     .read(currentCourseProvider.notifier)

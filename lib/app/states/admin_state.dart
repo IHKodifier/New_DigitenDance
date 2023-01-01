@@ -4,13 +4,12 @@ import 'package:logger/logger.dart';
 import 'package:new_digitendance/app/apis/dbapi.dart';
 import 'package:new_digitendance/app/models/institution.dart';
 import 'package:new_digitendance/app/states/institution_state.dart';
+import 'package:new_digitendance/app/states/session_state.dart';
 import 'package:new_digitendance/app/utilities/transformer.dart';
 import '../../../../app/models/course.dart';
 import '../models/session.dart';
 
 var log = Logger(printer: PrettyPrinter());
-
-
 
 /// [allCoursesStreamProvider] provides a stream of all courses in the current users [Institution]
 final allCoursesStreamProvider = StreamProvider<List<Course>>((ref) async* {
@@ -31,14 +30,12 @@ final allCoursesStreamProvider = StreamProvider<List<Course>>((ref) async* {
   yield* fireStream;
 });
 
-
-
-
 ///-[currentCourseProvider] provides the currently selected [Course] for the current operation
-final currentCourseProvider =
-    StateNotifierProvider<CourseNotifier, Course>((ref) {
-  return CourseNotifier(ref);
-});
+final currentCourseProvider = StateNotifierProvider<CourseNotifier, Course>(
+  (ref) {
+    return CourseNotifier(ref);
+  },
+);
 
 class CourseNotifier extends StateNotifier<Course> {
   CourseNotifier(this.ref) : super(Course.initial());
@@ -48,20 +45,14 @@ class CourseNotifier extends StateNotifier<Course> {
 
   DocumentReference? get docRef => state.docRef;
 
-  // void setPreReqsonCourse(QuerySnapshot<Map<String, dynamic>> data) {
-  //   data.docs.forEach((element) {
-  //     state.preReqs!.add(Course.fromData(element.data()));
-  //    logger.i(
-  //         'added ${element.data().toString()} to selected Course\'s preREQs ');
-  //   });
-  // }
-  void setCurrentCourse(Course course) => state = course;
+  void setCurrentCourse(Course course) {
+    state = course;
+    ref.refresh(sessionStreamProvider);
+  }
 
-
-void setSessionsOnCourse(List <Session> sessions){
-  state.sessions=sessions;
-  
-}
-
-
+  void setSessionsOnCourse(List<Session> sessions) {
+    state = ref.read(currentCourseProvider);
+    state.sessions = sessions;
+    state = state.copyWith();
+  }
 }

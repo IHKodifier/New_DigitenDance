@@ -8,15 +8,14 @@ import 'package:new_digitendance/app/models/pre_reqs.dart';
 import 'package:new_digitendance/app/models/session.dart';
 
 class Course extends Equatable {
-  Course({
-    required this.id,
-    required this.title,
-    required this.credits,
-    required this.docRef,
-    this.preReqs,
-    this.sessions,
-    this.description
-  });
+  Course(
+      {required this.id,
+      required this.title,
+      required this.credits,
+      required this.docRef,
+      this.preReqs,
+      this.sessions,
+      this.description});
 
   factory Course.fromJson(String source) => Course.fromMap(json.decode(source));
 
@@ -25,11 +24,10 @@ class Course extends Equatable {
       id: map['courseId'],
       title: map['courseTitle'],
       credits: map['credits']?.toInt(),
-      
       preReqs: map['preReqs'] != null
           ? List<PreReqs>.from(map['preReqs']?.map((x) => PreReqs.fromMap(x)))
           : null,
-          description: map['description'],
+      description: map['description'],
       sessions: map['sessions'] != null
           ? List<Session>.from(map['sessions']?.map((x) => Session.fromMap(x)))
           : null,
@@ -52,8 +50,8 @@ class Course extends Equatable {
       id,
       title,
       credits,
-      preReqs!.toSet(),// ?? <PreReqs>[],
-      sessions!.toSet(),// ?? <Session>[],
+      preReqs!.map((e) => e),
+      sessions!.map((e) => e),
       docRef.path,
       description!
     ];
@@ -120,7 +118,7 @@ class Course extends Equatable {
     result.addAll({'courseId': id});
     result.addAll({'courseTitle': title});
     result.addAll({'credits': credits});
-      result.addAll({'description': description});
+    result.addAll({'description': description});
     if (preReqs != null) {
       result.addAll({'preReqs': preReqs!.map((x) => x?.toMap()).toList()});
     }

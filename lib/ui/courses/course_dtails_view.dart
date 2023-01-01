@@ -18,52 +18,49 @@ class CouurseDetailsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(currentCourseProvider);
-    final sessionStream = ref.watch(sessionStreamProvider);
 
-    var _preReqsLengthWidget = Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Course Pre-Requisites (${state.preReqs?.length.toString()} )',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline5
-                                ?.copyWith(
-                                    color: Theme.of(context).primaryColor),
-                          ),
-                        ),
-                        PreReqsWidget(mode: PreReqsWidgetMode.ViewOnly),
-                      ],
-                    ),
-                  );
-    var courseHeaderWidget = Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      const Icon(
-                        Icons.auto_stories,
-                        size: 130,
-                      ),
+    var _preReqsLengthDisplay = Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Course Pre-Requisites (${state.preReqs?.length.toString()} )',
+              style: Theme.of(context)
+                  .textTheme
+                  .headline5
+                  ?.copyWith(color: Theme.of(context).primaryColor),
+            ),
+          ),
+          PreReqsWidget(mode: PreReqsWidgetMode.ViewOnly),
+        ],
+      ),
+    );
+    var _courseHeaderDisplay = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        const Icon(
+          Icons.auto_stories,
+          size: 130,
+        ),
 
-                      Text(
-                        state.title,
-                        style: Theme.of(context).textTheme.headline1,
-                      ),
-                      Text(
-                        '${state.credits.toString()} credits',
-                        style: Theme.of(context).textTheme.headline4,
-                      ),
-                      //  Expanded(
-                      //   child: Container(),
-                      // ),
-                    ],
-                  );
-  
-    return SingleChildScrollView(
+        Text(
+          state.title,
+          style: Theme.of(context).textTheme.headline1,
+        ),
+        Text(
+          '${state.credits.toString()} credits',
+          style: Theme.of(context).textTheme.headline4,
+        ),
+        //  Expanded(
+        //   child: Container(),
+        // ),
+      ],
+    );
+    var courseBody = SingleChildScrollView(
       child: Center(
         child: Container(
           margin: const EdgeInsets.all(16),
@@ -76,13 +73,13 @@ class CouurseDetailsView extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  courseHeaderWidget,
-                  _preReqsLengthWidget,
+                  _courseHeaderDisplay,
+                  _preReqsLengthDisplay,
                   Divider(thickness: 1),
                   // Expanded(
-                    // flex: 0,
-                    // child:
-                    SessionViewingCard(),
+                  // flex: 0,
+                  // child:
+                  SessionViewingCard(),
                   // ),
                 ],
               ),
@@ -91,16 +88,20 @@ class CouurseDetailsView extends ConsumerWidget {
         ),
       ),
     );
+    return courseBody;
   }
 }
+
+
+
 
 class SessionViewingCard extends ConsumerWidget {
   SessionViewingCard({
     Key? key,
   }) : super(key: key);
 
-  late BuildContext localContext;
   late CourseNotifier courseNotifier;
+  late BuildContext localContext;
 
   Widget whenLoading() {
     return ShimmerCard();
@@ -114,9 +115,9 @@ class SessionViewingCard extends ConsumerWidget {
   }
 
   Widget whensessionStreamDone(List<Session> data) {
+    
 // return Container();
-courseNotifier.setSessionsOnCourse(data);
-
+    // courseNotifier.setSessionsOnCourse(data);
 
     return SingleChildScrollView(
       child: Container(
@@ -127,7 +128,7 @@ courseNotifier.setSessionsOnCourse(data);
             color: Colors.white,
             border: Border.all(
               color: Theme.of(localContext).primaryColor,
-              width: 3,
+              width: 1,
             )),
         child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -140,11 +141,14 @@ courseNotifier.setSessionsOnCourse(data);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    courseNotifier= ref.read(currentCourseProvider.notifier);
+    courseNotifier = ref.read(currentCourseProvider.notifier);
+    // final state = ref.watch(currentCourseProvider);
     localContext = context;
+
+
     return ref.watch(sessionStreamProvider).when(
         data: whensessionStreamDone,
-         error: whenError,
-          loading: whenLoading);
+         error: whenError, 
+         loading: whenLoading);
   }
 }

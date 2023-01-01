@@ -14,14 +14,12 @@ final sessionStreamProvider = StreamProvider<List<Session>>((ref)  {
 
 class SessionGrabber {
   SessionGrabber(this.ref){
-    List<Session> sessions=<Session>[];
-
+    Session session;
     final firebaseStream = ref
       .read(dbProvider)
       .doc(ref.read(currentCourseProvider).docRef.path)
       .collection('sessions')
       .snapshots();
- Session session;
       final subscription = firebaseStream.listen(
     // ignore: void_checks
     (event) async {
@@ -38,8 +36,31 @@ class SessionGrabber {
   }
 
   final StreamProviderRef ref;
+    List<Session> sessions=<Session>[];
 
   final _controller= StreamController<List<Session>>();
+
+void refrehSessions(){
+  Session session;
+ ref
+      .read(dbProvider)
+      .doc(ref.read(currentCourseProvider).docRef.path)
+      .collection('sessions')
+      .snapshots().listen((event) async  {
+  for (var doc in event.docs) {
+        session = Session.fromMap(doc.data());
+        final faculty = await DbSession().getFacultybyUserId(session, ref);
+        session.faculty = faculty;
+        sessions.add(session);
+      }
+       _controller.sink.add(sessions);
+
+
+
+
+       });
+
+}
 
   Stream<List<Session>> get stream=>_controller.stream;
 }

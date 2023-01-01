@@ -21,7 +21,6 @@ class CourseDetailsPage extends ConsumerWidget {
       body: Column(
         children: const [
          
-          // CourseDetailsBody(),
           CouurseDetailsView(),
         ],
       ),
