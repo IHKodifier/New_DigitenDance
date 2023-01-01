@@ -14,10 +14,11 @@ class CourseCard extends ConsumerWidget {
   CourseCard({required this.course, Key? key}) : super(key: key);
 
   final Course course;
+  final log = Logger(printer: PrettyPrinter());
   late CourseNotifier notifier;
   RandomColor randomColor = RandomColor();
   late Size size;
-  double tileWidth = 150;
+  double tileWidth = 150;    
 
   Positioned buildIdPositioned(BuildContext context) {
     return Positioned(
@@ -116,7 +117,18 @@ class CourseCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     notifier = ref.read(currentCourseProvider.notifier);
-    var log = Logger(printer: PrettyPrinter());
+    ref.listen(currentCourseProvider, (Course? previous, Course next) {
+      log.i('Listen hit fetchxxx');
+      if (previous!=next) {
+        ///refresh sessions
+        log.e('WE HAVE DETECTEd  A CHANGE IN SELECTED  fetchxxx COURSE (from              ${previous!.id}              to          ${next.id} ');
+        
+      } else {
+        //do nothing
+      log.i('did nothing fetchxxx');
+      }
+     });
+  
     size = MediaQuery.of(context).size;
     log.i(course.toString());
     Color bgColor = randomColor.randomColor(
@@ -132,7 +144,7 @@ class CourseCard extends ConsumerWidget {
 
     return InkWell(
       onTap: () {
-        final notifier = ref.read(currentCourseProvider.notifier);
+        // final notifier = ref.read(currentCourseProvider.notifier);
         notifier.setCurrentCourse(course);
         // DbCourse().getSessionsForCourse(ref);
         // ref

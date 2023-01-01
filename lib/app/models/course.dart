@@ -69,7 +69,8 @@ class Course extends Equatable {
         credits: 0,
         docRef: DbApi().documentReferenceFromStringPath('institutions/default'),
         preReqs: const <PreReqs>[],
-        sessions: const <Session>[]);
+        sessions: const <Session>[],
+        description: 'Please provde descripion');
   }
 
   Course copyWith({

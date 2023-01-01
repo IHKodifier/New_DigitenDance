@@ -142,7 +142,7 @@ class SessionViewingCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     courseNotifier = ref.read(currentCourseProvider.notifier);
-    // final state = ref.watch(currentCourseProvider);
+     
     localContext = context;
 
 
