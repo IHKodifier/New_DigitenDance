@@ -231,8 +231,7 @@ class SessionEditingCard extends ConsumerWidget {
     data,
   ) {
     return Container(
-      width: 500,
-      height: 600,
+      //
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: Colors.white,
@@ -272,4 +271,12 @@ class SessionEditingCard extends ConsumerWidget {
   Widget whenError(Object error, StackTrace? stackTrace) {
     return Text(error.toString() + stackTrace.toString());
   }
+
+  // @override
+  // Widget build(BuildContext context, WidgetRef ref) {
+  //    localContext = context;
+  //   return ref
+  //       .watch(sessionStreamProvider)
+  //       .when(data: whenData, error: whenError, loading: whenLoading);
+  // }
 }

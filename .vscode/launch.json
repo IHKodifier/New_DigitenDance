@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "new_digitendance",
+            "name": "DEBUG new_digitendance",
             "request": "launch",
             "type": "dart",
             "flutterMode": "debug"

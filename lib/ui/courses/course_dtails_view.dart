@@ -92,9 +92,6 @@ class CouurseDetailsView extends ConsumerWidget {
   }
 }
 
-
-
-
 class SessionViewingCard extends ConsumerWidget {
   SessionViewingCard({
     Key? key,
