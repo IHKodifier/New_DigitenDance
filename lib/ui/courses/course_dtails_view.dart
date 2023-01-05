@@ -76,11 +76,8 @@ class CouurseDetailsView extends ConsumerWidget {
                   _courseHeaderDisplay,
                   _preReqsLengthDisplay,
                   Divider(thickness: 1),
-                  // Expanded(
-                  // flex: 0,
-                  // child:
                   SessionViewingCard(),
-                  // ),
+                  //464546556
                 ],
               ),
             ),
@@ -112,7 +109,6 @@ class SessionViewingCard extends ConsumerWidget {
   }
 
   Widget whensessionStreamDone(List<Session> data) {
-    
 // return Container();
     // courseNotifier.setSessionsOnCourse(data);
 
@@ -139,13 +135,10 @@ class SessionViewingCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     courseNotifier = ref.read(currentCourseProvider.notifier);
-     
+
     localContext = context;
 
-
     return ref.watch(sessionStreamProvider).when(
-        data: whensessionStreamDone,
-         error: whenError, 
-         loading: whenLoading);
+        data: whensessionStreamDone, error: whenError, loading: whenLoading);
   }
 }
