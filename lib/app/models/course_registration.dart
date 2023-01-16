@@ -4,23 +4,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class Registration extends Equatable {
-  final String studentId;
+  final String id;final String studentId;
   final Timestamp registrationDate;
-  const Registration({
+  const Registration( {required this.id,
     required this.studentId,
     required this.registrationDate,
   });
   static Registration initial() {
     var registration = Registration(
-        studentId: 'not initialized', registrationDate: Timestamp.now() );
+        studentId: 'not initialized', registrationDate: Timestamp.now(), id: 'not initialized' );
     return registration;
   }
 
   Registration copyWith({
+    String? id,
     String? studentId,
     Timestamp? registrationDate,
   }) {
     return Registration(
+      id: id??this.id,
       studentId: studentId ?? this.studentId,
       registrationDate: registrationDate?? Timestamp.now()
     );
@@ -28,6 +30,7 @@ class Registration extends Equatable {
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
+    result.addAll({'id':id});
 
     result.addAll({'studentId': studentId});
     result
@@ -38,6 +41,7 @@ class Registration extends Equatable {
 
   factory Registration.fromMap(Map<String, dynamic> map) {
     return Registration(
+      id: map['id'],
       studentId: map['studentId'] ?? '',
       registrationDate:
           (map['registrationDate'])as Timestamp,
@@ -54,5 +58,5 @@ class Registration extends Equatable {
       'CourseRegistration(studentId: $studentId, registrationDate: $registrationDate)';
 
   @override
-  List<Object> get props => [studentId, registrationDate];
+  List<Object> get props => [id,studentId, registrationDate];
 }

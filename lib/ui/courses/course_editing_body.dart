@@ -246,11 +246,23 @@ class SessionEditingCard extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: FloatingActionButton(
-                child: Icon(
+                child: const Icon(
                   Icons.add,
                   size: 45,
                 ),
-                onPressed: () {},
+                onPressed:(){
+                  showDialog(context: localContext, builder: (localContext)=>
+                  Dialog(child: Container(
+                    width: 600,
+                    height: 500,
+                    child: const  Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(32.0),
+                        child: Text('Flutter is fun'),
+                      ),
+                    ),
+                  ),));
+                },
               ),
             ),
             ...data
@@ -279,4 +291,6 @@ class SessionEditingCard extends ConsumerWidget {
   //       .watch(sessionStreamProvider)
   //       .when(data: whenData, error: whenError, loading: whenLoading);
   // }
+
+ 
 }
