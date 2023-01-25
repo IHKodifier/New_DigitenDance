@@ -6,6 +6,7 @@ import 'package:new_digitendance/app/states/admin_state.dart';
 import '../../app/apis/db_session.dart';
 import '../../app/apis/db_session.dart';
 import '../../app/models/session.dart';
+import '../models/faculty.dart';
 
 final sessionStreamProvider = StreamProvider<List<Session>>((ref)  {
  return SessionGrabber(ref).stream;
@@ -17,7 +18,7 @@ class SessionGrabber {
     Session session;
     final firebaseStream = ref
       .read(dbProvider)
-      .doc(ref.read(currentCourseProvider).docRef.path)
+      .doc(ref.read(currentCourseProvider).docRef!.path)
       .collection('sessions')
       .snapshots();
       final subscription = firebaseStream.listen(
@@ -44,7 +45,7 @@ void refrehSessions(){
   Session session;
  ref
       .read(dbProvider)
-      .doc(ref.read(currentCourseProvider).docRef.path)
+      .doc(ref.read(currentCourseProvider).docRef!.path)
       .collection('sessions')
       .snapshots().listen((event) async  {
   for (var doc in event.docs) {
@@ -63,4 +64,27 @@ void refrehSessions(){
 }
 
   Stream<List<Session>> get stream=>_controller.stream;
+}
+
+
+final newSessionProvider =
+    StateNotifierProvider<SessionNotifier, Session>((ref) {
+  return SessionNotifier(Session());
+});
+
+class SessionNotifier extends StateNotifier<Session> {
+  SessionNotifier(state) : super(state);
+
+  void setSession(Session session) {
+    state = session.copyWith();
+  }
+
+  void setFaculty(Faculty value) {
+    state.faculty = value;
+    state = state.copyWith();
+  }
+
+  void nullify() {
+    // dispose();
+  }
 }

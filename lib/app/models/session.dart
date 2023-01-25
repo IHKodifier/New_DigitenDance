@@ -10,7 +10,8 @@ class Session extends Equatable {
   Session({
     this.id,
     this.title,
-    // required this.courseId,
+    this.sessionStartDate,
+    this.sessionEndDate,
     this.registrationStartDate,
     this.registrationEndDate,
     this.faculty,
@@ -45,6 +46,8 @@ class Session extends Equatable {
   Timestamp? registrationEndDate;
   Timestamp? registrationStartDate;
   SessionStatus? sessionStatus;
+  DateTime? sessionStartDate;
+  DateTime? sessionEndDate;
   String? title;
 
   @override

@@ -48,7 +48,7 @@ class CouurseDetailsView extends ConsumerWidget {
         ),
 
         Text(
-          state.title,
+          state.title!,
           style: Theme.of(context).textTheme.headline1,
         ),
         Text(

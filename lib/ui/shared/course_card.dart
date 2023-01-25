@@ -49,7 +49,7 @@ class CourseCard extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
       child: Text(
-        course.id,
+        course.id!,
         style: Theme.of(context).textTheme.bodyText2?.copyWith(
             fontWeight: FontWeight.w900, fontSize: 22, color: Colors.yellow),
       ),
@@ -76,7 +76,7 @@ class CourseCard extends ConsumerWidget {
         children: [
           FittedBox(
             child: Text(
-              course.title,
+              course.title!,
               softWrap: false,
               maxLines: 1,
               style: Theme.of(context)
@@ -121,7 +121,7 @@ class CourseCard extends ConsumerWidget {
       log.i('Listen hit fetchxxx');
       if (previous!=next) {
         ///refresh sessions
-        log.e('WE HAVE DETECTEd  A CHANGE IN SELECTED  fetchxxx COURSE (from              ${previous!.id}              to          ${next.id} ');
+        log.i('WE HAVE DETECTEd  A CHANGE IN SELECTED  fetchxxx COURSE (from              ${previous!.id}              to          ${next.id} ');
         
       } else {
         //do nothing

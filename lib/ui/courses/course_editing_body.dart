@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_digitendance/app/models/session.dart';
 import 'package:new_digitendance/ui/authentication/login/login_form.dart';
+import 'package:new_digitendance/ui/courses/new_session_form.dart';
 import 'package:new_digitendance/ui/courses/pre_reqs_wiget.dart';
 import 'package:new_digitendance/ui/courses/session_card.dart';
 import 'package:new_digitendance/ui/shared/shimmers.dart';
@@ -35,8 +36,8 @@ class _CourseEditingBodyWidgetState
     // TODO: implement initState
     super.initState();
     preLoadedState = ref.read(currentCourseProvider);
-    courseTitleController.text = preLoadedState.title;
-    courseIdController.text = preLoadedState.id;
+    courseTitleController.text = preLoadedState.title!;
+    courseIdController.text = preLoadedState.id!;
     courseCreditController.text = preLoadedState.credits.toString();
   }
 
@@ -253,12 +254,13 @@ class SessionEditingCard extends ConsumerWidget {
                 onPressed:(){
                   showDialog(context: localContext, builder: (localContext)=>
                   Dialog(child: Container(
-                    width: 600,
-                    height: 500,
+                    width: MediaQuery.of(localContext).size.width*.45,
+                    height: MediaQuery.of(localContext).size.width*.75,
+                    // height: 500,
                     child: const  Center(
                       child: Padding(
                         padding: const EdgeInsets.all(32.0),
-                        child: Text('Flutter is fun'),
+                        child: NewSessionForm(),
                       ),
                     ),
                   ),));

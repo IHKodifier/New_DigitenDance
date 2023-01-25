@@ -81,7 +81,7 @@ class CoursesList extends ConsumerWidget {
     final courseStream = ref.watch(allCoursesStreamProvider);
     return courseStream.when(
       error: (err, st) {
-        log.e(err.toString() + st.toString());
+        log.i(err.toString() + st.toString());
         return Center(
           child: Text(
             err.toString() + st.toString(),

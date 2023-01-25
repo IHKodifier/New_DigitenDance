@@ -1,60 +1,44 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:cloud_firestore_platform_interface/src/timestamp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:new_digitendance/app/utilities/date_time_extention.dart';
-import 'package:new_digitendance/ui/shared/spacers.dart';
 
 import '../../app/models/faculty.dart';
 import '../../app/models/session.dart';
-import '../../app/states/admin_state.dart';
-
-final newSessionProvider =
-    StateNotifierProvider<SessionNotifier, Session>((ref) {
-  return SessionNotifier(Session());
-});
-
-class SessionNotifier extends StateNotifier<Session> {
-  SessionNotifier(state) : super(state);
-  void setSession(Session session) {
-    state = session.copyWith();
-  }
-
-  void setFaculty(Faculty value) {
-    state.faculty = value;
-    state = state.copyWith();
-  }
-
-  void nullify() {
-    // dispose();
-  }
-}
+import '../../app/states/course_editing_state.dart';
+import '../../app/states/faculty_state.dart';
+import '../../app/states/session_state.dart';
+import '../shared/spacers.dart';
 
 class NewSessionForm extends ConsumerStatefulWidget {
-  const NewSessionForm({Key? key}) : super(key: key);
+  const NewSessionForm({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _State();
+  ConsumerState<ConsumerStatefulWidget> createState() => _NewSessionFormState();
 }
 
-class _State extends ConsumerState<NewSessionForm> {
-  final Logger logger=Logger(printer: PrettyPrinter());
-  late final TextEditingController titleController;
+class _NewSessionFormState extends ConsumerState<NewSessionForm> {
+  String? endDateString = 'Select Date & Time ';
+  // @override
+  // // TODO: implement ref
+  // WidgetRef get ref => super.ref;
+  Faculty? facultySelected;
+
   late final TextEditingController idController;
-  late final _formKey = GlobalKey<FormState>();
-  DateTime? regStartDate;
-  DateTime? regEndDate;
-  DateTime? sessionStartDate;
-  DateTime? sessionEndDate;
-  TimeOfDay? regEndTime;
+  final Logger logger = Logger(printer: PrettyPrinter());
   Session? newSession;
   SessionNotifier? newSessionNotifier;
-  String? endDateString = 'Select Date & Time ';
-  // String sessio
-  Faculty? facultySelected;
+  DateTime? regEndDate;
+  TimeOfDay? regEndTime;
+  DateTime? regStartDate;
+  DateTime? sessionEndDate;
+  DateTime? sessionStartDate;
+  late final TextEditingController titleController;
   List<bool> tutoringDays = [false, false, false, false, false];
+
+  late final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -63,91 +47,68 @@ class _State extends ConsumerState<NewSessionForm> {
     titleController = TextEditingController();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final facultyList = ref.read(facultyListProvider);
-    newSessionNotifier = ref.read(newSessionProvider.notifier);
-    newSession = ref.watch(newSessionProvider);
-    facultySelected = newSession?.faculty;
+  Widget buildSessionStart(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * .65,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              buildFormTitle(context),
-              buildTextIputCard(),
-
-              const SpacerVertical(4),
-
-              buildRegDates(context),
-              const SpacerVertical(4),
-
-              /// widget to display Faculty
-              SizedBox(
-                width: double.infinity,
-                child: Card(
-                  elevation: 20,
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 96, vertical: 8),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        newSession?.faculty?.userId == null
-                            ? FacultyPicker()
-                            : const FacultySelected()
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SpacerVertical(16),
-              buildSessionCalendarCard(context),
-              buildButtonBar(context),
-              // const SizedBox(height: 20),
-              const SpacerVertical(20),
-            ],
-          ),
+      child: Card(
+        elevation: 3,
+        margin: const EdgeInsets.all(8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              ' starts on ',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall
+                  ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
+            ),
+            const SpacerVertical(8),
+            InkWell(
+              child: sessionStartDate != null
+                  ? Text(
+                      sessionStartDate != null
+                          ? DateFormat.yMMMEd('en-US').format(sessionStartDate!)
+                          : 'Select Date',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(color: Theme.of(context).primaryColor),
+                    )
+                  : const Icon(Icons.calendar_today_outlined),
+              onTap: () => _pickSessionStartDat(context),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget buildSessionCalendarCard(BuildContext context) {
+  Widget buildSessionEnd(BuildContext context) {
+    //  endDate==null?
+
     return Card(
-      elevation: 20,
-      margin: const EdgeInsets.symmetric(horizontal: 96, vertical: 8),
+      elevation: 3,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Session Calendar ',
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall
-                  ?.copyWith(color: Theme.of(context).primaryColor),
-            ),
-          ),
-          // const SpacerVertical(4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(child: buildSessionStart(context)),
-              Expanded(child: buildSessionEnd(context)),
-              const SpacerVertical(4),
-            ],
+          Text(
+            ' Ends on ',
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
           ),
           const SpacerVertical(8),
-          buildWeekdayChoices(),
-          const SpacerVertical(8),
+          InkWell(
+            child: sessionEndDate != null
+                ? Text(DateFormat.yMMMEd('en-US').format(sessionEndDate!),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(color: Theme.of(context).primaryColor))
+                : const Icon(Icons.calendar_today_rounded),
+            onTap: () => _pickSessionEndDate(context),
+          ),
         ],
       ),
     );
@@ -231,352 +192,34 @@ class _State extends ConsumerState<NewSessionForm> {
     );
   }
 
-  Widget buildTextIputCard() {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 96),
-      elevation: 20,
-      child: Column(
-        children: [buildId(), buildTitle(), const SpacerVertical(16)],
-      ),
-    );
-  }
-
-  Widget buildRegDates(BuildContext context) {
-    // facultySelected = ref.watch(newSessionProvider).faculty;
-    return Card(
-      elevation: 20,
-      margin: const EdgeInsets.symmetric(horizontal: 96, vertical: 8),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Registration ',
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall
-                  ?.copyWith(color: Theme.of(context).primaryColor),
-            ),
-          ),
-          // const SpacerVertical(4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(child: buildRegStart(context)),
-              Expanded(child: buildRegEnd(context)),
-              // const SpacerVertical(8),
-            ],
-          ),
-          const SpacerVertical(16),
-          // buildFacultySelectionCard(context),
-        ],
-      ),
-    );
-  }
-
-  Padding buildFormTitle(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Text('Create new Session',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: Theme.of(context).primaryColorDark,
-              )),
-    );
-  }
-
-  buildButtonBar(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Spacer(
-          flex: 2,
-        ),
-        TextButton(
-            onPressed: (() => Navigator.pop(context)),
-            // icon: const Icon(Icons.cancel),
-            child: const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                'Cancel',
-                style: TextStyle(fontSize: 20),
-              ),
-            )),
-        const Spacer(flex: 1),
-        ElevatedButton.icon(
-            onPressed: onCreateSession,
-            icon: const Icon(Icons.save),
-            label: const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                'Create Session  ',
-                style: TextStyle(fontSize: 20),
-              ),
-            )),
-        const Spacer(
-          flex: 2,
-        ),
-      ],
-    );
-  }
-
   onCreateSession() {
     newSession = Session();
     final notifier = ref.read(newSessionProvider.notifier);
+    logger.i('we have clicked Save session button ');
 
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      // newSession?.parentCourseId = ref.read(currentCourseProvider).courseId!;
-      newSession!.registrationStartDate = regStartDate;
-      newSession!.registrationEndDate = Timestamp.fromDate(
-        DateTime(regEndDate!.year).join(date: regEndDate!, time: regEndTime!),
-      );
-      newSession!.faculty = ref.read(newSessionProvider).faculty;
-      // Utils.log(newSession.toString());
-      // ref
-      //     .read(firestoreProvider).doc(ref.read(currentCourseProvider).docRef!.path).collection('sessions')
-      //   //   .collection('institutions')
-      //   //   .doc(ref.read(InstitutionProvider).docRef.path)
-      //   //   .collection('courses')
-      //   //   .doc(ref.read(currentCourseProvider).docRef!.path)
-      //   //   .collection('sessions')
-      //     .add(newSession!.toMap())
-      //     .then((value) {
-      // }
-      notifier.setSession(newSession!);
-      var notif = ref.read(courseEditingProvider.notifier);
-      notif.state.sessions!.add(newSession!);
-      logger.i(
-          'New Session Added \n printing from Provider ${ref.read(newSessionProvider).toString()}');
-      // ref.read(newSessionProvider)=
+    // if (_formKey.currentState!.validate()) {
+    //   _formKey.currentState!.save();
+    //   // newSession?.parentCourseId = ref.read(currentCourseProvider).courseId!;
+    //   newSession!.registrationStartDate = regStartDate as Timestamp?;
+    //   newSession!.registrationEndDate = Timestamp.fromDate(
+    //     DateTime(regEndDate!.year).join(date: regEndDate!, time: regEndTime!),
+    //   );
+    //   newSession!.faculty = ref.read(newSessionProvider).faculty;
 
-      Navigator.pop(context);
+    //   notifier.setSession(newSession!);
+    //   var notif = ref.read(courseEditingProvider.notifier);
+    //   notif.state.sessions!.add(newSession!);
+    //   logger.i(
+    //       'New Session Added \n printing from Provider ${ref.read(newSessionProvider).toString()}');
+    //   // ref.read(newSessionProvider)=
 
-      // )
-    } else {}
+    //   Navigator.pop(context);
+
+    //   // )
+    // } else {}
   }
 
-  // buildBlankFaculty() {
-  //   return SizedBox(
-  //     width: 400,
-  //     child: Padding(
-  //       padding: const EdgeInsets.all(8),
-  //       child: InkWell(
-  //         onTap: _showSimpleDialog,
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.center,
-  //           children: const [
-  //             Text('Select Faculty'),
-  //             Icon(
-  //               Icons.account_circle,
-  //               size: 80,
-
-  //               color: Color.fromARGB(255, 117, 118, 119),
-  //               // child: const Center(child: Text('select Faculty')),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Widget buildFacultyFormTile() {
-  //   if (facultySelected == null) {
-  //     return InkWell(
-  //       child: const Text('select Faculty'),
-  //       onTap: () {},
-  //     );
-  //   } else {
-  //     return ListTile(
-  //       leading: const Icon(
-  //         Icons.account_circle_outlined,
-  //         size: 40,
-  //         color: Colors.red,
-  //       ),
-  //       title:
-  //           Text(facultySelected!.firstName! + ' ' + facultySelected!.lastName),
-  //     );
-  //   }
-  // }
-
-  Widget buildId() => Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 8.0,
-        ),
-        child: TextFormField(
-          decoration: const InputDecoration(
-            hintText: 'Please enter a Session Id',
-            label: Text('session Id'),
-          ),
-          controller: idController,
-          onSaved: (newValue) {
-            Utils.log('Saving Session Id');
-            newSession!.sessionId = newValue;
-          },
-        ),
-      );
-
-  Widget buildTitle() => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: TextFormField(
-          decoration: const InputDecoration(
-            hintText: 'Please enter a Session Title',
-            label: Text('session Title'),
-          ),
-          controller: titleController,
-          onSaved: (newValue) {
-            Utils.log('Saving Session Title');
-            newSession!.sessionTitle = newValue;
-          },
-        ),
-      );
-
-  Widget buildRegStart(BuildContext context) {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text(
-            ' starts on ',
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
-          ),
-          // const SizedBox(width: 20),
-          const SpacerVertical(8),
-          InkWell(
-            child: regStartDate != null
-                ? Text(
-                    regStartDate != null
-                        ? DateFormat.yMMMEd('en-US').format(regStartDate!)
-                        : 'Select Date',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(color: Theme.of(context).primaryColor),
-                  )
-                : const Icon(Icons.calendar_today_outlined),
-            onTap: () => _datePicker_Registration(context),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildRegEnd(BuildContext context) {
-    //  endDate==null?
-
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text(
-            ' Ends on ',
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
-          ),
-          const SpacerVertical(8),
-          InkWell(
-            child: regStartDate != null
-                ? Text(endDateString!,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(color: Theme.of(context).primaryColor))
-                : const Icon(Icons.calendar_today_rounded),
-            onTap: () => _dateAndTimePicker(context),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildSessionStart(BuildContext context) {
-    return Container(
-      child: Card(
-        // color: const Color.fromARGB(137, 172, 166, 166),
-        elevation: 3,
-        margin: const EdgeInsets.all(8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              ' starts on ',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall
-                  ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
-            ),
-            // const SizedBox(width: 20),
-            const SpacerVertical(8),
-            InkWell(
-              child: sessionStartDate != null
-                  ? Text(
-                      regStartDate != null
-                          ? DateFormat.yMMMEd('en-US').format(sessionStartDate!)
-                          : 'Select Date',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(color: Theme.of(context).primaryColor),
-                    )
-                  : const Icon(Icons.calendar_today_outlined),
-              onTap: () => _datePicker_SessionStart(context),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildSessionEnd(BuildContext context) {
-    //  endDate==null?
-
-    return Card(
-      elevation: 3,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text(
-            ' Ends on ',
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
-          ),
-          const SpacerVertical(8),
-          InkWell(
-            child: sessionEndDate != null
-                ? Text(DateFormat.yMMMEd('en-US').format(sessionEndDate!),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(color: Theme.of(context).primaryColor))
-                : const Icon(Icons.calendar_today_rounded),
-            onTap: () => _datePicker_SessionEnd(context),
-          ),
-        ],
-      ),
-    );
-  }
-
-  _datePicker_Registration(BuildContext context) async {
-    final newDate = await showDatePicker(
-      context: context,
-      initialDate: regStartDate ?? DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-    );
-    setState(() {
-      regStartDate = newDate;
-    });
-  }
-
-  _datePicker_SessionStart(BuildContext context) async {
+  _pickSessionStartDat(BuildContext context) async {
     final newDate = await showDatePicker(
       context: context,
       initialDate: regStartDate ?? DateTime.now(),
@@ -588,15 +231,15 @@ class _State extends ConsumerState<NewSessionForm> {
         sessionStartDate = newDate;
       });
     } else {
-      return;
+      return null;
     }
   }
 
-  _datePicker_SessionEnd(BuildContext context) async {
+  _pickSessionEndDate(BuildContext context) async {
     final newDate = await showDatePicker(
       context: context,
-      initialDate: regStartDate ?? DateTime.now(),
-      firstDate: DateTime(1900),
+      initialDate: sessionStartDate ?? DateTime.now(),
+      firstDate: sessionStartDate ?? regEndDate!.add(const Duration(days: 1)),
       lastDate: DateTime(2100),
     );
     if (newDate != null) {
@@ -608,7 +251,7 @@ class _State extends ConsumerState<NewSessionForm> {
     }
   }
 
-  _dateAndTimePicker(BuildContext context) async {
+  _pickRegistrationEndDate(BuildContext context) async {
     final newDate = await showDatePicker(
       context: context,
       initialDate: regEndDate ?? DateTime.now(),
@@ -635,117 +278,263 @@ class _State extends ConsumerState<NewSessionForm> {
     });
   }
 
-  // _showSimpleDialog() {
-  //   final list = ref.read(facultyListProvider);
-  //   showDialog(
-  //       context: context,
-  //       builder: (context) => SimpleDialog(
-  //             title: const Text('select Faculty'),
-  //             children:
-  //                 list.asData?.value.map((e) => FacultyLisTile(e: e)).toList(),
-  //           ));
-
-}
-
-class FacultyPicker extends ConsumerWidget {
-  FacultyPicker({Key? key}) : super(key: key);
-  late AsyncValue<List<Faculty>> asyncList;
-  late BuildContext thisContext;
-  late WidgetRef thisRef;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    asyncList = ref.watch(facultyListProvider);
-    thisContext = context;
-    thisRef = ref;
-
-    return asyncList.when(
-        error: (e, st) => Text(e.toString()),
-        loading: () => const CircularProgressIndicator(),
-        data: (data) => InkWell(
-              child: const Tooltip(
-                message: 'Click to Select Faculty',
-                child: CircleAvatar(
-                  child: Icon(
-                    Icons.account_circle,
-                    size: 80,
-                  ),
-                  radius: 41,
-                ),
-              ),
-              onTap: () => pickFaculty(context, ref),
-            ));
+  _pickRegistrationStartDate(BuildContext context) async {
+    final newDate = await showDatePicker(
+      context: context,
+      initialDate:
+          sessionStartDate?.subtract(Duration(days: 18)) ?? DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: sessionStartDate!.subtract(const Duration(days: 18)),
+    );
+    setState(() {
+      regStartDate = newDate;
+    });
   }
 
-  pickFaculty(BuildContext context, WidgetRef ref) {
-    asyncList.when(
-      data: (List<Faculty> data) {
-        final notifier = ref.read(newSessionProvider.notifier);
-        showDialog(
-          context: thisContext,
-          builder: (context) => SimpleDialog(
-              title: const Text('select Faculty'),
-              children: data.map((e) => FacultyLisTile(e: e)).toList()),
-        );
-      },
-      error: (e, st) => [Text(e.toString())],
-      loading: () => [
-        const CircularProgressIndicator(),
+  @override
+  Widget build(BuildContext context) {
+    var formTitle = Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Text('Create new Session',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: Theme.of(context).primaryColor,
+              )),
+    );
+    var sessionIdField = Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8.0,
+      ),
+      child: TextFormField(
+        decoration: const InputDecoration(
+          hintText: 'Please enter a Session Id',
+          label: Text('session Id'),
+        ),
+        controller: idController,
+        onSaved: (newValue) {
+          logger.i('Saving Session Id');
+          newSession!.id = newValue;
+        },
+      ),
+    );
+    var sessioTitleField = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: TextFormField(
+        decoration: const InputDecoration(
+          hintText: 'Please enter a Session Title',
+          label: Text('session Title'),
+        ),
+        controller: titleController,
+        onSaved: (newValue) {
+          logger.i('Saving Session Title');
+          newSession!.title = newValue;
+        },
+      ),
+    );
+    var textInputCard = Column(
+      children: [
+        sessionIdField,
+        sessioTitleField,
+        const SpacerVertical(16),
       ],
     );
-  }
-}
-
-class FacultySelected extends ConsumerWidget {
-  const FacultySelected({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final faculty = ref.watch(newSessionProvider).faculty;
-    return SizedBox(
-      width: double.infinity,
+    var buildRegEnd = Container(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          InkWell(
-            child: ClipOval(
-              child: SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Image.network(faculty!.photoURL!, fit: BoxFit.fill),
-                  )),
-              // radius: 50,
-            ),
-            onTap: () {
-              var asyncList = ref.read(facultyListProvider);
-              asyncList.when(
-                data: (List<Faculty> data) {
-                  final notifier = ref.read(newSessionProvider.notifier);
-                  showDialog(
-                    context: context,
-                    builder: (context) => SimpleDialog(
-                        title: const Text('select Faculty'),
-                        children:
-                            data.map((e) => FacultyLisTile(e: e)).toList()),
-                  );
-                },
-                error: (e, st) => [Text(e.toString())],
-                loading: () => [
-                  const CircularProgressIndicator(),
-                ],
-              );
-            },
-          ),
-          const SpacerVertical(4),
           Text(
-            faculty.title! + faculty.firstName! + faculty.lastName!,
-            style: Theme.of(context).textTheme.headline5,
+            ' Ends on  ',
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
+          ),
+          const SpacerVertical(8),
+          InkWell(
+            child: regStartDate != null
+                ? Text(endDateString!,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(color: Theme.of(context).primaryColor))
+                : const Icon(Icons.calendar_today_rounded),
+            onTap: () => _pickRegistrationEndDate(context),
           ),
         ],
       ),
     );
+    var buildRegStart = Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text(
+            ' starts on ',
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
+          ),
+          // const SizedBox(width: 20),
+          const SpacerVertical(8),
+          InkWell(
+            child: regStartDate != null
+                ? Text(
+                    regStartDate != null
+                        ? DateFormat.yMMMEd('en-US').format(regStartDate!)
+                        : 'Select Date',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(color: Theme.of(context).primaryColor),
+                  )
+                : const Icon(Icons.calendar_today_outlined),
+            onTap: () => _pickRegistrationStartDate(context),
+          ),
+        ],
+      ),
+    );
+    var registrationDatesCard = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            'Registration ',
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall
+                ?.copyWith(color: Theme.of(context).primaryColor),
+          ),
+        ),
+        // const SpacerVertical(4),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(child: buildRegStart),
+            Expanded(child: buildRegEnd),
+            // const SpacerVertical(8),
+          ],
+        ),
+        const SpacerVertical(16),
+        // buildFacultySelectionCard(context),
+      ],
+    );
+    var sessionCalendarCard = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            'Session Calendar ',
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall
+                ?.copyWith(color: Theme.of(context).primaryColor),
+          ),
+        ),
+        // const SpacerVertical(4),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            buildSessionStart(context),
+            Flexible(child: Container()),
+            buildSessionEnd(context),
+            // const SpacerVertical(4),
+          ],
+        ),
+        const SpacerVertical(8),
+        buildWeekdayChoices(),
+        const SpacerVertical(8),
+      ],
+    );
+    var buttonBar = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Spacer(
+          flex: 2,
+        ),
+        TextButton(
+            onPressed: (() => Navigator.pop(context)),
+            // icon: const Icon(Icons.cancel),
+            child: const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                'Cancel',
+                style: TextStyle(fontSize: 20),
+              ),
+            )),
+        const Spacer(flex: 1),
+        ElevatedButton.icon(
+            onPressed: onCreateSession,
+            icon: const Icon(
+              Icons.save,
+            ),
+            label: const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                'SAVE ',
+                style: TextStyle(fontSize: 20),
+              ),
+            )),
+        const Spacer(
+          flex: 2,
+        ),
+      ],
+    );
+    var facultySelectionCard = Container(
+      child: Card(
+        child: InkWell(
+          child: const Tooltip(
+              child: Text(
+                'Faculty',
+              ),
+              message: 'click to select faculty'),
+          onTap: () => showDialog(
+            context: context,
+            builder: ((context) => SimpleDialog(
+                  title: Text('Select Faculty'),
+                  children: List.generate(
+                      5,
+                      (index) => SimpleDialogOption(
+                            child: Text(index.toString()),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              logger.i(index.toString()+'was clicked by user');
+                            },
+                          )).toList(),
+                )),
+          ),
+        ),
+      ),
+    );
+
+    Widget form = Form(
+      key: _formKey,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              formTitle,
+              textInputCard,
+              sessionCalendarCard,
+              facultySelectionCard,
+              registrationDatesCard,
+              SpacerVertical(16),
+              buttonBar,
+            ],
+          ),
+        ),
+      ),
+    );
+
+    final facultyList = ref.read(facultyListProvider);
+    newSessionNotifier = ref.read(newSessionProvider.notifier);
+    newSession = ref.watch(newSessionProvider);
+    facultySelected = newSession?.faculty;
+    final size = MediaQuery.of(context).size;
+    return Center(child: form);
   }
 }

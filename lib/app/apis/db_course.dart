@@ -36,9 +36,9 @@ class DbCourse {
 
     course.sessions?.forEach((session) {
       writeBatch.set(
-          course.docRef.collection('sessions').doc(), session?.toMap());
+          course.docRef!.collection('sessions').doc(), session?.toMap());
     });
-    writeBatch.set(course.docRef, course.toShallowMap());
+    writeBatch.set(course.docRef!, course.toShallowMap());
 
     return writeBatch.commit();
     // return FirebaseFirestore.instance

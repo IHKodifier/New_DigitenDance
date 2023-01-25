@@ -9,10 +9,10 @@ import 'package:new_digitendance/app/models/session.dart';
 
 class Course extends Equatable {
   Course(
-      {required this.id,
-      required this.title,
-      required this.credits,
-      required this.docRef,
+      { this.id,
+       this.title,
+       this.credits,
+       this.docRef,
       this.preReqs,
       this.sessions,
       this.description});
@@ -36,30 +36,30 @@ class Course extends Equatable {
     return retval;
   }
 
-  int credits;
-  DocumentReference<Map<String, dynamic>> docRef;
-  String id;
+  int? credits;
+  DocumentReference<Map<String, dynamic>>? docRef;
+  String? id;
   List<PreReqs?>? preReqs = [];
   List<Session?>? sessions = [];
-  String title;
+  String? title;
   String? description;
 
   @override
   List<Object> get props {
     return [
-      id,
-      title,
-      credits,
+      id!,
+      title!,
+      credits!,
       preReqs!.map((e) => e),
       sessions!.map((e) => e),
-      docRef.path,
+      docRef!.path,
       description!
     ];
   }
 
   @override
   String toString() {
-    return 'Course(courseId: $id, courseTitle: $title, credits: $credits, preReqs: ${preReqs ?? ''}, sessions: $sessions, docRef: ${docRef.path}) description ${description}';
+    return 'Course(courseId: $id, courseTitle: $title, credits: $credits, preReqs: ${preReqs ?? ''}, sessions: $sessions, docRef: ${docRef!.path}) description ${description}';
   }
 
   static Course initial() {
@@ -107,7 +107,7 @@ class Course extends Equatable {
     if (sessions != null) {
       result.addAll({'sessions': sessions!.map((x) => x?.toMap()).toList()});
     }
-    result.addAll({'docRef': docRef.path});
+    result.addAll({'docRef': docRef!.path});
 
     return result;
   }
@@ -126,12 +126,12 @@ class Course extends Equatable {
 
     result.addAll({'sessions': <Session>[]});
 
-    result.addAll({'docRef': docRef.path});
+    result.addAll({'docRef': docRef!.path});
 
     return result;
   }
 
   String toJson() => json.encode(toMap());
 
-  PreReqs toPreReq() => PreReqs(id: id, title: title, credits: credits);
+  PreReqs toPreReq() => PreReqs(id: id!, title: title!, credits: credits!);
 }
