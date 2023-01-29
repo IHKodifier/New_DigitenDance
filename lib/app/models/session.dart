@@ -16,21 +16,30 @@ class Session extends Equatable {
     this.registrationEndDate,
     this.faculty,
     this.courseRegistrations,
-  });
+    
+  }){
+    this.tutoringDays=[false,
+    false,
+    false,
+    false,
+    false];
+  }
 
   factory Session.fromJson(String source) =>
       Session.fromMap(json.decode(source));
 
   factory Session.fromMap(Map<String, dynamic> map) {
+    Timestamp registrationStartDate=map['registrationStartDate'];
+    Timestamp registrationEndtDate=map['registrationEndDate'];
+    Timestamp sessionStartDate=map['sessionStartDate'];
     Session session = Session(
       id: map['id'],
       title: map['title'],
       // courseId: map['parentCourseId'] ?? '',
-      registrationStartDate: map['registrationStartDate'] != null
-          ? (map['registrationStartDate'] as Timestamp)
-          : null,
-      registrationEndDate: map['registrationEndDate']! ??
-          (map['registrationEndDate'] as Timestamp).toDate(),
+      registrationStartDate: registrationStartDate.toDate(),
+      registrationEndDate: registrationEndtDate,
+      sessionStartDate: sessionStartDate.toDate(),
+      sessionEndDate: sessionStartDate.toDate(),
       faculty: map['faculty'] != null ? Faculty(userId: map['faculty']) : null,
       courseRegistrations: map['courseRegistrations'] != null
           ? List<Registration>.from(
@@ -44,11 +53,12 @@ class Session extends Equatable {
   Faculty? faculty;
   String? id;
   Timestamp? registrationEndDate;
-  Timestamp? registrationStartDate;
-  SessionStatus? sessionStatus;
-  DateTime? sessionStartDate;
+  DateTime? registrationStartDate;
   DateTime? sessionEndDate;
+  DateTime? sessionStartDate;
+  SessionStatus? sessionStatus;
   String? title;
+  List<bool>? tutoringDays;
 
   @override
   List<Object> get props {
@@ -66,7 +76,7 @@ class Session extends Equatable {
     String? id,
     String? title,
     String? parentCourseId,
-    Timestamp? registrationStartDate,
+    DateTime? registrationStartDate,
     Timestamp? registrationEndDate,
     Faculty? faculty,
     List<Registration>? courseRegistrations,
@@ -74,9 +84,8 @@ class Session extends Equatable {
     return Session(
       id: id ?? id,
       title: title ?? title,
-      // courseId: parentCourseId ?? courseId,
       registrationStartDate:
-          registrationStartDate ?? this.registrationStartDate as Timestamp,
+          registrationStartDate ?? DateTime.now(),
       registrationEndDate: registrationEndDate ?? this.registrationEndDate,
       faculty: faculty ?? this.faculty,
       courseRegistrations: courseRegistrations ?? this.courseRegistrations,
@@ -88,7 +97,7 @@ class Session extends Equatable {
     session.courseRegistrations = [Registration.initial()];
     session.faculty = Faculty.initial();
     session.registrationEndDate = Timestamp.now();
-    session.registrationStartDate = Timestamp.now();
+    session.registrationStartDate = DateTime.now();
     session.sessionStatus = SessionStatus.inProgress;
     session.title = 'title not initialized';
     session.id = 'id not initialized';

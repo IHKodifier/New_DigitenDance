@@ -51,7 +51,7 @@ class Course extends Equatable {
       title!,
       credits!,
       preReqs!.map((e) => e),
-      sessions!.map((e) => e),
+      // sessions.map((e) => e),
       docRef!.path,
       description!
     ];

@@ -43,7 +43,7 @@ class SessionTile extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyText1!.copyWith(
                   color: Theme.of(context).primaryColor,
                 ),),
-                Text(state.registrationStartDate!.toDate().toString()),
+                Text(state.registrationStartDate!.toString()),
                 Text(state.title!),
               ],
                        ),

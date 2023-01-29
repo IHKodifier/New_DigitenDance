@@ -67,7 +67,7 @@ void refrehSessions(){
 }
 
 
-final newSessionProvider =
+final newSessionNotifierProvider =
     StateNotifierProvider<SessionNotifier, Session>((ref) {
   return SessionNotifier(Session());
 });
