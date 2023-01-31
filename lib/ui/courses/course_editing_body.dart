@@ -253,7 +253,9 @@ class SessionEditingCard extends ConsumerWidget {
                 ),
                 onPressed:(){
                   showDialog(context: localContext, builder: (localContext)=>
-                  Dialog(child: Container(
+                  Dialog(
+                    // backgroundColor: Colors.black,
+                    child: Container(
                     width: MediaQuery.of(localContext).size.width*.45,
                     height: MediaQuery.of(localContext).size.width*.75,
                     // height: 500,
@@ -285,14 +287,6 @@ class SessionEditingCard extends ConsumerWidget {
   Widget whenError(Object error, StackTrace? stackTrace) {
     return Text(error.toString() + stackTrace.toString());
   }
-
-  // @override
-  // Widget build(BuildContext context, WidgetRef ref) {
-  //    localContext = context;
-  //   return ref
-  //       .watch(sessionStreamProvider)
-  //       .when(data: whenData, error: whenError, loading: whenLoading);
-  // }
 
  
 }

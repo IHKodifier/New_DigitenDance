@@ -30,14 +30,14 @@ class Session extends Equatable {
 
   factory Session.fromMap(Map<String, dynamic> map) {
     Timestamp registrationStartDate=map['registrationStartDate'];
-    Timestamp registrationEndtDate=map['registrationEndDate'];
+    Timestamp registrationEndDate=map['registrationEndDate'];
     Timestamp sessionStartDate=map['sessionStartDate'];
     Session session = Session(
       id: map['id'],
       title: map['title'],
       // courseId: map['parentCourseId'] ?? '',
       registrationStartDate: registrationStartDate.toDate(),
-      registrationEndDate: registrationEndtDate,
+      registrationEndDate: registrationEndDate.toDate(),
       sessionStartDate: sessionStartDate.toDate(),
       sessionEndDate: sessionStartDate.toDate(),
       faculty: map['faculty'] != null ? Faculty(userId: map['faculty']) : null,
@@ -52,7 +52,7 @@ class Session extends Equatable {
   List<Registration>? courseRegistrations;
   Faculty? faculty;
   String? id;
-  Timestamp? registrationEndDate;
+  DateTime? registrationEndDate;
   DateTime? registrationStartDate;
   DateTime? sessionEndDate;
   DateTime? sessionStartDate;
@@ -86,9 +86,9 @@ class Session extends Equatable {
       title: title ?? title,
       registrationStartDate:
           registrationStartDate ?? DateTime.now(),
-      registrationEndDate: registrationEndDate ?? this.registrationEndDate,
+      registrationEndDate: this.registrationEndDate ?? this.registrationEndDate,
       faculty: faculty ?? this.faculty,
-      courseRegistrations: courseRegistrations ?? this.courseRegistrations,
+      courseRegistrations: this.courseRegistrations ?? courseRegistrations,
     );
   }
 
@@ -96,7 +96,7 @@ class Session extends Equatable {
     var session = Session();
     session.courseRegistrations = [Registration.initial()];
     session.faculty = Faculty.initial();
-    session.registrationEndDate = Timestamp.now();
+    session.registrationEndDate = DateTime.now();
     session.registrationStartDate = DateTime.now();
     session.sessionStatus = SessionStatus.inProgress;
     session.title = 'title not initialized';

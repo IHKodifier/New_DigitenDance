@@ -9,6 +9,7 @@ class Faculty extends Equatable {
   Faculty({
     required this.userId,
     this.firstName,
+    this.lastName,
     this.photoURL,
     this.docRef,
     this.jobTitle,
@@ -31,6 +32,7 @@ class Faculty extends Equatable {
     Faculty faculty = Faculty(
         userId: dataMap['userId'] ?? '',
         firstName: dataMap['firstName'],
+        lastName: dataMap['lastName'],
         photoURL: dataMap['photoURL'],
         jobTitle: dataMap['jobTitle'],
         prefix: dataMap['prefix'],

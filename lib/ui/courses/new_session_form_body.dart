@@ -1,13 +1,15 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_typing_uninitialized_variables, prefer_const_constructors
 
 import 'package:cloud_firestore_platform_interface/src/timestamp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import 'package:new_digitendance/app/models/faculty.dart';
 import 'package:new_digitendance/app/states/session_state.dart';
 
 import '../../app/models/session.dart';
+import '../../app/states/faculty_state.dart';
 import '../shared/spacers.dart';
 
 class NewSessionFormBody extends ConsumerStatefulWidget {
@@ -18,12 +20,13 @@ class NewSessionFormBody extends ConsumerStatefulWidget {
 }
 
 class _NewSessionFormBodyState extends ConsumerState<NewSessionFormBody> {
+  String endDateString='';
+  Faculty? facultySelected=Faculty(userId: '');
   late final TextEditingController idController;
   final Logger logger = Logger(printer: PrettyPrinter());
   late   SessionNotifier sessionNotifier;
   late   Session state ;
   late final TextEditingController titleController;
-  String endDateString='';
 
   final _formKey=GlobalKey<FormState>();
 
@@ -250,6 +253,203 @@ void initState() {
     );
   }
 
+  registrationDatesPanel(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            'Registration ',
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall
+                ?.copyWith(color: Theme.of(context).primaryColor),
+          ),
+        ),
+        // const SpacerVertical(4),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(child: buildRegStart()),
+            Expanded(child: buildRegEnd()),
+            // const SpacerVertical(8),
+          ],
+        ),
+        const SpacerVertical(16),
+        // buildFacultySelectionCard(context),
+      ],
+    );
+  }
+
+  buildRegStart() =>Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text(
+            ' starts on ',
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
+          ),
+          // const SizedBox(width: 20),
+          const SpacerVertical(8),
+          InkWell(
+            child: state.registrationStartDate != null
+                ? Text(
+                    state.registrationStartDate != null
+                        ? DateFormat.yMMMEd('en-US').format(state.registrationStartDate! as DateTime)
+                        : 'Select Date',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(color: Theme.of(context).primaryColor),
+                  )
+                : const Icon(Icons.calendar_today_outlined),
+            onTap: () => _pickRegistrationStartDate(context),
+          ),
+        ],
+      ),
+    );
+
+  buildRegEnd() =>Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text(
+            ' Ends on  ',
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
+          ),
+          const SpacerVertical(8),
+          InkWell(
+            child: state.registrationEndDate != null
+                ? Text(endDateString,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(color: Theme.of(context).primaryColor))
+                : const Icon(Icons.calendar_today_rounded),
+            onTap: () => _pickRegistrationEndDate(context),
+          ),
+        ],
+      ),
+    );
+
+  buttonBar(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Spacer(
+          flex: 2,
+        ),
+        TextButton(
+            onPressed: (() => Navigator.pop(context)),
+            // icon: const Icon(Icons.cancel),
+            child: const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                'Cancel',
+                style: TextStyle(fontSize: 20),
+              ),
+            )),
+        const Spacer(flex: 1),
+        ElevatedButton.icon(
+            onPressed: onCreateSession,
+            icon: const Icon(
+              Icons.save,
+            ),
+            label: const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                'SAVE ',
+                style: TextStyle(fontSize: 20),
+              ),
+            )),
+        const Spacer(
+          flex: 2,
+        ),
+      ],
+    );
+  }
+
+  void onCreateSession() {
+    logger.i(state.toString());
+  }
+
+  facultySelectionPanel(BuildContext context) {
+      final facultyList = ref.read(facultyListProvider);
+   return  Container(
+      child: Card(
+        child: InkWell(
+          child: Tooltip(
+              child: facultySelected?.userId == ''
+                  ? Text(
+                      'click to select faculty',
+                    )
+                  : selectedFacultyTile(),
+              message: 'click to select faculty'),
+          onTap: () => showDialog(
+              context: context,
+              builder: ((context) => SimpleDialog(
+                    title: Text('Select Faculty'),
+                    children: facultyList
+                    .when(
+                     error: (error,stacktrce){
+                      logger.e(error.toString() 
+                     + stacktrce.toString(),);
+                     return [Text(error.toString()+ stacktrce.toString())];
+                     },
+
+                    loading: ()=> [Center(child: CircularProgressIndicator())],
+                    data: (List<Faculty> data){
+                    return   data.map((e) => SimpleDialogOption(
+                              child: Text(e.userId),
+                              onPressed: () {
+                                logger.i('you selected ${e.userId}');
+                                facultySelected=e;
+                                Navigator.of(context).pop();
+                              },
+                    )
+                            )
+                        .toList();},
+                            )
+
+                  )
+                  ),
+                  ),
+        ),
+      ),
+    );
+  }
+
+  selectedFacultyTile() {
+    return Card(
+      child: facultySelected!.userId != ''
+      ?Column(
+        children: [
+          facultySelected!.userId != ''
+              ? Text(facultySelected!.userId)
+              : Container(),
+          Row(
+            children: [
+              Text(facultySelected!.prefix),
+              facultySelected!.userId != ''
+                  ? Container()
+                  : Text(facultySelected!.firstName!),
+              facultySelected!.userId != ''
+                  ? Container()
+                  : Text(facultySelected!.lastName!),
+            ],
+          ),
+        ],
+      ):Container(),
+    );
+  }
+
   _pickSessionStartDat(BuildContext context)async {
     final newDate = await showDatePicker(
       context: context,
@@ -282,6 +482,41 @@ void initState() {
     }
   }
 
+      _pickRegistrationStartDate(BuildContext context) async {
+    final newDate = await showDatePicker(
+      context: context,
+      initialDate:
+          state.sessionStartDate?.subtract(Duration(days: 18)) ?? DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: state.sessionStartDate!.subtract(const Duration(days: 18)),
+    );
+    setState(() {
+      DateTime dateTime= newDate!;
+
+      state.registrationStartDate = newDate;
+    });
+  }
+
+      _pickRegistrationEndDate(BuildContext context) async {
+    final newDate = await showDatePicker(
+      context: context,
+      initialDate: state.registrationEndDate!=null?state.registrationEndDate as DateTime: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+    
+    setState(() {
+      state.registrationEndDate = newDate;
+      if (state.registrationEndDate == null) {
+        endDateString = '';
+      } else {
+        endDateString = DateFormat.yMMMEd('en-US').format(state.registrationEndDate as DateTime);
+      }
+     
+      endDateString=DateFormat.yMMMEd('en-US').format(state.registrationEndDate as DateTime);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     sessionNotifier= ref.read(newSessionNotifierProvider.notifier);
@@ -297,7 +532,9 @@ void initState() {
               textInputPanel(context),
               sessionDatesPanel(context),
               sessionDaysPanel(context),
+              facultySelectionPanel(context),
               registrationDatesPanel(context),
+              buttonBar(context),
 
 
             ],
@@ -306,133 +543,5 @@ void initState() {
       ),
     );
     
-  }
-  
-  registrationDatesPanel(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'Registration ',
-            style: Theme.of(context)
-                .textTheme
-                .headlineSmall
-                ?.copyWith(color: Theme.of(context).primaryColor),
-          ),
-        ),
-        // const SpacerVertical(4),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(child: buildRegStart()),
-            Expanded(child: buildRegEnd()),
-            // const SpacerVertical(8),
-          ],
-        ),
-        const SpacerVertical(16),
-        // buildFacultySelectionCard(context),
-      ],
-    );
-  }
-  
-  buildRegStart() =>Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text(
-            ' starts on ',
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
-          ),
-          // const SizedBox(width: 20),
-          const SpacerVertical(8),
-          InkWell(
-            child: state.registrationStartDate != null
-                ? Text(
-                    state.registrationStartDate != null
-                        ? DateFormat.yMMMEd('en-US').format(state.registrationStartDate! as DateTime)
-                        : 'Select Date',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(color: Theme.of(context).primaryColor),
-                  )
-                : const Icon(Icons.calendar_today_outlined),
-            onTap: () => _pickRegistrationStartDate(context),
-          ),
-        ],
-      ),
-    );
-    
-      _pickRegistrationStartDate(BuildContext context) async {
-    final newDate = await showDatePicker(
-      context: context,
-      initialDate:
-          state.sessionStartDate?.subtract(Duration(days: 18)) ?? DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: state.sessionStartDate!.subtract(const Duration(days: 18)),
-    );
-    setState(() {
-      DateTime dateTime= newDate!;
-
-      state.registrationStartDate = newDate;
-    });
-  }
-  
-  buildRegEnd() =>Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text(
-            ' Ends on  ',
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
-          ),
-          const SpacerVertical(8),
-          InkWell(
-            child: state.registrationEndDate != null
-                ? Text(endDateString,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(color: Theme.of(context).primaryColor))
-                : const Icon(Icons.calendar_today_rounded),
-            onTap: () => _pickRegistrationEndDate(context),
-          ),
-        ],
-      ),
-    );
-    
-      _pickRegistrationEndDate(BuildContext context) async {
-    final newDate = await showDatePicker(
-      context: context,
-      initialDate: state.registrationEndDate!=null?state.registrationEndDate as DateTime: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-    );
-    // TimeOfDay
-    final now = TimeOfDay.now();
-    final selectectedTime = await showTimePicker(
-      context: context,
-      initialTime:  now,
-    );
-    setState(() {
-      state.registrationEndDate = newDate as Timestamp?;
-      if (state.registrationEndDate == null) {
-        endDateString = '';
-      } else {
-        endDateString = DateFormat.yMMMEd('en-US').format(state.registrationEndDate as DateTime);
-      }
-      state.registrationEndDate = selectectedTime as Timestamp;
-
-      String temp = (state.registrationEndDate!as TimeOfDay) .format(context);
-      endDateString = endDateString! + ' --  ' + temp;
-    });
   }
 }
