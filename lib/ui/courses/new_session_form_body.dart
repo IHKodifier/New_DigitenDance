@@ -381,7 +381,7 @@ void initState() {
   }
 
   facultySelectionPanel(BuildContext context) {
-      final facultyList = ref.read(facultyListProvider);
+      final facultyList = ref.watch(facultyListProvider);
    return  Container(
       child: Card(
         child: InkWell(
@@ -428,25 +428,8 @@ void initState() {
 
   selectedFacultyTile() {
     return Card(
-      child: facultySelected!.userId != ''
-      ?Column(
-        children: [
-          facultySelected!.userId != ''
-              ? Text(facultySelected!.userId)
-              : Container(),
-          Row(
-            children: [
-              Text(facultySelected!.prefix),
-              facultySelected!.userId != ''
-                  ? Container()
-                  : Text(facultySelected!.firstName!),
-              facultySelected!.userId != ''
-                  ? Container()
-                  : Text(facultySelected!.lastName!),
-            ],
-          ),
-        ],
-      ):Container(),
+      child: facultySelected!.userId==null
+      ?Container(): Text(facultySelected!.prefix+' '+ facultySelected!.firstName! +' '+facultySelected!.lastName!),
     );
   }
 
