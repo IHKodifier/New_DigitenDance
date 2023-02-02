@@ -177,39 +177,35 @@ class HomeMenuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.20,
-        margin: const EdgeInsets.all(8),
-        height: 220,
-        child: InkWell(
-          // hoverColor: Colors.purple.shade300,
-          // splashColor: Colors.purple.shade100,
-          onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => CoursesPage()));
-          },
-          child: Card(
-            // shape: Bordersh(),
-            elevation: 25,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  iconData,
-                  color: Theme.of(context).iconTheme.color,
-                  size: 80,
-                ),
-                const SizedBox(
-                  height: 10,
-                  width: 100,
-                ),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-              ],
-            ),
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.20,
+      margin: const EdgeInsets.all(8),
+      height: 220,
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => CoursesPage()));
+        },
+        child: Card(
+          // shape: Bordersh(),
+          elevation: 25,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                iconData,
+                color: Theme.of(context).iconTheme.color,
+                size: 80,
+              ),
+              const SizedBox(
+                height: 10,
+                width: 100,
+              ),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.headline6,
+              ),
+            ],
           ),
         ),
       ),

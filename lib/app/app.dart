@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_digitendance/app/contants.dart';
@@ -37,13 +38,23 @@ class MyApp extends ConsumerWidget {
             breakpoints:_breakPoints,
           )),
       title: 'Digitendance 1.0',
+      themeMode: ThemeMode.dark,
    
-      theme: ThemeData(
-        // ),
-        colorSchemeSeed: const Color.fromARGB(255, 222, 6, 238),
-        brightness: brightnessState,
-        useMaterial3: true,
-      ),
+      theme: FlexColorScheme.light(scheme: FlexScheme.dellGenoa).toTheme,
+      darkTheme: FlexColorScheme.dark(scheme: FlexScheme.dellGenoa).toTheme,
+
+// ThemeData(
+//         // ),
+//         colorSchemeSeed: const Color.fromARGB(255, 222, 6, 238),
+//         brightness: brightnessState,
+//         useMaterial3: true,
+//       ),
+
+
+
+
+
+
 
       home: FutureBuilder(
         future: _initializeApp,

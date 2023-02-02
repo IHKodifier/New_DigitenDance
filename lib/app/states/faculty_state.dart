@@ -16,3 +16,5 @@ final facultyListProvider = StreamProvider<List<Faculty>>((ref) {
           (event) => event.docs.map((e) => Faculty.fromMap(e.data())).toList());
   return stream;
 });
+
+// staten

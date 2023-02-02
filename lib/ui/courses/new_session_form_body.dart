@@ -16,139 +16,144 @@ class NewSessionFormBody extends ConsumerStatefulWidget {
   const NewSessionFormBody({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _NewSessionFormBodyState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _NewSessionFormBodyState();
 }
 
 class _NewSessionFormBodyState extends ConsumerState<NewSessionFormBody> {
-  String endDateString='';
-  Faculty? facultySelected=Faculty(userId: '');
+  String endDateString = '';
+  // Faculty? selectedFaculty=Faculty(userId: '');
+  bool isFacultySelected = false;
   late final TextEditingController idController;
   final Logger logger = Logger(printer: PrettyPrinter());
-  late   SessionNotifier sessionNotifier;
-  late   Session state ;
+  late SessionNotifier sessionNotifier;
+  late Session state;
   late final TextEditingController titleController;
 
-  final _formKey=GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
-@override
-void initState() {
-  super.initState();
-  idController= TextEditingController();
-  titleController= TextEditingController();
-  
-}
+  @override
+  void initState() {
+    super.initState();
+    idController = TextEditingController();
+    titleController = TextEditingController();
+  }
 
   @override
   // TODO: implement ref
   WidgetRef get ref => super.ref;
 
   Padding formTitle(BuildContext context) => Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text('Create New Session',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: Theme.of(context).primaryColor,
-              )),
-          );
+        padding: const EdgeInsets.all(16.0),
+        child: Text('Create New Session',
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: Theme.of(context).primaryColor,
+                )),
+      );
 
-  textInputPanel(BuildContext context) =>Column(children: [
-    Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 8.0,
-      ),
-      child: TextFormField(
-        decoration: const InputDecoration(
-          hintText: 'Please enter the id for session',
-          label: Text('session Id'),
-        ),
-        controller: idController,
-        onSaved: (newValue) {
-          logger.i('Saving Session Id');
-          // newSession!.id = newValue;
-        },
-      ),
-    ),
-    Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: TextFormField(
-        decoration: const InputDecoration(
-          hintText: 'Please enter a Session Title',
-          label: Text('session Title'),
-        ),
-        controller: titleController,
-        onSaved: (newValue) {
-          logger.i('Saving Session Title');
-          // if (newSession != null) {
-          //   newSession!.title = newValue;
-          // }
-        },
-      ),
-    ),
-  ],);
-
-  sessionDatesPanel(BuildContext context) =>Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'Session Calendar ',
-            style: Theme.of(context)
-                .textTheme
-                .headlineSmall
-                ?.copyWith(color: Theme.of(context).primaryColor),
+  textInputPanel(BuildContext context) => Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8.0,
+            ),
+            child: TextFormField(
+              decoration: const InputDecoration(
+                hintText: 'Please enter the id for session',
+                label: Text('session Id'),
+              ),
+              controller: idController,
+              onSaved: (newValue) {
+                logger.i('Saving Session Id');
+                // newSession!.id = newValue;
+              },
+            ),
           ),
-        ),
-        // const SpacerVertical(4),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            buildSessionStart(context),
-            Flexible(child: Container()),
-            buildSessionEnd(context),
-            // const SpacerVertical(4),
-          ],
-        ),
-        const SpacerVertical(8),
-        // buildWeekdayChoices(),
-        const SpacerVertical(8),
-      ],
-    );
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: TextFormField(
+              decoration: const InputDecoration(
+                hintText: 'Please enter a Session Title',
+                label: Text('session Title'),
+              ),
+              controller: titleController,
+              onSaved: (newValue) {
+                logger.i('Saving Session Title');
+                // if (newSession != null) {
+                //   newSession!.title = newValue;
+                // }
+              },
+            ),
+          ),
+        ],
+      );
 
-      buildSessionStart(BuildContext context) =>Container(
-      child: Card(
-        elevation: 3,
-        margin: const EdgeInsets.all(8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              ' starts on ',
+  sessionDatesPanel(BuildContext context) => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Session Calendar ',
               style: Theme.of(context)
                   .textTheme
-                  .titleSmall
-                  ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
+                  .headlineSmall
+                  ?.copyWith(color: Theme.of(context).primaryColor),
             ),
-            const SpacerVertical(8),
-            InkWell(
-              child: state.sessionStartDate != null
-                  ? Text(
-                      state.sessionStartDate != null
-                          ? DateFormat.yMMMEd('en-US').format(state.sessionStartDate!)
-                          : 'Select Date',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(color: Theme.of(context).primaryColor),
-                    )
-                  : const Icon(Icons.calendar_today_outlined),
-              onTap: () => _pickSessionStartDat(context),
-            ),
-          ],
-        ),
-      ),
-    );
+          ),
+          // const SpacerVertical(4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              buildSessionStart(context),
+              Flexible(child: Container()),
+              buildSessionEnd(context),
+              // const SpacerVertical(4),
+            ],
+          ),
+          const SpacerVertical(8),
+          // buildWeekdayChoices(),
+          const SpacerVertical(8),
+        ],
+      );
 
-  buildSessionEnd(BuildContext context) { return Card(
+  buildSessionStart(BuildContext context) => Container(
+        child: Card(
+          elevation: 3,
+          margin: const EdgeInsets.all(8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                ' starts on ',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleSmall
+                    ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
+              ),
+              const SpacerVertical(8),
+              InkWell(
+                child: state.sessionStartDate != null
+                    ? Text(
+                        state.sessionStartDate != null
+                            ? DateFormat.yMMMEd('en-US')
+                                .format(state.sessionStartDate!)
+                            : 'Select Date',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(color: Theme.of(context).primaryColor),
+                      )
+                    : const Icon(Icons.calendar_today_outlined),
+                onTap: () => _pickSessionStartDat(context),
+              ),
+            ],
+          ),
+        ),
+      );
+
+  buildSessionEnd(BuildContext context) {
+    return Card(
       elevation: 3,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -173,7 +178,8 @@ void initState() {
           ),
         ],
       ),
-    );}
+    );
+  }
 
   sessionDaysPanel(BuildContext context) {
     return Column(
@@ -282,62 +288,63 @@ void initState() {
     );
   }
 
-  buildRegStart() =>Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text(
-            ' starts on ',
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
-          ),
-          // const SizedBox(width: 20),
-          const SpacerVertical(8),
-          InkWell(
-            child: state.registrationStartDate != null
-                ? Text(
-                    state.registrationStartDate != null
-                        ? DateFormat.yMMMEd('en-US').format(state.registrationStartDate! as DateTime)
-                        : 'Select Date',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(color: Theme.of(context).primaryColor),
-                  )
-                : const Icon(Icons.calendar_today_outlined),
-            onTap: () => _pickRegistrationStartDate(context),
-          ),
-        ],
-      ),
-    );
+  buildRegStart() => Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              ' starts on ',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall
+                  ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
+            ),
+            // const SizedBox(width: 20),
+            const SpacerVertical(8),
+            InkWell(
+              child: state.registrationStartDate != null
+                  ? Text(
+                      state.registrationStartDate != null
+                          ? DateFormat.yMMMEd('en-US')
+                              .format(state.registrationStartDate! as DateTime)
+                          : 'Select Date',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(color: Theme.of(context).primaryColor),
+                    )
+                  : const Icon(Icons.calendar_today_outlined),
+              onTap: () => _pickRegistrationStartDate(context),
+            ),
+          ],
+        ),
+      );
 
-  buildRegEnd() =>Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text(
-            ' Ends on  ',
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
-          ),
-          const SpacerVertical(8),
-          InkWell(
-            child: state.registrationEndDate != null
-                ? Text(endDateString,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(color: Theme.of(context).primaryColor))
-                : const Icon(Icons.calendar_today_rounded),
-            onTap: () => _pickRegistrationEndDate(context),
-          ),
-        ],
-      ),
-    );
+  buildRegEnd() => Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              ' Ends on  ',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall
+                  ?.copyWith(fontWeight: FontWeight.w400, fontSize: 16),
+            ),
+            const SpacerVertical(8),
+            InkWell(
+              child: state.registrationEndDate != null
+                  ? Text(endDateString,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(color: Theme.of(context).primaryColor))
+                  : const Icon(Icons.calendar_today_rounded),
+              onTap: () => _pickRegistrationEndDate(context),
+            ),
+          ],
+        ),
+      );
 
   buttonBar(BuildContext context) {
     return Row(
@@ -381,46 +388,56 @@ void initState() {
   }
 
   facultySelectionPanel(BuildContext context) {
-      final facultyList = ref.watch(facultyListProvider);
-   return  Container(
+    final facultyList = ref.watch(facultyListProvider);
+    return Container(
       child: Card(
         child: InkWell(
           child: Tooltip(
-              child: facultySelected?.userId == ''
+              child: state.faculty?.userId == ''
                   ? Text(
                       'click to select faculty',
                     )
                   : selectedFacultyTile(),
               message: 'click to select faculty'),
           onTap: () => showDialog(
-              context: context,
-              builder: ((context) => SimpleDialog(
-                    title: Text('Select Faculty'),
-                    children: facultyList
-                    .when(
-                     error: (error,stacktrce){
-                      logger.e(error.toString() 
-                     + stacktrce.toString(),);
-                     return [Text(error.toString()+ stacktrce.toString())];
-                     },
-
-                    loading: ()=> [Center(child: CircularProgressIndicator())],
-                    data: (List<Faculty> data){
-                    return   data.map((e) => SimpleDialogOption(
-                              child: Text(e.userId),
+            context: context,
+            builder: ((context) => SimpleDialog(
+                title: Text('Select Faculty'),
+                children: facultyList.when(
+                  error: (error, stacktrce) {
+                    logger.e(
+                      error.toString() + stacktrce.toString(),
+                    );
+                    return [Text(error.toString() + stacktrce.toString())];
+                  },
+                  loading: () => [Center(child: CircularProgressIndicator())],
+                  data: (List<Faculty> data) {
+//                     String str1= state.faculty!.firstName!.substring(0,1);
+// String str2= state.faculty!.lastName!.substring(0,1);
+                    String initials = 'fix this';
+                    
+                                
+                                  
+                    return data
+                        .map((e) => SimpleDialogOption(
+                              child: ListTile(
+                                leading: CircleAvatar(child: Text(
+                                  initials)),
+                                title: Text(e.userId)),
                               onPressed: () {
                                 logger.i('you selected ${e.userId}');
-                                facultySelected=e;
+                                sessionNotifier.setFaculty(e);
+                                // var newState = state.copyWith();
+                                // newState.faculty=e;
+                                // state=newState;
+                                // // state=state.copyWith();
                                 Navigator.of(context).pop();
                               },
-                    )
-                            )
-                        .toList();},
-                            )
-
-                  )
-                  ),
-                  ),
+                            ))
+                        .toList();
+                  },
+                ))),
+          ),
         ),
       ),
     );
@@ -428,15 +445,22 @@ void initState() {
 
   selectedFacultyTile() {
     return Card(
-      child: facultySelected!.userId==null
-      ?Container(): Text(facultySelected!.prefix+' '+ facultySelected!.firstName! +' '+facultySelected!.lastName!),
+      child: state.faculty?.userId == null
+          ? Container()
+          : Text(state.faculty!.prefix +
+              ' ' +
+              state.faculty!.firstName! +
+              ' ' +
+              state.faculty!.lastName!),
     );
   }
 
-  _pickSessionStartDat(BuildContext context)async {
+  _pickSessionStartDat(BuildContext context) async {
     final newDate = await showDatePicker(
       context: context,
-      initialDate: state.registrationStartDate==null? DateTime.now():state.registrationStartDate as DateTime,
+      initialDate: state.registrationStartDate == null
+          ? DateTime.now()
+          : state.registrationStartDate as DateTime,
       firstDate: DateTime(1900),
       lastDate: DateTime(2100),
     );
@@ -449,11 +473,12 @@ void initState() {
     }
   }
 
-      _pickSessionEndDate(BuildContext context) async {
+  _pickSessionEndDate(BuildContext context) async {
     final newDate = await showDatePicker(
       context: context,
       initialDate: state.sessionStartDate ?? DateTime.now(),
-      firstDate: state.sessionStartDate ?? (state.registrationEndDate! as DateTime).add(const Duration(days: 1)),
+      firstDate: state.sessionStartDate ??
+          (state.registrationEndDate! as DateTime).add(const Duration(days: 1)),
       lastDate: DateTime(2100),
     );
     if (newDate != null) {
@@ -465,45 +490,49 @@ void initState() {
     }
   }
 
-      _pickRegistrationStartDate(BuildContext context) async {
+  _pickRegistrationStartDate(BuildContext context) async {
     final newDate = await showDatePicker(
       context: context,
-      initialDate:
-          state.sessionStartDate?.subtract(Duration(days: 18)) ?? DateTime.now(),
+      initialDate: state.sessionStartDate?.subtract(Duration(days: 18)) ??
+          DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: state.sessionStartDate!.subtract(const Duration(days: 18)),
     );
     setState(() {
-      DateTime dateTime= newDate!;
+      DateTime dateTime = newDate!;
 
       state.registrationStartDate = newDate;
     });
   }
 
-      _pickRegistrationEndDate(BuildContext context) async {
+  _pickRegistrationEndDate(BuildContext context) async {
     final newDate = await showDatePicker(
       context: context,
-      initialDate: state.registrationEndDate!=null?state.registrationEndDate as DateTime: DateTime.now(),
+      initialDate: state.registrationEndDate != null
+          ? state.registrationEndDate as DateTime
+          : DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime(2100),
     );
-    
+
     setState(() {
       state.registrationEndDate = newDate;
       if (state.registrationEndDate == null) {
         endDateString = '';
       } else {
-        endDateString = DateFormat.yMMMEd('en-US').format(state.registrationEndDate as DateTime);
+        endDateString = DateFormat.yMMMEd('en-US')
+            .format(state.registrationEndDate as DateTime);
       }
-     
-      endDateString=DateFormat.yMMMEd('en-US').format(state.registrationEndDate as DateTime);
+
+      endDateString = DateFormat.yMMMEd('en-US')
+          .format(state.registrationEndDate as DateTime);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    sessionNotifier= ref.read(newSessionNotifierProvider.notifier);
-    state=ref.watch(newSessionNotifierProvider);
+    sessionNotifier = ref.read(newSessionNotifierProvider.notifier);
+    state = ref.watch(newSessionNotifierProvider);
 
     return Container(
       child: SingleChildScrollView(
@@ -511,20 +540,17 @@ void initState() {
           key: _formKey,
           child: Column(
             children: [
-              formTitle(context), 
+              formTitle(context),
               textInputPanel(context),
               sessionDatesPanel(context),
               sessionDaysPanel(context),
               facultySelectionPanel(context),
               registrationDatesPanel(context),
               buttonBar(context),
-
-
             ],
           ),
         ),
       ),
     );
-    
   }
 }
