@@ -42,18 +42,12 @@ class MyApp extends ConsumerWidget {
    
       theme: FlexColorScheme.light(scheme: FlexScheme.dellGenoa).toTheme,
       darkTheme: FlexColorScheme.dark(scheme: FlexScheme.dellGenoa).toTheme,
-
 // ThemeData(
 //         // ),
 //         colorSchemeSeed: const Color.fromARGB(255, 222, 6, 238),
 //         brightness: brightnessState,
 //         useMaterial3: true,
 //       ),
-
-
-
-
-
 
 
       home: FutureBuilder(

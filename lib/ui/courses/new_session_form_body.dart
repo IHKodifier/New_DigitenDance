@@ -22,9 +22,8 @@ class NewSessionFormBody extends ConsumerStatefulWidget {
 
 class _NewSessionFormBodyState extends ConsumerState<NewSessionFormBody> {
   String endDateString = '';
-  // Faculty? selectedFaculty=Faculty(userId: '');
-  bool isFacultySelected = false;
   late final TextEditingController idController;
+  bool isFacultySelected = false;
   final Logger logger = Logger(printer: PrettyPrinter());
   late SessionNotifier sessionNotifier;
   late Session state;
@@ -139,13 +138,11 @@ class _NewSessionFormBodyState extends ConsumerState<NewSessionFormBody> {
                             ? DateFormat.yMMMEd('en-US')
                                 .format(state.sessionStartDate!)
                             : 'Select Date',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge
-                            ?.copyWith(color: Theme.of(context).primaryColor),
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            color: Theme.of(context).colorScheme.primary),
                       )
                     : const Icon(Icons.calendar_today_outlined),
-                onTap: () => _pickSessionStartDat(context),
+                onTap: () => _pickSessionStartDate(context),
               ),
             ],
           ),
@@ -174,7 +171,9 @@ class _NewSessionFormBodyState extends ConsumerState<NewSessionFormBody> {
                         .titleLarge
                         ?.copyWith(color: Theme.of(context).primaryColor))
                 : const Icon(Icons.calendar_today_rounded),
-            onTap: () => _pickSessionEndDate(context),
+            onTap: () => state.sessionStartDate == null
+                ? null
+                : _pickSessionEndDate(context),
           ),
         ],
       ),
@@ -334,7 +333,7 @@ class _NewSessionFormBodyState extends ConsumerState<NewSessionFormBody> {
             const SpacerVertical(8),
             InkWell(
               child: state.registrationEndDate != null
-                  ? Text(endDateString,
+                  ? Text(DateFormat.yMMMEd('en-US').format(state.registrationEndDate!),
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge
@@ -393,9 +392,12 @@ class _NewSessionFormBodyState extends ConsumerState<NewSessionFormBody> {
       child: Card(
         child: InkWell(
           child: Tooltip(
-              child: state.faculty?.userId == ''
-                  ? Text(
-                      'click to select faculty',
+              child: state.faculty == null
+                  ? Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        'click to select faculty',
+                      ),
                     )
                   : selectedFacultyTile(),
               message: 'click to select faculty'),
@@ -412,25 +414,18 @@ class _NewSessionFormBodyState extends ConsumerState<NewSessionFormBody> {
                   },
                   loading: () => [Center(child: CircularProgressIndicator())],
                   data: (List<Faculty> data) {
-//                     String str1= state.faculty!.firstName!.substring(0,1);
-// String str2= state.faculty!.lastName!.substring(0,1);
+                    //TODO FIX CIRCLEAVATAR
                     String initials = 'fix this';
-                    
-                                
-                                  
+
                     return data
                         .map((e) => SimpleDialogOption(
                               child: ListTile(
-                                leading: CircleAvatar(child: Text(
-                                  initials)),
-                                title: Text(e.userId)),
+                                  leading: CircleAvatar(child: Text(initials)),
+                                  title: Text(e.userId)),
                               onPressed: () {
                                 logger.i('you selected ${e.userId}');
                                 sessionNotifier.setFaculty(e);
-                                // var newState = state.copyWith();
-                                // newState.faculty=e;
-                                // state=newState;
-                                // // state=state.copyWith();
+                                //
                                 Navigator.of(context).pop();
                               },
                             ))
@@ -455,14 +450,15 @@ class _NewSessionFormBodyState extends ConsumerState<NewSessionFormBody> {
     );
   }
 
-  _pickSessionStartDat(BuildContext context) async {
+  _pickSessionStartDate(BuildContext context) async {
+    var initialDate, firstDate, lastDate;
+    initialDate = DateTime.now().add(Duration(days: 15));
+
     final newDate = await showDatePicker(
       context: context,
-      initialDate: state.registrationStartDate == null
-          ? DateTime.now()
-          : state.registrationStartDate as DateTime,
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
+      initialDate: initialDate,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2999),
     );
     if (newDate != null) {
       setState(() {
@@ -474,12 +470,17 @@ class _NewSessionFormBodyState extends ConsumerState<NewSessionFormBody> {
   }
 
   _pickSessionEndDate(BuildContext context) async {
+    var initialDate, firstDate, lastDate;
+firstDate= state.sessionStartDate!=null?state.sessionStartDate!.add(Duration(days: 28)):DateTime.now();
+    initialDate = firstDate;
+    // firstDate = DateTime.now();
+    lastDate=DateTime(2100);
+
     final newDate = await showDatePicker(
       context: context,
-      initialDate: state.sessionStartDate ?? DateTime.now(),
-      firstDate: state.sessionStartDate ??
-          (state.registrationEndDate! as DateTime).add(const Duration(days: 1)),
-      lastDate: DateTime(2100),
+      initialDate: initialDate!,
+      firstDate: firstDate!,
+      lastDate: lastDate,
     );
     if (newDate != null) {
       setState(() {
@@ -491,41 +492,47 @@ class _NewSessionFormBodyState extends ConsumerState<NewSessionFormBody> {
   }
 
   _pickRegistrationStartDate(BuildContext context) async {
+    var initialDate, firstDate, lastDate;
+
+    firstDate = state.sessionStartDate != null
+        ? state.sessionStartDate?.subtract(Duration(days: 28))
+        : DateTime.now();
+    lastDate = state.sessionStartDate != null
+        ? state.sessionStartDate!.subtract(Duration(days: 15))
+        : DateTime.now();
+    initialDate = firstDate;
+
     final newDate = await showDatePicker(
       context: context,
-      initialDate: state.sessionStartDate?.subtract(Duration(days: 18)) ??
-          DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: state.sessionStartDate!.subtract(const Duration(days: 18)),
+      initialDate: initialDate!,
+      firstDate: firstDate!,
+      lastDate: lastDate,
     );
     setState(() {
       DateTime dateTime = newDate!;
 
-      state.registrationStartDate = newDate;
+      state.registrationStartDate = dateTime;
     });
   }
 
   _pickRegistrationEndDate(BuildContext context) async {
+    var firstDate;
+    var initialDate ;
+    var lastDate;
+    if (state.sessionStartDate != null) {
+      firstDate = state.registrationStartDate!.add(Duration(days: 15));
+      lastDate = state.sessionStartDate!.subtract(Duration(days: 1));
+    }
+initialDate=firstDate;
     final newDate = await showDatePicker(
       context: context,
-      initialDate: state.registrationEndDate != null
-          ? state.registrationEndDate as DateTime
-          : DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
+      initialDate: firstDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
     );
 
     setState(() {
       state.registrationEndDate = newDate;
-      if (state.registrationEndDate == null) {
-        endDateString = '';
-      } else {
-        endDateString = DateFormat.yMMMEd('en-US')
-            .format(state.registrationEndDate as DateTime);
-      }
-
-      endDateString = DateFormat.yMMMEd('en-US')
-          .format(state.registrationEndDate as DateTime);
     });
   }
 

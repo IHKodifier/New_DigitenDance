@@ -6,10 +6,13 @@ import 'package:new_digitendance/ui/shared/spacers.dart';
 import '../../app/states/pre_reqs_state.dart';
 
 class PreReqsEditor extends ConsumerWidget {
-  const PreReqsEditor({Key? key}) : super(key: key);
+   PreReqsEditor({Key? key}) : super(key: key);
+  var localContext;
 
   Widget availableGrid(BuildContext context, PreReqsEditingState state,
       PreReqsEditingNotifier notifier) {
+        localContext=context;
+
     return SizedBox(
       height: 100,
       child: GridView.count(
@@ -51,7 +54,7 @@ class PreReqsEditor extends ConsumerWidget {
           elevation: 5,
           child: InkWell(
             onTap: () => notifier.addPreReq(preReq: e),
-            hoverColor: Colors.green.shade200,
+            hoverColor: Theme.of(localContext).colorScheme.onSecondary,
             child: SizedBox(
               height: 100,
               child: Padding(
@@ -156,7 +159,7 @@ class PreReqsEditor extends ConsumerWidget {
       elevation: 10,
       margin: const EdgeInsets.all(8),
       surfaceTintColor: const Color.fromARGB(255, 242, 148, 225),
-      color: Colors.white70,
+      color: Theme.of(context).colorScheme.background,
       child: Container(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -229,7 +232,7 @@ class PreReqsHint extends ConsumerWidget {
       child: Text(
         'Tap on a preRequisite to add /remove',
         style: Theme.of(context).textTheme.subtitle1?.copyWith(
-              color: Colors.blueGrey.shade800,
+              color: Theme.of(context).colorScheme.primary,
             ),
       ),
     );

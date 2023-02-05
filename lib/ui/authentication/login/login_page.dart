@@ -30,9 +30,9 @@ class LoginPage extends ConsumerWidget {
         width: MediaQuery.of(context).size.width*.7,
         margin: EdgeInsets.all(32),
         child: Material(
-          color: Colors.purple.shade50,
+          // color: Colors.purple.shade50,
           elevation: 50,
-          shadowColor: Colors.black87,
+          // shadowColor: Colors.black87,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,

@@ -235,9 +235,9 @@ class SessionEditingCard extends ConsumerWidget {
       //
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Colors.white,
+          // color: Colors.white,
           border: Border.all(
-            color: Theme.of(localContext).primaryColor,
+            color: Theme.of(localContext).colorScheme.background,
             width: 3,
           )),
       child: Padding(

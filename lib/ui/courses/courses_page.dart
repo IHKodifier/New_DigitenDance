@@ -40,28 +40,19 @@ class CoursesPage extends ConsumerWidget {
         // centerTitle: true,
       ),
       body: CoursesList(),
-      floatingActionButton: FloatingActionButton.extended(
-        // backgroundColor: Theme.of(context).primaryColor,
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
           ref.refresh(institutionNotifierProvider);
           final courseNotifier = ref.watch(currentCourseProvider.notifier);
           navigateToAddCourse(context);
         },
-        label: Text(
-          'New Course',
-          style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                color: Colors.white,
-                // fontFamily: Goog¿,
-                fontSize: 22,
-              ),
-        ),
-        icon: const Icon(
+     
+        child: const Icon(
           Icons.add,
           size: 40,
         ),
       ),
-      // floatingActionButtonLocation:
-      // FloatingActionButtonLocation.miniCenterFloat,
+
     );
   }
 }

@@ -103,11 +103,14 @@ class AdminAppHomePage extends ConsumerWidget {
                       ),
                     ],
                   );
-        var logOutButton = ElevatedButton(
-                    onPressed: () {
-                      authNotifier.signOut();
-                    },
-                    child: const Text('Log out '));
+        var logOutButton = Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ElevatedButton(
+                      onPressed: () {
+                        authNotifier.signOut();
+                      },
+                      child: const Text('Log out ',style: TextStyle(fontSize: 20),)),
+        );
         return Scaffold(
         appBar: appBar,
         body: Center(

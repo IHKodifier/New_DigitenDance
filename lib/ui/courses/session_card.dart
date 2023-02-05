@@ -12,43 +12,39 @@ class SessionTile extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
       width: size.width/4.5,
-      color: Colors.deepPurple.shade50,
+      color: Theme.of(context).colorScheme.inversePrimary,
       // height: 250,
       margin: const EdgeInsets.all(8),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Material(
-          color: Colors.deepPurple.shade50,
-          elevation: 10,
-          child: Row(
+        child: Row(
+          children: [
+          CircleAvatar(
+            // color: Colors.red,
+            radius: size.width/30,
+            // width: size.height/6,
+            child: Align(
+              alignment: Alignment.center,
+              child: FittedBox(child: Text(state.id!))),
+            ),
+          Expanded(child: Container()),
+           Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-            CircleAvatar(
-              // color: Colors.red,
-              radius: size.width/30,
-              // width: size.height/6,
-              child: Align(
-                alignment: Alignment.center,
-                child: FittedBox(child: Text(state.id!))),
+              Text(state.title!,
+              style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).colorScheme.background,
+              fontWeight: FontWeight.bold),
+              
               ),
-            Expanded(child: Container()),
-             Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(state.title!,
-                style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.bold),
-                
-                ),
-                Text(state.faculty!.jobTitle!+' '+state.faculty!.firstName!,
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                  color: Theme.of(context).primaryColor,
-                ),),
-                Text(state.registrationStartDate!.toString()),
-                Text(state.title!),
-              ],
-                       ),
+              Text(state.faculty!.jobTitle!+' '+state.faculty!.firstName!,
+              style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                color: Theme.of(context).primaryColor,
+              ),),
+              Text(state.registrationStartDate!.toString()),
+              Text(state.title!),
+            ],
+                     ),
          ], ),
-        ),
       ),
     );
   }

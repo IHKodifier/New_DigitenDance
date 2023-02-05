@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:new_digitendance/app/apis/db_course.dart';
-import 'package:random_color/random_color.dart';
 
 import '../../app/models/course.dart';
 import 'dart:math' as math;
@@ -16,7 +15,6 @@ class CourseCard extends ConsumerWidget {
   final Course course;
   final log = Logger(printer: PrettyPrinter());
   late CourseNotifier notifier;
-  RandomColor randomColor = RandomColor();
   late Size size;
   double tileWidth = 150;    
 
@@ -29,8 +27,9 @@ class CourseCard extends ConsumerWidget {
         children: [
           Container(
             alignment: Alignment.center,
-            decoration: const BoxDecoration(
-              color: Colors.black87,
+            decoration:  BoxDecoration(
+              // color: Colors.black87,
+              color: Theme.of(context).colorScheme.inversePrimary,
               borderRadius: BorderRadius.only(
                 bottomRight: Radius.circular(10),
                 bottomLeft: Radius.circular(10),
@@ -131,10 +130,10 @@ class CourseCard extends ConsumerWidget {
   
     size = MediaQuery.of(context).size;
     log.i(course.toString());
-    Color bgColor = randomColor.randomColor(
-      colorBrightness: ColorBrightness.light,
-      colorSaturation: ColorSaturation.highSaturation,
-    );
+    // Color bgColor = randomColor.randomColor(
+    //   colorBrightness: ColorBrightness.light,
+    //   colorSaturation: ColorSaturation.highSaturation,
+    // );
     var width = MediaQuery.of(context).size.width;
     if (width > 800) {
       tileWidth = 250;
@@ -144,25 +143,20 @@ class CourseCard extends ConsumerWidget {
 
     return InkWell(
       onTap: () {
-        // final notifier = ref.read(currentCourseProvider.notifier);
         notifier.setCurrentCourse(course);
-        // DbCourse().getSessionsForCourse(ref);
-        // ref
-        //     .read(currentCourseProvider.notifier)
-        //     // .setSessiononCourseProvider(data, courseId);
-        //     .getSessionsforCurrentCourse();
+        
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (_) => CourseDetailsPage()));
       },
-      hoverColor: Theme.of(context).primaryColor,
+      hoverColor: Theme.of(context).colorScheme.onPrimaryContainer,
       child: Container(
         width: tileWidth,
         decoration: BoxDecoration(
-            color:
-                randomColor.randomColor(colorBrightness: ColorBrightness.light),
+            color:Theme.of(context).colorScheme.primary,
+                
             borderRadius: BorderRadius.circular(10),
             gradient: LinearGradient(
-                colors: [randomColor.randomColor(), Colors.black],
+                colors: [Theme.of(context).colorScheme.inversePrimary, Theme.of(context).primaryColor],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter)),
         height: 150,

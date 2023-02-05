@@ -66,7 +66,7 @@ class CouurseDetailsView extends ConsumerWidget {
           margin: const EdgeInsets.all(16),
           child: Material(
             elevation: 20,
-            shadowColor: Colors.black54,
+            // shadowColor: Theme.of(context).colorScheme,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -118,10 +118,10 @@ class SessionViewingCard extends ConsumerWidget {
         // height: 600,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Colors.white,
+            color: Theme.of(localContext).colorScheme.background,
             border: Border.all(
-              color: Theme.of(localContext).primaryColor,
-              width: 1,
+              color: Theme.of(localContext).colorScheme.background,
+              width: 0.3,
             )),
         child: Padding(
             padding: const EdgeInsets.all(16.0),
