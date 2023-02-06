@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:new_digitendance/app/models/faculty.dart';
+import 'package:new_digitendance/app/states/admin_state.dart';
+import 'package:new_digitendance/app/states/auth_state.dart';
 import 'package:new_digitendance/app/states/session_state.dart';
 
 import '../../app/models/session.dart';
@@ -65,6 +67,7 @@ class _NewSessionFormBodyState extends ConsumerState<NewSessionFormBody> {
               onSaved: (newValue) {
                 logger.i('Saving Session Id');
                 // newSession!.id = newValue;
+                state.id= newValue;
               },
             ),
           ),
@@ -78,9 +81,9 @@ class _NewSessionFormBodyState extends ConsumerState<NewSessionFormBody> {
               controller: titleController,
               onSaved: (newValue) {
                 logger.i('Saving Session Title');
-                // if (newSession != null) {
-                //   newSession!.title = newValue;
-                // }
+                if (state.title != null) {
+                  state.title = newValue;
+                }
               },
             ),
           ),
@@ -383,7 +386,20 @@ class _NewSessionFormBodyState extends ConsumerState<NewSessionFormBody> {
   }
 
   void onCreateSession() {
+if (_formKey.currentState!.validate()) {
+
     logger.i(state.toString());
+    ref.read(dbProvider).doc(
+      ref.read(currentCourseProvider).docRef!.path).collection('sessions').doc().set(state.toMap());
+
+
+  
+} else {
+  
+}
+
+
+
   }
 
   facultySelectionPanel(BuildContext context) {
