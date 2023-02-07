@@ -23,7 +23,7 @@ class Faculty extends Equatable {
   factory Faculty.minimalFromUserId(String userId) => Faculty(userId: userId);
 
   factory Faculty.fromMap(Map<String, dynamic> dataMap) {
-    List<SocialLink> social_links=[];
+    List<SocialLink> social_links=<SocialLink>[];
     for (var element in dataMap['links']) {
       social_links.add(SocialLink.fromMap(element));
       

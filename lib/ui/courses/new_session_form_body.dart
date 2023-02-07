@@ -81,9 +81,9 @@ class _NewSessionFormBodyState extends ConsumerState<NewSessionFormBody> {
               controller: titleController,
               onSaved: (newValue) {
                 logger.i('Saving Session Title');
-                if (state.title != null) {
+                
                   state.title = newValue;
-                }
+                
               },
             ),
           ),
@@ -385,12 +385,26 @@ class _NewSessionFormBodyState extends ConsumerState<NewSessionFormBody> {
     );
   }
 
-  void onCreateSession() {
+  void onCreateSession() async {
 if (_formKey.currentState!.validate()) {
+  _formKey.currentState!.save();
+  var data = state.toMap();
+  data['faculty']=state.faculty!.userId;
+  // ignore: unused_local_variable
+  int y=0;
+
 
     logger.i(state.toString());
-    ref.read(dbProvider).doc(
-      ref.read(currentCourseProvider).docRef!.path).collection('sessions').doc().set(state.toMap());
+    await ref.read(dbProvider)
+    .doc(
+      ref.read(currentCourseProvider).docRef!.path)
+      .collection('sessions')
+      // .doc()
+      .add(
+        data
+        );
+      // ignore: unused_local_variable
+      int x=0;
 
 
   
