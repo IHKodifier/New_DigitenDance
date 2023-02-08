@@ -390,7 +390,6 @@ if (_formKey.currentState!.validate()) {
   _formKey.currentState!.save();
   var data = state.toMap();
   data['faculty']=state.faculty!.userId;
-  // ignore: unused_local_variable
   int y=0;
 
 
@@ -399,7 +398,6 @@ if (_formKey.currentState!.validate()) {
     .doc(
       ref.read(currentCourseProvider).docRef!.path)
       .collection('sessions')
-      // .doc()
       .add(
         data
         );
@@ -490,20 +488,17 @@ if (_formKey.currentState!.validate()) {
       firstDate: DateTime.now(),
       lastDate: DateTime(2999),
     );
-    if (newDate != null) {
+   
       setState(() {
         state.sessionStartDate = newDate;
-      });
-    } else {
-      return null;
-    }
+      
+    } );
   }
 
   _pickSessionEndDate(BuildContext context) async {
     var initialDate, firstDate, lastDate;
 firstDate= state.sessionStartDate!=null?state.sessionStartDate!.add(Duration(days: 28)):DateTime.now();
     initialDate = firstDate;
-    // firstDate = DateTime.now();
     lastDate=DateTime(2100);
 
     final newDate = await showDatePicker(
@@ -512,13 +507,11 @@ firstDate= state.sessionStartDate!=null?state.sessionStartDate!.add(Duration(day
       firstDate: firstDate!,
       lastDate: lastDate,
     );
-    if (newDate != null) {
+  
       setState(() {
         state.sessionEndDate = newDate;
       });
-    } else {
-      return;
-    }
+    
   }
 
   _pickRegistrationStartDate(BuildContext context) async {

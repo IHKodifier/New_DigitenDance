@@ -114,6 +114,12 @@ class Session extends Equatable {
       result.addAll({'title': title});
     }
     // result.addAll({'parentCourseId': courseId});
+    if (sessionStartDate != null) {
+      result.addAll({'sessionStartDate': sessionStartDate});
+    }
+    if (sessionEndDate != null) {
+      result.addAll({'sessionEndDate': sessionEndDate});
+    }
     if (registrationStartDate != null) {
       result.addAll({'registrationStartDate': registrationStartDate});
     }
