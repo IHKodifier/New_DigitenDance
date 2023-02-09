@@ -394,6 +394,7 @@ if (_formKey.currentState!.validate()) {
 
 
     logger.i(state.toString());
+     final saveresult =
     await ref.read(dbProvider)
     .doc(
       ref.read(currentCourseProvider).docRef!.path)
@@ -402,7 +403,15 @@ if (_formKey.currentState!.validate()) {
         data
         );
       // ignore: unused_local_variable
-      int x=0;
+    if (saveresult!=null) {
+      //doc saved sucessfully
+      logger.i('doc saved successfully with id ${saveresult.toString()}');
+      Navigator.pop(context);
+      ref.refresh(sessionStreamProvider);
+      
+    } else {
+      
+    }
 
 
   
