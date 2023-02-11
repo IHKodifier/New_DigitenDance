@@ -21,7 +21,7 @@ class CoursesPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var brightnessNotifier = ref.read(themeBrightnessProvider.notifier);
+    var brightnessNotifier = ref.read(themeModeProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Digitendance > Courses'),

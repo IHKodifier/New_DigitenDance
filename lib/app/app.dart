@@ -17,8 +17,8 @@ class MyApp extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final brightnessNotifier = ref.read(themeBrightnessProvider.notifier);
-    var brightnessState = ref.watch(themeBrightnessProvider);
+    final brightnessNotifier = ref.read(themeModeProvider.notifier);
+    var themeModeState = ref.watch(themeModeProvider);
     var _breakPoints = [
       const ResponsiveBreakpoint.resize(480, name: MOBILE),
       const ResponsiveBreakpoint.autoScale(800, name: TABLET),
@@ -36,7 +36,7 @@ class MyApp extends ConsumerWidget {
             breakpoints: _breakPoints,
           )),
       title: 'Digitendance 1.0',
-      themeMode: ThemeMode.dark,
+      themeMode: themeModeState,
 
       theme: FlexThemeData.light(
   scheme: FlexScheme.verdunHemlock,

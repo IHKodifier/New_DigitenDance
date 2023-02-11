@@ -12,7 +12,7 @@ class NewCourse extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var brightnessNotifier = ref.watch(themeBrightnessProvider.notifier);
+    var brightnessNotifier = ref.watch(themeModeProvider.notifier);
     var preLoadedState = ref.read(currentCourseProvider);
     return Scaffold(
       appBar: AppBar(

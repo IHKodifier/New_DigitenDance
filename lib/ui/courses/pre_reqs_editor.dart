@@ -158,8 +158,8 @@ class PreReqsEditor extends ConsumerWidget {
     return Card(
       elevation: 10,
       margin: const EdgeInsets.all(8),
-      surfaceTintColor: const Color.fromARGB(255, 242, 148, 225),
-      color: Theme.of(context).colorScheme.background,
+      surfaceTintColor: Theme.of(context).colorScheme.secondaryContainer,
+      color: Theme.of(context).colorScheme.primaryContainer,
       child: Container(
         child: Column(
           mainAxisSize: MainAxisSize.min,

@@ -71,6 +71,7 @@ class _NewSessionFormBodyState extends ConsumerState<NewSessionFormBody> {
               },
             ),
           ),
+        SpacerVertical(20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: TextFormField(

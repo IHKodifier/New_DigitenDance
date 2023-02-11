@@ -10,10 +10,15 @@ import '../../../app/states/auth_state.dart';
 import '../../../app/states/authentication_notifier.dart';
 import '../../../app/states/institution_state.dart';
 import '../../../app/states/startup_state.dart';
-  final themeBrightnessProvider =
-      StateNotifierProvider<BrightnessNotifier, Brightness>((ref) {
-    return BrightnessNotifier(Brightness.light);
+  final themeModeProvider =
+      StateNotifierProvider<ThemeModeNotifier, ThemeMode>((ref) {
+    return ThemeModeNotifier(ThemeMode.system);
   });
+
+
+
+
+  
 class AdminAppHomePage extends ConsumerWidget {
   AdminAppHomePage({Key? key}) : super(key: key);
 
@@ -27,7 +32,7 @@ class AdminAppHomePage extends ConsumerWidget {
     thisRef = ref;
     // final allAdminCourses = ref.watch(allCoursesStreamProvider);
     final startupNotifier = ref.read(startupStateNotifierProvider.notifier);
-    final brightnessNotifier = ref.watch(themeBrightnessProvider.notifier);
+    final brightnessNotifier = ref.watch(themeModeProvider.notifier);
     AuthenticationNotifier authNotifier =
         thisRef.read(authenticationNotifierProvider.notifier);
     thisRef = ref;
@@ -149,23 +154,19 @@ class AdminAppHomePage extends ConsumerWidget {
   }
 }
 
-class BrightnessNotifier extends StateNotifier<Brightness> {
-  BrightnessNotifier(Brightness state) : super(state);
+class ThemeModeNotifier extends StateNotifier<ThemeMode> {
+  ThemeModeNotifier(ThemeMode state) : super(state);
 
   void toggleBrightness(BuildContext context) {
-    if (state == Brightness.light) {
-      var newState = state;
-      newState = Brightness.dark;
-      state = newState;
+    if (state == ThemeMode.light) {
+     
+      state = ThemeMode.dark;
     } else {
-      var newState = state;
-      newState = Brightness.light;
-      state = newState;
-
-
-
-
+      state = ThemeMode.light;
     }
+
+
+
   }
 }
 
