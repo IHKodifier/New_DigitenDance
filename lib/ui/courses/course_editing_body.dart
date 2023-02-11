@@ -181,17 +181,18 @@ class _CourseEditingBodyWidgetState
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      const SpacerVertical(50),
                       _courseIdField(),
-                      const SpacerVertical(15),
+                      const SpacerVertical(25),
 
                       ///[courseTitle FormField]
                       _courseTitleField(),
-                      const SpacerVertical(15),
+                      const SpacerVertical(25),
 
                       ///[courseCredits] Form Field
                       _coureseCreditsField(),
-                      const SpacerVertical(15),
-                      const SpacerVertical(15),
+                      const SpacerVertical(25),
+                      const SpacerVertical(25),
                       const PreReqsWidget(
                         mode: PreReqsWidgetMode.Editable,
                       ),

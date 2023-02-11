@@ -15,14 +15,15 @@ final sessionStreamProvider = StreamProvider<List<Session>>((ref)  {
 
 class SessionGrabber {
   SessionGrabber(this.ref){
+    var currentCourse = ref.watch(currentCourseProvider);
     Session session;
     final firebaseStream = ref
       .read(dbProvider)
-      .doc(ref.read(currentCourseProvider).docRef!.path)
+      .doc(currentCourse.docRef!.path)
       .collection('sessions')
       .snapshots();
-      final subscription = firebaseStream.listen(
-    // ignore: void_checks
+      final subscription = firebaseStream
+      .listen(
     (event) async {
       for (var doc in event.docs) {
         session = Session.fromMap(doc.data());
@@ -34,6 +35,7 @@ class SessionGrabber {
   _controller.sink.add(sessions);
     },
   );
+        // ref.read(currentCourseProvider.notifier).attachSessionsToCourse(sessions);
   }
 
   final StreamProviderRef ref;

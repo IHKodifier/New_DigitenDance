@@ -47,11 +47,12 @@ class CourseNotifier extends StateNotifier<Course> {
 
   void setCurrentCourse(Course course) {
     state = course;
-    ref.refresh(sessionStreamProvider);
+    // setSessionsOnCourse(ref.refresh(sessionStreamProvider).value!);
+    // state= state.copyWith();
   }
 
-  void setSessionsOnCourse(List<Session> sessions) {
-    state = ref.read(currentCourseProvider);
+  void attachSessionsToCourse(List<Session> sessions) {
+    // state = ref.read(currentCourseProvider);
     state.sessions = sessions;
     state = state.copyWith();
   }

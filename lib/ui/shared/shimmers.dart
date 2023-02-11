@@ -19,7 +19,7 @@ class ShimmerCard extends StatelessWidget {
           width: 292,
           height: 236,
           child: Card(
-            color: Theme.of(context).colorScheme.primaryContainer,
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
       ),

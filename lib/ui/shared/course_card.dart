@@ -1,7 +1,10 @@
+// ignore_for_file: unused_result
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:new_digitendance/app/apis/db_course.dart';
+import 'package:new_digitendance/app/states/session_state.dart';
 
 import '../../app/models/course.dart';
 import 'dart:math' as math;
@@ -29,7 +32,7 @@ class CourseCard extends ConsumerWidget {
             alignment: Alignment.center,
             decoration:  BoxDecoration(
               // color: Colors.black87,
-              color: Theme.of(context).colorScheme.inversePrimary,
+              color: Theme.of(context).colorScheme.primaryContainer,
               borderRadius: BorderRadius.only(
                 bottomRight: Radius.circular(10),
                 bottomLeft: Radius.circular(10),
@@ -50,7 +53,8 @@ class CourseCard extends ConsumerWidget {
       child: Text(
         course.id!,
         style: Theme.of(context).textTheme.bodyText2?.copyWith(
-            fontWeight: FontWeight.w900, fontSize: 22, color: Colors.yellow),
+            fontWeight: FontWeight.w900, fontSize: 22, 
+            color:Theme.of(context).colorScheme.onPrimaryContainer),
       ),
     );
   }
@@ -59,7 +63,7 @@ class CourseCard extends ConsumerWidget {
     return Text(
       '${course.credits.toString()} credits',
       style: Theme.of(context).textTheme.caption?.copyWith(
-            color: Colors.yellow,
+            color: Colors.black,
             fontSize: 16,
           ),
     );
@@ -80,8 +84,10 @@ class CourseCard extends ConsumerWidget {
               maxLines: 1,
               style: Theme.of(context)
                   .textTheme
-                  .bodyText1
-                  ?.copyWith(fontWeight: FontWeight.w700),
+                  .titleLarge,
+                  // ?.copyWith(fontWeight: FontWeight.w700,
+                  // color: Theme.of(context).colorScheme.onPrimary,
+                  // ),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -104,8 +110,8 @@ class CourseCard extends ConsumerWidget {
                 '${course.preReqs!.length.toString()} Pre-Requisites',
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText1
-                    ?.copyWith(color: Colors.white, fontSize: 14),
+                    .titleSmall
+                    ?.copyWith(color: Colors.deepPurple, fontSize: 14,fontWeight: FontWeight.w800),
               ),
             ),
             buildCredits(context),
@@ -117,10 +123,14 @@ class CourseCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     notifier = ref.read(currentCourseProvider.notifier);
     ref.listen(currentCourseProvider, (Course? previous, Course next) {
-      log.i('Listen hit fetchxxx');
+      // log.i('Listen hit fetchxxx');
       if (previous!=next) {
         ///refresh sessions
         log.i('WE HAVE DETECTEd  A CHANGE IN SELECTED  fetchxxx COURSE (from              ${previous!.id}              to          ${next.id} ');
+        log.i('the new current course is ${ref.read(currentCourseProvider).id}');
+       ref.invalidate(sessionStreamProvider);
+       ref.read(sessionStreamProvider);
+       
         
       } else {
         //do nothing
@@ -142,8 +152,10 @@ class CourseCard extends ConsumerWidget {
     }
 
     return InkWell(
-      onTap: () {
+      onTap: () async {
         notifier.setCurrentCourse(course);
+        ref.refresh(sessionStreamProvider);
+        // notifier.attachSessionsToCourse( ref.watch(sessionStreamProvider).value!);
         
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (_) => CourseDetailsPage()));
