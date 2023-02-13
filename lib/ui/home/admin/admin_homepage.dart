@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
+
 import 'package:new_digitendance/ui/authentication/login/login_page.dart';
 import 'package:new_digitendance/ui/courses/courses_page.dart';
 import 'package:new_digitendance/ui/shared/shimmers.dart';
@@ -10,7 +11,8 @@ import '../../../app/states/auth_state.dart';
 import '../../../app/states/authentication_notifier.dart';
 import '../../../app/states/institution_state.dart';
 import '../../../app/states/startup_state.dart';
-  final themeModeProvider =
+import '../faculty/faculty_page.dart';
+ final themeModeProvider =
       StateNotifierProvider<ThemeModeNotifier, ThemeMode>((ref) {
     return ThemeModeNotifier(ThemeMode.system);
   });
@@ -77,34 +79,53 @@ class AdminAppHomePage extends ConsumerWidget {
                     alignment: WrapAlignment.center,
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
-                      const HomeMenuCard(
+                       HomeMenuCard(
                         iconData: Icons.auto_stories,
                         title: 'Courses',
+                        onTap: (){ 
+                           Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => CoursesPage()));
+        },
                       ),
-                      const HomeMenuCard(
+                       HomeMenuCard(
                         // assetName: 'student.jpg',
                         iconData: Icons.people,
                         title: 'Students',
+                        onTap: (){  Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => CoursesPage()));
+        },
                       ),
-                      const HomeMenuCard(
+                       HomeMenuCard(
                         // assetName: 'faculty.png',
                         iconData: Icons.school,
                         title: 'Faculty',
+                        onTap: (){  Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => FacultyPage()));
+        },
                       ),
-                      const HomeMenuCard(
+                       HomeMenuCard(
                         // assetName: 'about.png',
                         iconData: Icons.info,
                         title: 'About Digitendance',
+                        onTap: (){  Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => CoursesPage()));
+        },
                       ),
-                      const HomeMenuCard(
+                       HomeMenuCard(
                         // assetName: 'settings.png',
                         iconData: Icons.settings,
                         title: 'Settings',
+                                     onTap: (){  Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => FacultyPage()));
+        },
                       ),
-                      const HomeMenuCard(
+                       HomeMenuCard(
                         // assetName: 'reports.jpg',
                         iconData: Icons.bar_chart_sharp,
                         title: 'Reports',
+                                     onTap: (){  Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => FacultyPage()));
+        },
                       ),
                     ],
                   );
@@ -171,8 +192,14 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
 }
 
 class HomeMenuCard extends StatelessWidget {
-  const HomeMenuCard({Key? key, required this.iconData, required this.title})
-      : super(key: key);
+  final VoidCallback onTap;
+  const HomeMenuCard({
+    Key? key,
+    required this.onTap,
+    required this.iconData,
+    required this.title,
+  }) : super(key: key);
+      
 
   // final String assetName;
   final IconData iconData;
@@ -186,10 +213,11 @@ class HomeMenuCard extends StatelessWidget {
       margin: const EdgeInsets.all(8),
       height: 220,
       child: InkWell(
-        onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => CoursesPage()));
-        },
+        onTap: onTap,
+        // () {
+        //   Navigator.of(context)
+        //       .push(MaterialPageRoute(builder: (context) => CoursesPage()));
+        // },
         child: Card(
           // shape: Bordersh(),
           elevation: 25,
