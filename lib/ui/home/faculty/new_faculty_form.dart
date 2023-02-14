@@ -51,42 +51,44 @@ class _NewFacultyFormState extends ConsumerState<NewFacultyForm> {
                   const _FormHeader(),
                   const Divider(thickness: 1),
                   Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        //     const PrefixMenu(),
-                        //     UserIdTextFormField(controller: userIdController),
-                        //   ],
-                        // ),
-                        // const Divider(thickness: 0.5),
-                        // const SpacerVertical(8),
-                        // FirstNameTextFormField(controller: firstNameController),
-                        // const Divider(thickness: 0.5),
-                        // const SpacerVertical(8),
-                        // LastNameTextFormField(controller: lastNameController),
-                        // const Divider(thickness: 0.5),
-                        // const SpacerVertical(8),
-                        // PhoneTextFormField(controller: phoneController),
-                        // const Divider(thickness: 0.5),
-                        // const SpacerVertical(8),
-                        Container(
-                          height: 150,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Icon(
-                                Icons.person,
-                                size: 100,
-                              ),
-                              Container(
-                                height: 250,
-                                width: 100,
-                                child: Text('text boxes go here.'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ]),
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Flexible(
+                        flex: 2,
+                        child: Container(
+                            // color: Colors.blue,
+                            child: const Icon(
+                          Icons.add_a_photo,
+                          size: 80,
+                        )),
+                      ),
+                      Flexible(
+                        flex: 4,
+                        child: Container(
+                            // color: Colors.red,
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            const PrefixMenu(),
+                            SizedBox(width: 40),
+                            Flexible(
+                                flex: 2,
+                                child: UserIdTextFormField(
+                                    controller: userIdController))
+                          ],
+                        )),
+                      ),
+                    ],
+                  ),
+                  FirstNameTextFormField(controller: firstNameController),
+                  const SpacerVertical(8),
+                  Divider(thickness: 0.8),
+                  const SpacerVertical(8),
+                  LastNameTextFormField(controller: lastNameController),
+                  const SpacerVertical(8),
+                  Divider(thickness: 0.8),
+                  const SpacerVertical(8),
+                  PhoneTextFormField(controller: phoneController),
                   // ),
                 ],
               ),
@@ -108,6 +110,7 @@ class _PrefixMenuState extends ConsumerState<PrefixMenu> {
     'Mrs',
     'Dr',
   ];
+
   String selectedPrefix = 'Mr';
 
   @override
@@ -267,28 +270,31 @@ class UserIdTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: 'user Id',
-        hintText: 'User Id for the new faculty',
-        hintStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
-            fontStyle: FontStyle.italic,
-            color: Theme.of(context).colorScheme.primary),
+    return Container(
+      // width: 200,
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: 'user Id',
+          hintText: 'User Id for the new faculty',
+          hintStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
+              fontStyle: FontStyle.italic,
+              color: Theme.of(context).colorScheme.primary),
 
-        // If  you are using latest version of flutter then lable text and hint text shown like this
-        // if you r using flutter less then 1.20.* then maybe this is not working properly
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Tooltip(
-          message: '''This is the user Id of the faculty you create
-             will be the UserId for the  faculty to login
-             ADMIN ROLE of the institution.appears evety where in the system''',
-          child: const Icon(Icons.person),
-          // height: 160,
-          textStyle: Theme.of(context)
-              .textTheme
-              .titleMedium!
-              .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+          // If  you are using latest version of flutter then lable text and hint text shown like this
+          // if you r using flutter less then 1.20.* then maybe this is not working properly
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          suffixIcon: Tooltip(
+            message: '''This is the user Id of the faculty you create
+               will be the UserId for the  faculty to login
+               ADMIN ROLE of the institution.appears evety where in the system''',
+            child: const Icon(Icons.person),
+            // height: 160,
+            textStyle: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+          ),
         ),
       ),
     );

@@ -84,9 +84,14 @@ class FacultyPage extends ConsumerWidget {
                           Row(children: [
                             Icon(
                               Icons.account_circle,
-                              size: 80,
+                              size: 100,
                             ),
-                            Text(e.firstName!),
+                            Container(
+                              height: 108,
+                              color: Colors.blue,
+
+                              child: Center(child: Text(e.firstName!))),
+                              Center(child: Text(e.lastName!)),
                           ]),
                         ],
                       ),
