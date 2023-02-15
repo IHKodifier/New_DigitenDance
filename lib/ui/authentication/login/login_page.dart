@@ -1,4 +1,3 @@
-import 'dart:js_util';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -10,24 +9,23 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginPage extends ConsumerWidget {
   const LoginPage({Key? key}) : super(key: key);
-  
-  get svgChild =>  Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: SvgPicture.asset(
-              'school.svg',
-              // height: 300,
-              // width: 800,
-              // color: Theme.of(context).primaryColor,
-              fit: BoxFit.contain,
-              
-            ),
-  );
+
+  get svgChild => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SvgPicture.asset(
+          'school.svg',
+          // height: 300,
+          // width: 800,
+          // color: Theme.of(context).primaryColor,
+          fit: BoxFit.contain,
+        ),
+      );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Center(
       child: Container(
-        width: MediaQuery.of(context).size.width*.7,
+        width: MediaQuery.of(context).size.width * .7,
         margin: EdgeInsets.all(32),
         child: Material(
           // color: Colors.purple.shade50,
@@ -38,16 +36,15 @@ class LoginPage extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SpacerVertical(10),
-              Expanded(
-                flex:10,
-                child: svgChild),
-             
+              Expanded(flex: 10, child: svgChild),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal:64),
+                padding: const EdgeInsets.symmetric(horizontal: 64),
                 child: const LoginForm(),
               ),
-              Expanded(child: Container(),
-              flex: 1,),
+              Expanded(
+                child: Container(),
+                flex: 1,
+              ),
             ],
           ),
         ),

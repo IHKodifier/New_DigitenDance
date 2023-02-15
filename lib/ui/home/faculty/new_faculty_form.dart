@@ -47,6 +47,7 @@ class _NewFacultyFormState extends ConsumerState<NewFacultyForm> {
               padding: const EdgeInsets.all(16),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const _FormHeader(),
                   const Divider(thickness: 1),
@@ -80,7 +81,16 @@ class _NewFacultyFormState extends ConsumerState<NewFacultyForm> {
                       ),
                     ],
                   ),
-                  FirstNameTextFormField(controller: firstNameController),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      JobTitleMenu(),
+                      Container(
+                          width: 200,
+                          child: FirstNameTextFormField(
+                              controller: firstNameController)),
+                    ],
+                  ),
                   const SpacerVertical(8),
                   Divider(thickness: 0.8),
                   const SpacerVertical(8),
@@ -90,6 +100,8 @@ class _NewFacultyFormState extends ConsumerState<NewFacultyForm> {
                   const SpacerVertical(8),
                   PhoneTextFormField(controller: phoneController),
                   const SpacerVertical(8),
+
+                  //ButtonBar
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -117,6 +129,49 @@ class _NewFacultyFormState extends ConsumerState<NewFacultyForm> {
                 ],
               ),
             )));
+  }
+}
+
+class JobTitleMenu extends ConsumerStatefulWidget {
+  const JobTitleMenu({super.key});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _JobTitleMenuState();
+}
+
+class _JobTitleMenuState extends ConsumerState<JobTitleMenu> {
+  List<String> titles = [
+    'Please Select',
+    'Professor',
+    'Assistant Professor',
+    'Associate Professor',
+    'Lecturer',
+    'Lab Scientist',
+    'Lab Technician',
+    'Teaching Assistant'
+  ];
+  String selectedJobTitle = 'Please Select';
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: DropdownButton<String>(
+        value: selectedJobTitle,
+        items: titles
+            .map(
+              (e) => DropdownMenuItem(
+                child: Text(e),
+                value: e,
+              ),
+            )
+            .toList(),
+        onChanged: (value) {
+          setState(() {
+            selectedJobTitle = value!;
+          });
+        },
+      ),
+    );
   }
 }
 
