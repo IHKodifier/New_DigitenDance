@@ -89,12 +89,12 @@ class FacultyPage extends ConsumerWidget {
                               size: 100,
                             ),
                             Container(
-                                height: 108,
-                                // color: Colors.blue,
+                              height: 108,
+                              // color: Colors.blue,
 
-                                child: Center(child: Text(e.prefix))),
-                            Center(child: Text(' ${e.firstName!}')),
-                            Center(child: Text(' ${e.lastName!}')),
+                              child: Center(child: Text(e.prefix!))),
+                              Center(child: Text(' ${e.firstName!}')),
+                              Center(child: Text('${ e.lastName!}')),
                           ]),
                           Text(e.jobTitle!),
                         ],

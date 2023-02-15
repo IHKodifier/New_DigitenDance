@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_digitendance/ui/shared/spacers.dart';
 
+import '../../authentication/login/login_form.dart';
+
 class NewFacultyForm extends ConsumerStatefulWidget {
   const NewFacultyForm({super.key});
 
@@ -38,69 +40,54 @@ class _NewFacultyFormState extends ConsumerState<NewFacultyForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-        elevation: 10,
-        insetPadding: const EdgeInsets.all(32),
-        child: Container(
-            width: MediaQuery.of(context).size.width * .45,
+    return LayoutBuilder(builder: (context,constraints)=>
+      Container(
+        width: constraints.maxWidth*.45,
+        child: Dialog(
+            elevation: 10,
+            insetPadding: const EdgeInsets.all(32),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const _FormHeader(),
                   const Divider(thickness: 1),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Flexible(
-                        flex: 2,
-                        child: Container(
-                            // color: Colors.blue,
-                            child: const Icon(
-                          Icons.add_a_photo,
-                          size: 80,
-                        )),
-                      ),
-                      Flexible(
-                        flex: 4,
-                        child: Container(
-                            // color: Colors.red,
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            const PrefixMenu(),
-                            SizedBox(width: 40),
-                            Flexible(
-                                flex: 2,
-                                child: UserIdTextFormField(
-                                    controller: userIdController))
-                          ],
-                        )),
+                      Placeholder(fallbackHeight: 180,
+                      fallbackWidth: 180,
+                      child: IconButton(icon: Icon(Icons.add_a_photo_outlined,size: 120,), onPressed: () {  },),),
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              PrefixMenu(),
+                              LayoutBuilder(builder: (context,constraints){
+                                double parentWidth = constraints.maxWidth;
+                                return SizedBox(width: parentWidth-16,
+                                height: 50,
+                                child: FirstNameTextFormField(controller: firstNameController),);
+                              }),
+                            ],
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      JobTitleMenu(),
-                      Container(
-                          width: 200,
-                          child: FirstNameTextFormField(
-                              controller: firstNameController)),
-                    ],
-                  ),
-                  const SpacerVertical(8),
-                  Divider(thickness: 0.8),
-                  const SpacerVertical(8),
-                  LastNameTextFormField(controller: lastNameController),
-                  const SpacerVertical(8),
-                  Divider(thickness: 0.8),
-                  const SpacerVertical(8),
-                  PhoneTextFormField(controller: phoneController),
-                  const SpacerVertical(8),
-
+                  SpacerVertical(12),
+                  Placeholder(fallbackHeight: 80,),
+                  SpacerVertical(12),
+                  Placeholder(fallbackHeight: 80,),
+                  SpacerVertical(12),
+                  Placeholder(fallbackHeight: 80,),
+                  SpacerVertical(12),
+          
+              
+          
                   //ButtonBar
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -109,26 +96,32 @@ class _NewFacultyFormState extends ConsumerState<NewFacultyForm> {
                           flex: 3,
                           child: Container(
                             width: double.infinity,
-                            child: ElevatedButton(
-                                onPressed: () {}, child: Text('Save')),
+                            child: OnHoverButton(
+                              child: ElevatedButton(
+                                  onPressed: () {}, child: Text('Save')),
+                            ),
                           )),
                       Flexible(
                           flex: 2,
                           child: Container(
                             width: double.infinity,
-                            child: TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text('Cancel')),
+                            child: OnHoverButton(
+                              child: TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('Cancel')),
+                            ),
                           )),
                     ],
                   ),
-
+          
                   // ),
                 ],
               ),
-            )));
+            )),
+      ),
+    );
   }
 }
 
@@ -273,6 +266,7 @@ class FirstNameTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final maxwidth = MediaQuery.of(context).size.width;
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
@@ -281,7 +275,7 @@ class FirstNameTextFormField extends StatelessWidget {
         hintStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
             fontStyle: FontStyle.italic,
             color: Theme.of(context).colorScheme.primary),
-
+    
         // If  you are using latest version of flutter then lable text and hint text shown like this
         // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
