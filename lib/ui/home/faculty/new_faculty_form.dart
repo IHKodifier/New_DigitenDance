@@ -89,6 +89,30 @@ class _NewFacultyFormState extends ConsumerState<NewFacultyForm> {
                   Divider(thickness: 0.8),
                   const SpacerVertical(8),
                   PhoneTextFormField(controller: phoneController),
+                  const SpacerVertical(8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Flexible(
+                          flex: 3,
+                          child: Container(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                                onPressed: () {}, child: Text('Save')),
+                          )),
+                      Flexible(
+                          flex: 2,
+                          child: Container(
+                            width: double.infinity,
+                            child: TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('Cancel')),
+                          )),
+                    ],
+                  ),
+
                   // ),
                 ],
               ),
