@@ -41,84 +41,115 @@ class _NewFacultyFormState extends ConsumerState<NewFacultyForm> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context,constraints)=>
-      Container(
+      SizedBox(
         width: constraints.maxWidth*.45,
         child: Dialog(
             elevation: 10,
             insetPadding: const EdgeInsets.all(32),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const _FormHeader(),
-                  const Divider(thickness: 1),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Placeholder(fallbackHeight: 180,
-                      fallbackWidth: 180,
-                      child: IconButton(icon: Icon(Icons.add_a_photo_outlined,size: 120,), onPressed: () {  },),),
-                      Column(
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const _FormHeader(),
+                const Divider(thickness: 1),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Placeholder(fallbackHeight: 180,
+                    fallbackWidth: 180,
+                    child: IconButton(icon: const Icon(Icons.add_a_photo_outlined,size: 120,), onPressed: () {  },),),
+                    Column(
+                      children: [
+                       LayoutBuilder(
+                         builder: (BuildContext context, BoxConstraints constraints) {
+                           return SizedBox(
+                            width: constraints.maxWidth,
+                             child: Row(
+                                                     mainAxisSize: MainAxisSize.min,
+                                                     mainAxisAlignment: MainAxisAlignment.start,
+                                                     children: [
+                              //prefix menu
                               PrefixMenu(),
+                              //firstNameTextFormField
                               LayoutBuilder(builder: (context,constraints){
                                 double parentWidth = constraints.maxWidth;
-                                return SizedBox(width: parentWidth-16,
+                                return SizedBox(
+                                  width: parentWidth*.75,
                                 height: 50,
                                 child: FirstNameTextFormField(controller: firstNameController),);
                               }),
-                            ],
+                                                     ],
+                                                   ),
+                           );
+                         },
+                       ),
+                        
+
+
+                          Row(
+                          mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            //Job Title menu
+                            JobTitleMenu(),
+                            //LastTextFormField
+                            LayoutBuilder(builder: (context,constraints){
+                              double parentWidth = constraints.maxWidth;
+                              return SizedBox(width: 400,
+                              height: 50,
+                              child: LastNameTextFormField(controller: lastNameController),);
+                            }),
+                          ],
+                        ),
+
+                      ],
+                    ),
+                  ],
+                ),
+                SpacerVertical(12),
+                //LastName TextFormField
+                Placeholder(fallbackHeight: 80,child:LastNameTextFormField(controller: lastNameController) ,),
+                SpacerVertical(12),
+                //PhoneTextFormField
+                Placeholder(fallbackHeight: 80,child: PhoneTextFormField(controller: phoneController),),
+                SpacerVertical(12),
+                JobTitleMenu(),
+                Placeholder(fallbackHeight: 80,),
+                SpacerVertical(12),
+          
+            
+          
+                //ButtonBar
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(
+                        flex: 3,
+                        child: Container(
+                          width: double.infinity,
+                          child: OnHoverButton(
+                            child: ElevatedButton(
+                                onPressed: () {}, child: Text('Save')),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SpacerVertical(12),
-                  Placeholder(fallbackHeight: 80,),
-                  SpacerVertical(12),
-                  Placeholder(fallbackHeight: 80,),
-                  SpacerVertical(12),
-                  Placeholder(fallbackHeight: 80,),
-                  SpacerVertical(12),
+                        )),
+                    Flexible(
+                        flex: 2,
+                        child: Container(
+                          width: double.infinity,
+                          child: OnHoverButton(
+                            child: TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('Cancel')),
+                          ),
+                        )),
+                  ],
+                ),
           
-              
-          
-                  //ButtonBar
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Flexible(
-                          flex: 3,
-                          child: Container(
-                            width: double.infinity,
-                            child: OnHoverButton(
-                              child: ElevatedButton(
-                                  onPressed: () {}, child: Text('Save')),
-                            ),
-                          )),
-                      Flexible(
-                          flex: 2,
-                          child: Container(
-                            width: double.infinity,
-                            child: OnHoverButton(
-                              child: TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text('Cancel')),
-                            ),
-                          )),
-                    ],
-                  ),
-          
-                  // ),
-                ],
-              ),
+                // ),
+              ],
             )),
       ),
     );
@@ -267,28 +298,30 @@ class FirstNameTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final maxwidth = MediaQuery.of(context).size.width;
-    return TextFormField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: ' First Name',
-        hintText: 'First  name of the new Faculty member',
-        hintStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
-            fontStyle: FontStyle.italic,
-            color: Theme.of(context).colorScheme.primary),
-    
-        // If  you are using latest version of flutter then lable text and hint text shown like this
-        // if you r using flutter less then 1.20.* then maybe this is not working properly
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Tooltip(
-          message: '''This is the First Name of the faculty you create
-             will be the UserId for the  faculty to login
-             ADMIN ROLE of the institution.appears evety where in the system''',
-          child: const Icon(Icons.person),
-          // height: 160,
-          textStyle: Theme.of(context)
-              .textTheme
-              .titleMedium!
-              .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+    return Expanded(
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: ' First Name',
+          hintText: 'First  name of the new Faculty member',
+          hintStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
+              fontStyle: FontStyle.italic,
+              color: Theme.of(context).colorScheme.primary),
+      
+          // If  you are using latest version of flutter then lable text and hint text shown like this
+          // if you r using flutter less then 1.20.* then maybe this is not working properly
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          suffixIcon: Tooltip(
+            message: '''This is the First Name of the faculty you create
+               will be the UserId for the  faculty to login
+               ADMIN ROLE of the institution.appears evety where in the system''',
+            child: const Icon(Icons.person),
+            // height: 160,
+            textStyle: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+          ),
         ),
       ),
     );
@@ -305,28 +338,30 @@ class LastNameTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: ' Last Name',
-        hintText: 'Last name of the new Faculty member',
-        hintStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
-            fontStyle: FontStyle.italic,
-            color: Theme.of(context).colorScheme.primary),
-
-        // If  you are using latest version of flutter then lable text and hint text shown like this
-        // if you r using flutter less then 1.20.* then maybe this is not working properly
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Tooltip(
-          message: '''This is the Last Name of the faculty you create
-             will be the UserId for the  faculty to login
-             ADMIN ROLE of the institution.appears evety where in the system''',
-          child: const Icon(Icons.person),
-          // height: 160,
-          textStyle: Theme.of(context)
-              .textTheme
-              .titleMedium!
-              .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+    return Expanded(
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: ' Last Name',
+          hintText: 'Last name of the new Faculty member',
+          hintStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
+              fontStyle: FontStyle.italic,
+              color: Theme.of(context).colorScheme.primary),
+    
+          // If  you are using latest version of flutter then lable text and hint text shown like this
+          // if you r using flutter less then 1.20.* then maybe this is not working properly
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          suffixIcon: Tooltip(
+            message: '''This is the Last Name of the faculty you create
+               will be the UserId for the  faculty to login
+               ADMIN ROLE of the institution.appears evety where in the system''',
+            child: const Icon(Icons.person),
+            // height: 160,
+            textStyle: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+          ),
         ),
       ),
     );
