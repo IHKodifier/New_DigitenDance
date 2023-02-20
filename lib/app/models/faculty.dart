@@ -15,6 +15,7 @@ class Faculty extends Equatable {
     this.jobTitle,
     this.prefix = 'Mr.',
     this.phone = 'Not available',
+    this.bio='bio not created by user',
     this.links = const [],
   });
 
@@ -36,6 +37,7 @@ class Faculty extends Equatable {
         photoURL: dataMap['photoURL'],
         jobTitle: dataMap['jobTitle'],
         prefix: dataMap['prefix'],
+        bio: dataMap['bio'],
         docRef: DbApi().documentReferenceFromStringPath(dataMap['docRef'].path),
         phone: dataMap['phone'],
         links: social_links);
@@ -45,6 +47,7 @@ class Faculty extends Equatable {
   late DocumentReference? docRef;
   String? firstName;
   late String? jobTitle;
+  late String? bio;
   late String? lastName;
   late String? photoURL;
   final String prefix;
@@ -58,7 +61,7 @@ class Faculty extends Equatable {
 
   @override
   String toString() {
-    return 'Faculty(userId: $userId, $prefix firstName: $firstName $jobTitle, photoURL: $photoURL, docRef: $docRef),phone $phone links $links';
+    return 'Faculty(userId: $userId, $prefix firstName: $firstName $jobTitle, photoURL: $photoURL, docRef: $docRef),phone $phone links $links bio $bio' ;
   }
 
   static Faculty initial() {
@@ -97,6 +100,7 @@ class Faculty extends Equatable {
     final result = <String, dynamic>{};
 
     result.addAll({'userId': userId});
+    result.addAll({'bio':bio});
     if (firstName != null) {
       result.addAll({'firstName': firstName});
     }

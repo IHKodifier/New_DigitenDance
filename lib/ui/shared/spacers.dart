@@ -6,7 +6,7 @@ class SpacerVertical extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(height: value,width: 150,);
+    return SizedBox(height: value,width: 0,);
   }
 }
 
@@ -21,8 +21,8 @@ class SpacerHorizontal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: value,
-      width: 150,
+      height: 0,
+      width: value,
     );
   }
 }

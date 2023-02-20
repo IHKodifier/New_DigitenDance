@@ -1,6 +1,6 @@
 {
     "search.useIgnoreFiles": false,
-    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.fontSize": 16,
     "terminal.integrated.fontFamily": "monospace",
     "editor.fontSize": 18,
     "editor.fontLigatures": false,

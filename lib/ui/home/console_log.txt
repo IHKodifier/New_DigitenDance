@@ -1,0 +1,43 @@
+══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞═══════════════════════════════════════════════════════════
+The following assertion was thrown while applying parent data.:
+Incorrect use of ParentDataWidget.
+The ParentDataWidget Expanded(flex: 1) wants to apply ParentData of type FlexParentData to a
+RenderObject, which has been set up to accept ParentData of incompatible type ParentData.
+Usually, this means that the Expanded widget has the wrong ancestor RenderObjectWidget. Typically,
+Expanded widgets are placed directly inside Flex widgets.
+The offending Expanded is currently placed inside a CustomPaint widget.
+The ownership chain for the RenderObject that received the incompatible parent data was:
+  MouseRegion ← TextField ← UnmanagedRestorationScope ← TextFormField ← Expanded ←
+LastNameTextFormField ← CustomPaint ← LimitedBox ← Placeholder ← Column ← ⋯
+When the exception was thrown, this was the stack:
+C:/b/s/w/ir/cache/builder/src/out/host_debug/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/errors.dart 266:49      throw_
+packages/flutter/src/widgets/framework.dart 6119:11                                                                            <fn>
+packages/flutter/src/widgets/framework.dart 6135:14                                                                            [_updateParentData]
+packages/flutter/src/widgets/framework.dart 6159:7                                                                             attachRenderObject
+packages/flutter/src/widgets/framework.dart 5828:5                                                                             mount
+packages/flutter/src/widgets/framework.dart 6376:11                                                                            mount
+packages/flutter/src/widgets/framework.dart 3953:15                                                                            inflateWidget
+packages/flutter/src/widgets/framework.dart 3682:18                                                                            updateChild
+packages/flutter/src/widgets/framework.dart 4993:16                                                                            performRebuild
+packages/flutter/src/widgets/framework.dart 5133:11                                                                            performRebuild
+packages/flutter/src/widgets/framework.dart 4690:5                                                                             rebuild
+packages/flutter/src/widgets/framework.dart 4950:5                                                                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5124:11                                                                            [_firstBuild]
+packages/flutter/src/widgets/framework.dart 4944:5                                                                             mount
+packages/flutter/src/widgets/framework.dart 3953:15                                                                            inflateWidget
+packages/flutter/src/widgets/framework.dart 3682:18                                                                            updateChild
+packages/flutter/src/widgets/framework.dart 4993:16                                                                            performRebuild
+packages/flutter/src/widgets/framework.dart 4690:5                                                                             rebuild
+packages/flutter/src/widgets/framework.dart 4950:5                                                                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 4944:5                                                                             mount
+packages/flutter/src/widgets/framework.dart 3953:15                                                                            inflateWidget
+packages/flutter/src/widgets/framework.dart 3682:18                                                                            updateChild
+packages/flutter/src/widgets/framework.dart 4993:16                                                                            performRebuild
+packages/flutter/src/widgets/framework.dart 5133:11                                                                            performRebuild
+packages/flutter/src/widgets/framework.dart 4690:5                                                                             rebuild
+packages/flutter/src/widgets/framework.dart 4950:5                                                                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5124:11                                                                            [_firstBuild]
+packages/flutter/src/widgets/framework.dart 4944:5                                                                             mount
+packages/flutter/src/widgets/framework.dart 3953:15                                                                            inflateWidget
+packages/flutter/src/widgets/framework.dart 3682:18                                                                            updateChild
+packages/flutter/src/widgets/framework.dart 4993:16                                                                            performRebuild

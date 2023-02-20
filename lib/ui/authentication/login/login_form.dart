@@ -104,7 +104,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             hintText: "Enter your email",
             // If  you are using latest version of flutter then lable text and hint text shown like this
             // if you r using flutter less then 1.20.* then maybe this is not working properly
-            floatingLabelBehavior: FloatingLabelBehavior.always,
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
             suffixIcon: Icon(Icons.email)),
       ),
     );
@@ -127,7 +127,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
           // If  you are using latest version of flutter then lable text and hint text shown like this
           // if you r using flutter less then 1.20.* then maybe this is not working properly
-          floatingLabelBehavior: FloatingLabelBehavior.always,
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
           suffixIcon: IconButton(
             splashColor: Theme.of(context).primaryColor.withOpacity(0.3),
             onPressed: () {
@@ -208,7 +208,7 @@ class _OnHoverButtonState extends State<OnHoverButton> {
 
   @override
   Widget build(BuildContext context) {
-  final hoveredTransform = Matrix4.identity()..translate(8,-8,0)..scale(1.05);
+  final hoveredTransform = Matrix4.identity()..translate(0,-10,0)..scale(1.05);
   final  transform = isHovered ? hoveredTransform:Matrix4.identity();
     return MouseRegion(
         onEnter: (event) => onMouseEntered(true),

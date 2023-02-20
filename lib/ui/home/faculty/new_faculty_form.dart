@@ -1,8 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:new_digitendance/app/models/faculty.dart';
+import 'package:new_digitendance/app/states/admin_state.dart';
 import 'package:new_digitendance/ui/shared/spacers.dart';
 
 import '../../authentication/login/login_form.dart';
+
+final newFacultyProvider = StateNotifierProvider<FacultyNotifier,Faculty>((ref) {
+  return FacultyNotifier(Faculty.initial());
+});
+
+class FacultyNotifier  extends StateNotifier<Faculty>{
+  FacultyNotifier(super.state);
+  void setUserId({required String userId}){
+    state=state.copyWith(userId: userId);
+  }
+  void setPhone({required String value}){
+    state=state.copyWith(phone: value);
+  }
+  
+}
+
 
 class NewFacultyForm extends ConsumerStatefulWidget {
   const NewFacultyForm({super.key});
@@ -12,6 +30,7 @@ class NewFacultyForm extends ConsumerStatefulWidget {
 }
 
 class _NewFacultyFormState extends ConsumerState<NewFacultyForm> {
+  late TextEditingController bioController;
   late TextEditingController firstNameController;
   late TextEditingController lastNameController;
   late TextEditingController phoneController;
@@ -24,6 +43,7 @@ class _NewFacultyFormState extends ConsumerState<NewFacultyForm> {
     firstNameController.dispose();
     phoneController.dispose();
     lastNameController.dispose();
+    bioController.dispose();
     super.dispose();
   }
 
@@ -35,124 +55,107 @@ class _NewFacultyFormState extends ConsumerState<NewFacultyForm> {
     firstNameController = TextEditingController();
     lastNameController = TextEditingController();
     phoneController = TextEditingController();
+    bioController = TextEditingController();
     var _formKey = GlobalKey<FormState>();
   }
 
+
+
+    var state  ;
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context,constraints)=>
-      SizedBox(
-        width: constraints.maxWidth*.45,
+    state= ref.watch(newFacultyProvider);
+    return LayoutBuilder(
+      builder: (context, constraints) => SizedBox(
+        width: constraints.maxWidth * .45,
         child: Dialog(
             elevation: 10,
-            insetPadding: const EdgeInsets.all(32),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const _FormHeader(),
-                const Divider(thickness: 1),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Placeholder(fallbackHeight: 180,
-                    fallbackWidth: 180,
-                    child: IconButton(icon: const Icon(Icons.add_a_photo_outlined,size: 120,), onPressed: () {  },),),
-                    Column(
-                      children: [
-                       LayoutBuilder(
-                         builder: (BuildContext context, BoxConstraints constraints) {
-                           return SizedBox(
-                            width: constraints.maxWidth,
-                             child: Row(
-                                                     mainAxisSize: MainAxisSize.min,
-                                                     mainAxisAlignment: MainAxisAlignment.start,
-                                                     children: [
-                              //prefix menu
-                              PrefixMenu(),
-                              //firstNameTextFormField
-                              LayoutBuilder(builder: (context,constraints){
-                                double parentWidth = constraints.maxWidth;
-                                return SizedBox(
-                                  width: parentWidth*.75,
-                                height: 50,
-                                child: FirstNameTextFormField(controller: firstNameController),);
-                              }),
-                                                     ],
-                                                   ),
-                           );
-                         },
-                       ),
-                        
-
-
-                          Row(
-                          mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            //Job Title menu
-                            JobTitleMenu(),
-                            //LastTextFormField
-                            LayoutBuilder(builder: (context,constraints){
-                              double parentWidth = constraints.maxWidth;
-                              return SizedBox(width: 400,
-                              height: 50,
-                              child: LastNameTextFormField(controller: lastNameController),);
-                            }),
-                          ],
-                        ),
-
-                      ],
+            insetPadding: const EdgeInsets.all(48),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const _FormHeader(),
+                  const Divider(thickness: 1),
+                  UserIdTextFormField(controller: userIdController),
+                  SpacerVertical(24),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.add_a_photo_outlined,
+                      size: 120,
                     ),
-                  ],
-                ),
-                SpacerVertical(12),
-                //LastName TextFormField
-                Placeholder(fallbackHeight: 80,child:LastNameTextFormField(controller: lastNameController) ,),
-                SpacerVertical(12),
-                //PhoneTextFormField
-                Placeholder(fallbackHeight: 80,child: PhoneTextFormField(controller: phoneController),),
-                SpacerVertical(12),
-                JobTitleMenu(),
-                Placeholder(fallbackHeight: 80,),
-                SpacerVertical(12),
-          
-            
-          
-                //ButtonBar
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Flexible(
-                        flex: 3,
-                        child: Container(
+                    onPressed: () {},
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const PrefixMenu(),
+                      SpacerHorizontal(24),
+                      FirstNameTextFormField(controller: firstNameController),
+                      SpacerHorizontal(12),
+                      LastNameTextFormField(controller: lastNameController),
+                    ],
+                  ),
+                  const SpacerVertical(24),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Job Title',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      SpacerHorizontal(36),
+                      JobTitleMenu(),
+                    ],
+                  ),
+                  const SpacerVertical(24),
+                  PhoneTextFormField( phoneController),
+                  const SpacerVertical(24),
+
+                  // const SpacerVertical(24),
+                  BioTextFormField(controller: bioController),
+                  //ButtonBar
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Flexible(
+                            // flex: 3,
+                            child: Container(
                           width: double.infinity,
                           child: OnHoverButton(
                             child: ElevatedButton(
-                                onPressed: () {}, child: Text('Save')),
+                                onPressed: createNewFaculty, child: const Text('Save')),
                           ),
                         )),
-                    Flexible(
-                        flex: 2,
-                        child: Container(
+                        Flexible(
+                            // flex: 2,
+                            child: Container(
                           width: double.infinity,
                           child: OnHoverButton(
                             child: TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: Text('Cancel')),
+                                child: const Text('Cancel')),
                           ),
                         )),
-                  ],
-                ),
-          
-                // ),
-              ],
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             )),
       ),
     );
+  }
+
+  void createNewFaculty() {
+    //TODO  savr the form
+    log.i('save button was clicked phone = ${state.phone}');
   }
 }
 
@@ -164,6 +167,7 @@ class JobTitleMenu extends ConsumerStatefulWidget {
 }
 
 class _JobTitleMenuState extends ConsumerState<JobTitleMenu> {
+  String selectedJobTitle = 'Please Select';
   List<String> titles = [
     'Please Select',
     'Professor',
@@ -174,7 +178,6 @@ class _JobTitleMenuState extends ConsumerState<JobTitleMenu> {
     'Lab Technician',
     'Teaching Assistant'
   ];
-  String selectedJobTitle = 'Please Select';
 
   @override
   Widget build(BuildContext context) {
@@ -249,43 +252,62 @@ class _FormHeader extends StatelessWidget {
   }
 }
 
-class PhoneTextFormField extends StatelessWidget {
-  const PhoneTextFormField({
-    super.key,
-    required this.controller,
-  });
-
+class PhoneTextFormField extends ConsumerStatefulWidget {
+  const PhoneTextFormField(this.controller, {super.key});
   final TextEditingController controller;
 
   @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: ' phone ',
-        hintText: '+923XX XXXX XXX',
-        hintStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
-            fontStyle: FontStyle.italic,
-            color: Theme.of(context).colorScheme.primary),
-        // If  you are using latest version of flutter then lable text and hint text shown like this
-        // if you r using flutter less then 1.20.* then maybe this is not working properly
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Tooltip(
-          message: '''This is the First Name of the faculty you create
-             will be the UserId for the  faculty to login
-             ADMIN ROLE of the institution.appears evety where in the system''',
+  ConsumerState<ConsumerStatefulWidget> createState() => _PhoneTextFormFieldState();
+}
 
-          child: const Icon(Icons.phone_android_sharp),
-          // height: 160,
-          textStyle: Theme.of(context)
-              .textTheme
-              .titleMedium!
-              .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+class _PhoneTextFormFieldState extends ConsumerState<PhoneTextFormField> {
+
+  @override
+  Widget build(BuildContext context) {
+    final state= ref.watch(newFacultyProvider);
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: 200,
+        maxWidth: 350,
+      ),
+      child: Padding(
+        padding:
+            const EdgeInsets.only(top: 12, left: 32.0, right: 32, bottom: 12),
+        child: TextFormField(
+          controller: widget.controller,
+          decoration: InputDecoration(
+            labelText: ' phone ',
+            hintText: '+923XX XXXX XXX',
+            hintStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+                fontStyle: FontStyle.italic,
+                color: Theme.of(context).colorScheme.primary),
+            // If  you are using latest version of flutter then lable text and hint text shown like this
+            // if you r using flutter less then 1.20.* then maybe this is not working properly
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
+            suffixIcon: Tooltip(
+              message: '''This is the First Name of the faculty you create
+                 will be the UserId for the  faculty to login
+                 ADMIN ROLE of the institution.appears evety where in the system''',
+
+              child: const Icon(Icons.phone_android_sharp),
+              // height: 160,
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+            ),
+          ),
+       onSaved: (value){
+        if (state!=null) {
+          ref.read(newFacultyProvider.notifier).setPhone(value: value!);
+        }
+       },
         ),
       ),
     );
   }
-}
+} 
+
 
 class FirstNameTextFormField extends StatelessWidget {
   const FirstNameTextFormField({
@@ -298,19 +320,23 @@ class FirstNameTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final maxwidth = MediaQuery.of(context).size.width;
-    return Expanded(
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: 150,
+        maxWidth: 350,
+      ),
       child: TextFormField(
         controller: controller,
         decoration: InputDecoration(
           labelText: ' First Name',
           hintText: 'First  name of the new Faculty member',
-          hintStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
+          hintStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
               fontStyle: FontStyle.italic,
               color: Theme.of(context).colorScheme.primary),
-      
+
           // If  you are using latest version of flutter then lable text and hint text shown like this
           // if you r using flutter less then 1.20.* then maybe this is not working properly
-          floatingLabelBehavior: FloatingLabelBehavior.always,
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
           suffixIcon: Tooltip(
             message: '''This is the First Name of the faculty you create
                will be the UserId for the  faculty to login
@@ -338,19 +364,23 @@ class LastNameTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: 150,
+        maxWidth: 350,
+      ),
       child: TextFormField(
         controller: controller,
         decoration: InputDecoration(
           labelText: ' Last Name',
           hintText: 'Last name of the new Faculty member',
-          hintStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
+          hintStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
               fontStyle: FontStyle.italic,
               color: Theme.of(context).colorScheme.primary),
-    
+
           // If  you are using latest version of flutter then lable text and hint text shown like this
           // if you r using flutter less then 1.20.* then maybe this is not working properly
-          floatingLabelBehavior: FloatingLabelBehavior.always,
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
           suffixIcon: Tooltip(
             message: '''This is the Last Name of the faculty you create
                will be the UserId for the  faculty to login
@@ -378,24 +408,72 @@ class UserIdTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // width: 200,
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: 150,
+        maxWidth: 350,
+      ),
       child: TextFormField(
         controller: controller,
         decoration: InputDecoration(
           labelText: 'user Id',
           hintText: 'User Id for the new faculty',
-          hintStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
+          hintStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
               fontStyle: FontStyle.italic,
               color: Theme.of(context).colorScheme.primary),
 
           // If  you are using latest version of flutter then lable text and hint text shown like this
           // if you r using flutter less then 1.20.* then maybe this is not working properly
-          floatingLabelBehavior: FloatingLabelBehavior.always,
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
           suffixIcon: Tooltip(
             message: '''This is the user Id of the faculty you create
-               will be the UserId for the  faculty to login
-               ADMIN ROLE of the institution.appears evety where in the system''',
+               this will be the UserId for that  faculty member  to login to the system
+               ''',
+            child: const Icon(Icons.person),
+            // height: 160,
+            textStyle: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class BioTextFormField extends StatelessWidget {
+  const BioTextFormField({
+    super.key,
+    required this.controller,
+  });
+
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: 250,
+        maxWidth: 550,
+      ),
+      child: TextFormField(
+        controller: controller,
+        maxLines: null,
+        decoration: InputDecoration(
+          labelText: 'Short bio ',
+          hintText: 'Enter short bio of the new faculty',
+          hintStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+              fontStyle: FontStyle.italic,
+              color: Theme.of(context).colorScheme.primary),
+
+          // If  you are using latest version of flutter then lable text and hint text shown like this
+          // if you r using flutter less then 1.20.* then maybe this is not working properly
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          suffixIcon: Tooltip(
+            message: '''This is the user Id of the faculty you create
+               this will be the UserId for that  faculty member  to login to the system
+               ''',
             child: const Icon(Icons.person),
             // height: 160,
             textStyle: Theme.of(context)

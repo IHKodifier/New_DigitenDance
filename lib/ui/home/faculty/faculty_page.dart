@@ -77,25 +77,26 @@ class FacultyPage extends ConsumerWidget {
           children: data
               .map((e) => Container(
                     width: 400,
-                    height: 140,
+                    // height: 140,
                     child: Card(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(children: [
-                            Icon(
+                            const Icon(
                               Icons.account_circle,
                               size: 100,
                             ),
                             Container(
-                              height: 108,
-                              // color: Colors.blue,
+                                // height: 108,
+                                // color: Colors.blue,
 
-                              child: Center(child: Text(e.prefix!))),
-                              Center(child: Text(' ${e.firstName!}')),
-                              Center(child: Text('${ e.lastName!}')),
+                                child: Center(child: Text(e.prefix!))),
+                            Center(child: Text(' ${e.firstName!}')),
+                            Center(child: Text('${e.lastName!}')),
                           ]),
+                          Wrap(children: [Text('${e.bio!}')]),
                           Text(e.jobTitle!),
                         ],
                       ),

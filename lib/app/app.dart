@@ -31,7 +31,7 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       builder: ((context, widget) => ResponsiveWrapper.builder(
             widget,
-            minWidth: 480,
+            minWidth: 880,
             defaultScale: true,
             breakpoints: _breakPoints,
           )),
